@@ -1,0 +1,18 @@
+{% extends "wagtailadmin/widgets/chooser.html" %}
+{% load wagtail_embed_videos_tags embed_video_tags %}
+
+{% block chooser_class %}embed-video-chooser{% endblock %}
+
+{% block chosen_state_view %}
+    <div class="preview-image">
+        {% if embed_video %}
+            {% video embed_video.url as my_video %}
+                <img src="{{ my_video.thumbnail }}" style="width: 180px; height: 135px;">
+            {% endvideo %}
+        {% else %}
+            <img style="width: 180px; height: 135px;">
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block edit_chosen_item_url %}{% if embed_video %}{% url 'wagtail_embed_videos_edit_embed_video' embed_video.id %}{% endif %}{% endblock %}

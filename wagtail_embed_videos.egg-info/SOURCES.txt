@@ -1,0 +1,17 @@
+MANIFEST.in
+README.rst
+setup.py
+wagtail_embed_videos/__init__.py
+wagtail_embed_videos/admin.py
+wagtail_embed_videos/admin_urls.py
+wagtail_embed_videos/apps.py
+wagtail_embed_videos/edit_handlers.py
+wagtail_embed_videos/forms.py
+wagtail_embed_videos/models.py
+wagtail_embed_videos/wagtail_hooks.py
+wagtail_embed_videos/widgets.py
+wagtail_embed_videos.egg-info/PKG-INFO
+wagtail_embed_videos.egg-info/SOURCES.txt
+wagtail_embed_videos.egg-info/dependency_links.txt
+wagtail_embed_videos.egg-info/requires.txt
+wagtail_embed_videos.egg-info/top_level.txt

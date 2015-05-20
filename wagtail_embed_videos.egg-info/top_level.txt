@@ -1,0 +1,1 @@
+wagtail_embed_videos
