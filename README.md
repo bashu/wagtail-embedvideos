@@ -35,5 +35,10 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
                 related_name='+'
             )
             ...
+            
+        # accessing the EmbedVideoField() in the model EmbedVideo
+        # this is the field used for storing the url of the embed video
+        video_based_model_instanse.video.url
+        
 
 4. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
