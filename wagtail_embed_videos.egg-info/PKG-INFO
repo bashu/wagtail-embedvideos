@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: wagtail-embed-videos
-Version: 0.0.1
+Version: 0.0.2
 Summary: Embed videos for Wagtail CMS
 Home-page: UNKNOWN
 Author: Diogo Marques
@@ -45,6 +45,13 @@ Description: # WAGTAIL EMBED VIDEOS
                     ...
         
         4. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
+        
+        
+        ## Release Notes
+        
+        ### v0.0.2
+        
+        - Removed some files not needed;
         
 Platform: UNKNOWN
 Classifier: Environment :: Web Environment

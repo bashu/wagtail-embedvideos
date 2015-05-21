@@ -1,5 +1,4 @@
 function createEmbedVideoChooser(id) {
-    console.log(id);
     var chooserElement = $('#' + id + '-chooser');
     var previewEmbedVideo = chooserElement.find('.preview-image img');
     var input = $('#' + id);

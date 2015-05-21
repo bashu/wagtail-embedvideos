@@ -37,3 +37,10 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
             ...
 
 4. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
+
+
+## Release Notes
+
+### v0.0.2
+
+- Removed some files not needed;
