@@ -32,27 +32,6 @@ class EmbedVideosMenuItem(MenuItem):
 def register_embed_videos_menu_item():
     return EmbedVideosMenuItem(_('Embed Videos'), urlresolvers.reverse('wagtail_embed_videos_index'), classnames='icon icon-media', order=301)
 
-
-@hooks.register('insert_editor_js')
-def editor_js():
-    js_files = [
-        'wagtail_embed_videos/js/hallo-plugins/hallo-wagtail_embed_videos.js',
-        'wagtail_embed_videos/js/embed-video-chooser.js',
-    ]
-    js_includes = format_html_join('\n', '<script src="{0}{1}"></script>',
-        ((settings.STATIC_URL, filename) for filename in js_files)
-    )
-    return js_includes + format_html(
-        """
-        <script>
-            window.chooserUrls.embedVideoChooser = '{0}';
-            registerHalloPlugin('hallowagtail_embed_video');
-        </script>
-        """,
-        urlresolvers.reverse('wagtail_embed_videos_chooser')
-    )
-
-
 @hooks.register('register_permissions')
 def register_permissions():
     embed_video_content_type = ContentType.objects.get(app_label='wagtail_embed_videos', model='embedvideo')
