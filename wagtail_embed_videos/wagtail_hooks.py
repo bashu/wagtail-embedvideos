@@ -55,6 +55,6 @@ def editor_js():
 
 @hooks.register('register_permissions')
 def register_permissions():
-    embed_video_content_type = ContentType.objects.get(app_label='wagtail_embed_videos', model='EmbedVideo')
+    embed_video_content_type = ContentType.objects.get(app_label='wagtail_embed_videos', model='embedvideo')
     embed_video_permissions = Permission.objects.filter(content_type = embed_video_content_type)
     return embed_video_permissions
