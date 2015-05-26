@@ -1,5 +1,5 @@
 {% extends "wagtailadmin/base.html" %}
-{% load wagtail_embed_videos_tags compress embed_video_tags %}
+{% load compress embed_video_tags %}
 {% load i18n %}
 {% block titletag %}{% blocktrans with title=embed_video.title %}Editing embed video {{ title }}{% endblocktrans %}{% endblock %}
 {% block bodyclass %}menu-embed-videos{% endblock %}

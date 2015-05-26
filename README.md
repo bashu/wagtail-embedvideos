@@ -46,6 +46,9 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
 ## Release Notes
 
-### v0.0.2
+### v0.0.3
 
-- Removed some files not needed;
+- Fixed injection of js file for embed video chooser
+
+- Removed more unnecessary files
+
