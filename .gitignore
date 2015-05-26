@@ -3,7 +3,7 @@
 *.pyo
 /tmp
 /eggs
-.egg-info
+*.egg-info/*
 **/virtualenv
 /**/project.log
 .DS_Store
