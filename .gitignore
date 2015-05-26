@@ -3,6 +3,7 @@
 *.pyo
 /tmp
 /eggs
+.egg-info
 **/virtualenv
 /**/project.log
 .DS_Store
@@ -16,3 +17,4 @@ local.properties
 npm-debug.log
 node_modules
 **/migrations/*
+dist/
