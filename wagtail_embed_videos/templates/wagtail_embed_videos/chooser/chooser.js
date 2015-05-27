@@ -46,23 +46,23 @@ function(modal) {
 
     ajaxifyLinks(modal.body);
 
-    $('form.embed-video-upload', modal.body).submit(function() {
-        var formdata = new FormData(this);
+    // $('form.embed-video-upload', modal.body).submit(function() {
+    //     var formdata = new FormData(this);
 
-        $.ajax({
-            url: this.action,
-            data: formdata,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            dataType: 'text',
-            success: function(response){
-                modal.loadResponseText(response);
-            }
-        });
+    //     $.ajax({
+    //         url: this.action,
+    //         data: formdata,
+    //         processData: false,
+    //         contentType: false,
+    //         type: 'POST',
+    //         dataType: 'text',
+    //         success: function(response){
+    //             modal.loadResponseText(response);
+    //         }
+    //     });
 
-        return false;
-    });
+    //     return false;
+    // });
 
     $('form.embed-video-search', modal.body).submit(search);
 

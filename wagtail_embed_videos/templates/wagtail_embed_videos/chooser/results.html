@@ -1,4 +1,4 @@
-{% load wagtailadmin_tags embed_video_tags %}
+{% load wagtailadmin_tags embed_video_tags wagtailimages_tags %}
 {% load i18n %}
 {% if embed_videos %}
     {% if is_searching %}
@@ -18,9 +18,13 @@
             <li>
                 <a class="image-choice" href="{% url 'wagtail_embed_videos_embed_video_chosen' embed_video.id %}">
                     <div class="image">
-                        {% video embed_video.url as my_video %}
-                            <img src="{{ my_video.thumbnail }}" style="width: 180px; height: 135px;">
-                        {% endvideo %}
+                        {% if embed_video.thumbnail %}
+                            {% image embed_video.thumbnail max-165x165 class="show-transparency" %}
+                        {% else %}
+                            {% video embed_video.url as my_video %}
+                                <img src="{{ my_video.thumbnail }}" class="show-transparency" style="max-width: 165px; max-height: 165px;">
+                            {% endvideo %}
+                        {% endif %}
                     </div>
                     <h3>{{ embed_video.title|ellipsistrim:60 }}</h3>
                 </a>

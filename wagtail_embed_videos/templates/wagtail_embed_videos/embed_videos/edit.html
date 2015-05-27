@@ -1,5 +1,5 @@
 {% extends "wagtailadmin/base.html" %}
-{% load compress embed_video_tags %}
+{% load compress embed_video_tags static wagtailadmin_tags wagtailimages_tags %}
 {% load i18n %}
 {% block titletag %}{% blocktrans with title=embed_video.title %}Editing embed video {{ title }}{% endblocktrans %}{% endblock %}
 {% block bodyclass %}menu-embed-videos{% endblock %}
@@ -10,9 +10,16 @@
 {% block extra_js %}
     {% include "wagtailadmin/shared/tag_field_js.html" %}
 
-    {% comment %}
-    <script src="{{ STATIC_URL }}wagtailadmin/js/vendor/jquery.ba-throttle-debounce.min.js"></script>
-    {% endcomment %}
+    {# TODO: Find a way to inject page editor handler in the return of the view and not injecting it here #}
+    <script type="text/javascript" src="{% static 'wagtailimages/js/image-chooser.js' %}"></script>
+    <script type="text/javascript" src="{% static 'wagtailadmin/js/modal-workflow.js' %}"></script>
+    <script type="text/javascript">
+        window.chooserUrls = {
+            'pageChooser': '{% url "wagtailadmin_choose_page" %}'
+        };
+        window.chooserUrls.imageChooser = "{% url 'wagtailimages_chooser' %}";
+    </script>
+
 {% endblock %}
 
 {% block content %}
@@ -33,10 +40,13 @@
             </form>
         </div>
         <div class="col6 divider-before">
-            {% video embed_video.url as my_video %}
-                <img src="{{ my_video.thumbnail }}">
-            {% endvideo %}
-
+            {% if embed_video.thumbnail %}
+                {% image embed_video.thumbnail max-800x600 %}
+            {% else %}
+                {% video embed_video.url as my_video %}
+                    <img src="{{ my_video.thumbnail }}">
+                {% endvideo %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}

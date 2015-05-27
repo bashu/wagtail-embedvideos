@@ -2,50 +2,28 @@
 {% trans "Choose an embed video" as choose_str %}
 {% include "wagtailadmin/shared/header.html" with title=choose_str merged=1 tabbed=1 icon="media" %}
 
-{% if uploadform %}
-    <ul class="tab-nav merged">
-        <li class="{% if not uploadform.errors %}active{% endif %}"><a href="#search" >{% trans "Search" %}</a></li>
-        <li class="{% if uploadform.errors %}active{% endif %}"><a href="#upload">{% trans "New" %}</a></li>
-    </ul>
-{% endif %}
-
-<div class="tab-content">
-    <section id="search" class="{% if not uploadform.errors %}active{% endif %} nice-padding">
-        <form class="embed-video-search search-bar" action="{% url 'wagtail_embed_videos_chooser' %}{% if will_select_format %}?select_format=true{% endif %}" method="GET" autocomplete="off">
-            <ul class="fields">
-                {% for field in searchform %}
-                    {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
-                {% endfor %}
-                <li class="submit"><input type="submit" value="{% trans 'Search' %}" /></li>
-                {% if popular_tags %}
-                    <li class="taglist">
-                        <h3>{% trans 'Popular tags' %}</h3>
-                        {% for tag in popular_tags %}
-                            <a class="suggested-tag tag" href="{% url 'wagtail_embed_videos_index' %}?q={{ tag.name|urlencode }}">{{ tag.name }}</a>
-                        {% endfor %}
-                    </li>
-                {% endif %}
-            </ul>
-        </form>
-        <div id="embed-video-results">
-            {% include "wagtail_embed_videos/chooser/results.html" %}
-        </div>
-    </section>
-    {% if uploadform %}
-        <section id="upload" class="{% if uploadform.errors %}active{% endif %} nice-padding">
-            <form class="embed-video-upload" action="{% url 'wagtail_embed_videos_chooser_upload' %}{% if will_select_format %}?select_format=true{% endif %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <ul class="fields">
-                    {% for field in uploadform %}
-                        {% if field.is_hidden %}
-                            {{ field }}
-                        {% else %}
-                            {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
-                        {% endif %}
+<section id="search" class="{% if not uploadform.errors %}active{% endif %} nice-padding">
+    <form class="embed-video-search search-bar" action="{% url 'wagtail_embed_videos_chooser' %}{% if will_select_format %}?select_format=true{% endif %}" method="GET" autocomplete="off">
+        <ul class="fields">
+            {% for field in searchform %}
+                {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
+            {% endfor %}
+            <li class="submit"><input type="submit" value="{% trans 'Search' %}" /></li>
+            {% if popular_tags %}
+                <li class="taglist">
+                    <h3>{% trans 'Popular tags' %}</h3>
+                    {% for tag in popular_tags %}
+                        <a class="suggested-tag tag" href="{% url 'wagtail_embed_videos_index' %}?q={{ tag.name|urlencode }}">{{ tag.name }}</a>
                     {% endfor %}
-                    <li><input type="submit" value="{% trans 'Save' %}" /></li>
-                </ul>
-            </form>
-        </section>
+                </li>
+            {% endif %}
+        </ul>
+    </form>
+    <div id="embed-video-results">
+        {% include "wagtail_embed_videos/chooser/results.html" %}
+    </div>
+    {% if can_add %}
+        <p>{% blocktrans %}Add more {% endblocktrans %}<a href="{% url "wagtail_embed_videos_add_embed_video" %}" target="_blank">{% trans "Embed video" %}</p>
     {% endif %}
-</div>
+</section>
+

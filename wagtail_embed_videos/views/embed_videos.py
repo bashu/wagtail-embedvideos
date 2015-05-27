@@ -17,17 +17,17 @@ from wagtail_embed_videos.models import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
 
 
-@permission_required('wagtailimages.add_image')
+@permission_required('wagtail_embed_videos.add_embedvideo')
 @vary_on_headers('X-Requested-With')
 def index(request):
     EmbedVideo = get_embed_video_model()
 
-    # Get images
+    # Get embed videos
     embed_videos = EmbedVideo.objects.order_by('-created_at')
 
     # Permissions
-    if not request.user.has_perm('wagtail_embed_videos.change_embed_video'):
-        # restrict to the user's own images
+    if not request.user.has_perm('wagtail_embed_videos.change_embedvideo'):
+        # restrict to the user's own embed videos
         embed_videos = embed_videos.filter(uploaded_by_user=request.user)
 
     # Search
@@ -37,9 +37,14 @@ def index(request):
         if form.is_valid():
             query_string = form.cleaned_data['q']
 
-            if not request.user.has_perm('wagtail_embed_videos.change_embed_video'):
-                # restrict to the user's own images
-                embed_videos = EmbedVideo.search(query_string, filters={'uploaded_by_user_id': request.user.id})
+            if not request.user.has_perm(
+                'wagtail_embed_videos.change_embedvideo'
+            ):
+                # restrict to the user's own embed videos
+                embed_videos = EmbedVideo.search(
+                    query_string,
+                    filters={'uploaded_by_user_id': request.user.id}
+                )
             else:
                 embed_videos = EmbedVideo.search(query_string)
     else:
@@ -58,20 +63,27 @@ def index(request):
 
     # Create response
     if request.is_ajax():
-        return render(request, 'wagtail_embed_videos/embed_videos/results.html', {
-            'embed_videos': embed_videos,
-            'query_string': query_string,
-            'is_searching': bool(query_string),
-        })
+        return render(
+            request,
+            'wagtail_embed_videos/embed_videos/results.html',
+            {
+                'embed_videos': embed_videos,
+                'query_string': query_string,
+                'is_searching': bool(query_string),
+            }
+        )
     else:
-        return render(request, 'wagtail_embed_videos/embed_videos/index.html', {
-            'embed_videos': embed_videos,
-            'query_string': query_string,
-            'is_searching': bool(query_string),
-
-            'search_form': form,
-            'popular_tags': EmbedVideo.popular_tags(),
-        })
+        return render(
+            request,
+            'wagtail_embed_videos/embed_videos/index.html',
+            {
+                'embed_videos': embed_videos,
+                'query_string': query_string,
+                'is_searching': bool(query_string),
+                'search_form': form,
+                'popular_tags': EmbedVideo.popular_tags(),
+            }
+        )
 
 
 def edit(request, embed_video_id):
@@ -133,7 +145,7 @@ def delete(request, embed_video_id):
     })
 
 
-@permission_required('wagtail_embed_videos.add_embed_video')
+@permission_required('wagtail_embed_videos.add_embedvideo')
 def add(request):
     EmbedVideoModel = get_embed_video_model()
     EmbedVideoForm = get_embed_video_form(EmbedVideoModel)

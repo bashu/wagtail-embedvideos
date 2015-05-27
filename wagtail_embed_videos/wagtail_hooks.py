@@ -26,7 +26,7 @@ def construct_main_menu(request, menu_items):
 
 class EmbedVideosMenuItem(MenuItem):
     def is_shown(self, request):
-        return request.user.has_perm('wagtail_embed_videos.add_video')
+        return request.user.has_perm('wagtail_embed_videos.add_embedvideo')
 
 
 @hooks.register('register_admin_menu_item')

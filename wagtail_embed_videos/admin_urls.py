@@ -13,6 +13,6 @@ urlpatterns = [
 
     url(r'^chooser/$', chooser.chooser, name='wagtail_embed_videos_chooser'),
     url(r'^chooser/(\d+)/$', chooser.embed_video_chosen, name='wagtail_embed_videos_embed_video_chosen'),
-    url(r'^chooser/upload/$', chooser.chooser_upload, name='wagtail_embed_videos_chooser_upload'),
-    url(r'^chooser/(\d+)/select_format/$', chooser.chooser_select_format, name='wagtail_embed_videos_chooser_select_format'),
+    # url(r'^chooser/upload/$', chooser.chooser_upload, name='wagtail_embed_videos_chooser_upload'),
+    # url(r'^chooser/(\d+)/select_format/$', chooser.chooser_select_format, name='wagtail_embed_videos_chooser_select_format'),
 ]
