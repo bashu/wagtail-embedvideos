@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='wagtail_embed_videos',
-    version='0.0.2',
+    version='0.0.4',
     packages=['wagtail_embed_videos'],
     include_package_data=True,
     license='BSD License',

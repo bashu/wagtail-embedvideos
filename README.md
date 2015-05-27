@@ -7,6 +7,7 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
         pip install django-embed-video
 
+        wagtailimages
 
 ## Quick start
 
@@ -23,7 +24,9 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
 3. Run `python manage.py migrate` to create the models of wagtail_embed_videos app
 
-3. Using wagtail_embed_videos:
+4. Using wagtail_embed_videos:
+
+        from wagtail_embed_videos.edit_handlers import EmbedVideoChooserPanel
 
         class VideoBasedModel(models.Model):
             video = models.ForeignKey(
@@ -35,16 +38,28 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
                 related_name='+'
             )
             ...
-            
+            panels = [EmbedVideoChooserPanel('video')]
+
         # accessing the EmbedVideoField() in the model 'wagtail_embed_videos.EmbedVideo'
         # this is the field used for storing the url of the embed video
         video_based_model_instanse.video.url
-        
 
-4. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
+        # accessing the thumbnail image in the model 'wagtailimages'
+        # this is a foreign key to model Image
+        video_based_model_instanse.video.thumbnail
+
+
+5. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
 
 
 ## Release Notes
+
+### v0.0.4
+
+ - Auto-create thumbnail images in wagtailimages app with tag 'video-thumbnail'
+
+ - EmbedVideoChooserPanel now has a link to create a new embed video instance instead of the form
+ (this is a fix to the problem having nested modals of wagtail)
 
 ### v0.0.3
 
