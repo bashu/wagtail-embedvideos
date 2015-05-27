@@ -118,13 +118,13 @@ def get_embed_video_model():
     from django.db.models import get_model
 
     try:
-        app_label, model_name = settings.WAGTAILEMBEDVIDEO_VIDE_MODEL.split('.')
+        app_label, model_name = settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
     except AttributeError:
         return EmbedVideo
     except ValueError:
-        raise ImproperlyConfigured("WAGTAILEMBEDVIDEO_VIDE_MODEL must be of the form 'app_label.model_name'")
+        raise ImproperlyConfigured("WAGTAILEMBEDVIDEO_VIDEO_MODEL must be of the form 'app_label.model_name'")
 
     embed_video_model = get_model(app_label, model_name)
     if embed_video_model is None:
-        raise ImproperlyConfigured("WAGTAILEMBEDVIDEO_VIDE_MODEL refers to model '%s' that has not been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
+        raise ImproperlyConfigured("WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
     return embed_video_model
