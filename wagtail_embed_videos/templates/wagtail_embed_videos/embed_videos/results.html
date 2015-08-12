@@ -10,7 +10,7 @@
         {% endblocktrans %}
         </h2>
     {% else %}
-        <h2>{% trans "Latest embed videos" %}</h2>
+        <h2>{% trans "Latest videos" %}</h2>
     {% endif %}
 
     <ul class="listing horiz images">
@@ -36,9 +36,9 @@
 
 {% else %}
     {% if is_searching %}
-        <p>{% blocktrans %}Sorry, no embed videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
+        <p>{% blocktrans %}Sorry, no videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
     {% else %}
         {% url 'wagtail_embed_videos_add_embed_video' as wagtail_embed_videos_add_embed_video_url %}
-        <p>{% blocktrans %}You've not uploaded any embed videos. Why not <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+        <p>{% blocktrans %}You've not uploaded any videos. Why not <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
     {% endif %}
 {% endif %}

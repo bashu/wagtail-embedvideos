@@ -23,7 +23,6 @@
         {% include "wagtail_embed_videos/chooser/results.html" %}
     </div>
     {% if can_add %}
-        <p>{% blocktrans %}Add more {% endblocktrans %}<a href="{% url "wagtail_embed_videos_add_embed_video" %}" target="_blank">{% trans "Embed video" %}</p>
+        <p>{% blocktrans %}Add more {% endblocktrans %}<a href="{% url "wagtail_embed_videos_add_embed_video" %}" target="_blank">{% trans "Video" %}</p>
     {% endif %}
 </section>
-
