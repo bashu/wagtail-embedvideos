@@ -89,7 +89,7 @@ def chooser(request):
             embed_videos = paginator.page(1)
         except EmptyPage:
             embed_videos = paginator.page(paginator.num_pages)
-    print can_add
+    print(can_add)
     return render_modal_workflow(
         request,
         'wagtail_embed_videos/chooser/chooser.html',
