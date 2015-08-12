@@ -1,7 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import urllib2
+try:
+    import urllib2
+except ImportError:
+    import urllib3
 
 from taggit.managers import TaggableManager
 
@@ -22,15 +25,26 @@ from wagtail.wagtailimages.models import Image as WagtailImage
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
 
+from django.conf import settings
+try:
+    from django.apps import apps
+    get_model = apps.get_model
+except ImportError:
+    from django.db.models.loading import get_model
+
 
 def create_thumbnail(model_instance):
     # CREATING IMAGE FROM THUMBNAIL
-    print model_instance
+    print(model_instance)
     backend = detect_backend(model_instance.url)
     thumbnail_url = backend.get_thumbnail_url()
 
     img_temp = NamedTemporaryFile(delete=True)
-    img_temp.write(urllib2.urlopen(thumbnail_url).read())
+    try:
+        img_temp.write(urllib2.urlopen(thumbnail_url).read())
+    except:
+        http = urllib3.PoolManager()
+        img_temp.write(http.request('GET', thumbnail_url).data)
     img_temp.flush()
 
     image = WagtailImage(title=model_instance.title)
@@ -77,15 +91,14 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
 
         super(AbstractEmbedVideo, self).__init__(*args, **kwargs)
         if args:
-            if args[3] == None:
+            if args[3] is None:
                 create_thumbnail(self)
 
     def save(self, *args, **kwargs):
         super(AbstractEmbedVideo, self).save(*args, **kwargs)
         if not self.thumbnail:
             create_thumbnail(self)
-
-
+    
     @property
     def default_alt_text(self):
         return self.title
@@ -114,9 +127,6 @@ class EmbedVideo(AbstractEmbedVideo):
 
 
 def get_embed_video_model():
-    from django.conf import settings
-    from django.db.models import get_model
-
     try:
         app_label, model_name = settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
     except AttributeError:
