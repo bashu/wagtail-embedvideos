@@ -54,6 +54,10 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
 ## Release Notes
 
+### v0.0.5
+
+ - Now it shows the video when editing
+
 ### v0.0.4
 
  - Auto-create thumbnail images in wagtailimages app with tag 'video-thumbnail'
@@ -66,4 +70,3 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 - Fixed injection of js file for embed video chooser
 
 - Removed more unnecessary files
-

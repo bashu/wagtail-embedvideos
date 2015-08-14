@@ -1,36 +1,35 @@
-import os
-from setuptools import setup
+#!/usr/bin/env python
+from distutils.core import setup
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
-    README = readme.read()
-
-# allow setup.py to be run from any path
-os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='wagtail_embed_videos',
-    version='0.0.4',
-    packages=['wagtail_embed_videos'],
-    include_package_data=True,
-    license='BSD License',
-    description='Embed videos for Wagtail CMS',
+    version='0.0.5',
+    description='Embed Videos for Wagtail CMS.',
     long_description=README,
-    url='',
     author='Diogo Marques',
     author_email='doriva.marques.29@gmail.com',
+    maintainer='Diogo Marques',
+    maintainer_email='doriva.marques.29@gmail.com',
+    url='https://github.com/infoportugal/wagtail-embedvideos',
+    packages=['wagtail_embed_videos', 'wagtail_embed_videos.views'],
+    package_data={'wagtail_embed_videos': 'static/wagtail_embed_videos/js/*.js']},
+    requires=['django(>=1.7)', 'wagtail(>=1.0)', 'django-embed-video(>=1.0)'],
+    install_requires=['wagtail', 'django-embed-video']
     classifiers=[
-        'Environment :: Web Environment',
-        'Framework :: Django',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
-        'Operating System :: OS Independent',
         'Programming Language :: Python',
-        # Replace these appropriately if you are stuck on Python 2.
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-    ],
-    install_requires=['wagtail', 'django-embed-video']
+        'Programming Language :: Python :: 3.4',
+        'Operating System :: OS Independent',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'Framework :: Django',
+        'Framework :: Wagtail CMS',
+        'License :: OSI Approved :: BSD License'],
+    license='New BSD',
+
 )
