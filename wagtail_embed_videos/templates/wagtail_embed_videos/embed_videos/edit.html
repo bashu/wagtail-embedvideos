@@ -40,19 +40,9 @@
             </form>
         </div>
         <div class="col6 divider-before">
-            {# if embed_video.thumbnail %}
-                {% image embed_video.thumbnail max-800x600 %}
-            {% else %}
-                {% video embed_video.url as my_video %}
-                    <img src="{{ my_video.thumbnail }}">
-                {% endvideo %}
-            {% endif #}
             {% video embed_video.url as my_video %}
-              URL: {{ my_video.url }}
-              Thumbnail: {{ my_video.thumbnail }}
-              Backend: {{ my_video.backend }}
-            
-              {% video my_video "large" %}
+                {% video my_video "small" %}
+                <strong>Backend</strong>: {{ my_video.backend }}
             {% endvideo %}
         </div>
     </div>
