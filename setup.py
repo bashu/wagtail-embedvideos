@@ -13,7 +13,7 @@ setup(
     maintainer_email='doriva.marques.29@gmail.com',
     url='https://github.com/infoportugal/wagtail-embedvideos',
     packages=['wagtail_embed_videos', 'wagtail_embed_videos.views'],
-    package_data={'wagtail_embed_videos': 'static/wagtail_embed_videos/js/*.js']},
+    package_data={'wagtail_embed_videos': ['static/wagtail_embed_videos/js/*.js']},
     requires=['django(>=1.7)', 'wagtail(>=1.0)', 'django-embed-video(>=1.0)'],
     install_requires=['wagtail', 'django-embed-video']
     classifiers=[
