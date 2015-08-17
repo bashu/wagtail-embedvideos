@@ -33,7 +33,7 @@ def index(request):
     # Search
     query_string = None
     if 'q' in request.GET:
-        form = SearchForm(request.GET, placeholder=_("Search embed videos"))
+        form = SearchForm(request.GET, placeholder=_("Search videos"))
         if form.is_valid():
             query_string = form.cleaned_data['q']
 
@@ -48,7 +48,7 @@ def index(request):
             else:
                 embed_videos = EmbedVideo.search(query_string)
     else:
-        form = SearchForm(placeholder=_("Search embed videos"))
+        form = SearchForm(placeholder=_("Search videos"))
 
     # Pagination
     p = request.GET.get('p', 1)
@@ -104,12 +104,12 @@ def edit(request, embed_video_id):
             for backend in get_search_backends():
                 backend.add(embed_video)
 
-            messages.success(request, _("Embed video '{0}' updated.").format(embed_video.title), buttons=[
+            messages.success(request, _("Video '{0}' updated.").format(embed_video.title), buttons=[
                 messages.button(reverse('wagtail_embed_videos_edit_embed_video', args=(embed_video.id,)), _('Edit again'))
             ])
             return redirect('wagtail_embed_videos_index')
         else:
-            messages.error(request, _("The embed video could not be saved due to errors."))
+            messages.error(request, _("The video could not be saved due to errors."))
     else:
         form = EmbedVideoForm(instance=embed_video)
 
@@ -137,7 +137,7 @@ def delete(request, embed_video_id):
 
     if request.POST:
         embed_video.delete()
-        messages.success(request, _("Embed video '{0}' deleted.").format(embed_video.title))
+        messages.success(request, _("Video '{0}' deleted.").format(embed_video.title))
         return redirect('wagtail_embed_videos_index')
 
     return render(request, "wagtail_embed_videos/embed_videos/confirm_delete.html", {
@@ -160,12 +160,12 @@ def add(request):
             for backend in get_search_backends():
                 backend.add(embed_video)
 
-            messages.success(request, _("Embed video '{0}' added.").format(embed_video.title), buttons=[
+            messages.success(request, _("Video '{0}' added.").format(embed_video.title), buttons=[
                 messages.button(reverse('wagtail_embed_videos_edit_embed_video', args=(embed_video.id,)), _('Edit'))
             ])
             return redirect('wagtail_embed_videos_index')
         else:
-            messages.error(request, _("The embed video could not be created due to errors."))
+            messages.error(request, _("The video could not be created due to errors."))
     else:
         form = EmbedVideoForm()
 

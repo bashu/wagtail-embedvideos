@@ -1,7 +1,7 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n %}
 
-{% block titletag %}{% trans "Embed Videos" %}{% endblock %}
+{% block titletag %}{% trans "Videos" %}{% endblock %}
 {% block bodyclass %}menu-embed-videos{% endblock %}
 {% block extra_js %}
     <script>
@@ -14,8 +14,8 @@
 {% endblock %}
 
 {% block content %}
-    {% trans "Embed videos" as ev_str %}
-    {% trans "Add an embed video" as add_ev_str %}
+    {% trans "Videos" as ev_str %}
+    {% trans "Add a video" as add_ev_str %}
     {% include "wagtailadmin/shared/header.html" with title=ev_str add_link="wagtail_embed_videos_add_embed_video" icon="media" add_text=add_ev_str search_url="wagtail_embed_videos_index" %}
 
     <div class="nice-padding">
