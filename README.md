@@ -47,9 +47,15 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
         # accessing the thumbnail image in the model 'wagtailimages'
         # this is a foreign key to model Image
         video_based_model_instanse.video.thumbnail
-
-
-5. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
+        
+5. For render your video in a template put `{% load embed_video_tags%}` for load template tags and put this code where you want render your video:
+        ```html
+        {% video VideoBasedModel.video.url as video %}
+                {% video video 'small' %}
+        {% endvideo %}
+        ```
+        
+6. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
 
 
 ## Release Notes
