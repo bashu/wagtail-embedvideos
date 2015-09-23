@@ -17,7 +17,7 @@
         window.chooserUrls = {
             'pageChooser': '{% url "wagtailadmin_choose_page" %}'
         };
-        window.chooserUrls.imageChooser = "{% url 'wagtailimages_chooser' %}";
+        window.chooserUrls.imageChooser = "{% url 'wagtailimages:chooser' %}";
     </script>
 
 {% endblock %}
@@ -42,6 +42,7 @@
         <div class="col6 divider-before">
             {% video embed_video.url as my_video %}
                 {% video my_video "small" %}
+                <br />
                 <strong>Backend</strong>: {{ my_video.backend }}
             {% endvideo %}
         </div>
