@@ -16,7 +16,6 @@ class EmbedVideoChooserBlock(ChooserBlock):
 
     def render_basic(self, value):
         if value:
-            print value
             return value.thumbnail
         else:
             return ''
