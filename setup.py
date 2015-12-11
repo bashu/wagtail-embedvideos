@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='wagtail_embed_videos',
-    version='0.1.1',
+    version='0.1.2',
     description='Embed Videos for Wagtail CMS.',
     long_description=(
         "Simple app that works similar to wagtailimages,"
