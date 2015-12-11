@@ -3,5 +3,6 @@ recursive-include docs *.rst conf.py Makefile make.bat
 recursive-include wagtail_embed_videos/static *
 recursive-include wagtail_embed_videos/templates *
 recursive-include wagtail_embed_videos/views *
+recursive-include wagtail_embed_videos/migrations *
 global-exclude *.pyc
 global-exclude *.DS_Store
