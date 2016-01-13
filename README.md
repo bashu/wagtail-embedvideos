@@ -5,7 +5,7 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
 ## REQUIREMENTS
 
-        pip install django-embed-video
+        pip install wagtail-embed-videos
 
         wagtailimages
 
