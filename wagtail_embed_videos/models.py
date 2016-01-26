@@ -50,7 +50,8 @@ YOUTUBE_RESOLUTIONS = [
 
 
 def create_thumbnail(model_instance):
-    from wagtail.wagtailimages.models import get_image_model  # http://stackoverflow.com/a/25648427/1179222
+    # http://stackoverflow.com/a/25648427/1179222
+    from wagtail.wagtailimages.models import get_image_model
     WagtailImage = get_image_model()
 
     # CREATING IMAGE FROM THUMBNAIL
