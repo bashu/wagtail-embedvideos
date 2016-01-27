@@ -3,6 +3,11 @@ import sys
 from django.conf import settings
 from django.test import TestCase
 
+from mock_django.models import ModelMock
+
+from wagtail.wagtailimages.models import get_image_model
+from wagtail_embed_videos.models import EmbedVideo, create_thumbnail
+
 
 class EmbedVideoTestCase(TestCase):
     def setUp(self):
@@ -37,3 +42,15 @@ class EmbedVideoTestCase(TestCase):
                              'testapp.CustomImage')
             self.assertEqual(image_model_name,
                              'testapp.CustomImage')
+    def test_create_thumbnail(self):
+        """Fetch a thumbnail from a video service."""
+        video = ModelMock(EmbedVideo)
+
+        video.url = 'https://www.youtube.com/watch?v=-YGDyPAwQz0'
+        video.title = 'Test title'
+        create_thumbnail(video)
+        Image = get_image_model()
+
+        self.assertEqual('Test title', video.thumbnail.title)
+        self.assertIn('video-thumbnail', [tag.name for tag in video.thumbnail.tags.all()])
+        self.assertIsInstance(video.thumbnail, Image)
