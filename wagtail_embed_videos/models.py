@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 try:
-    import urllib2
-except ImportError:
-    import urllib3
+    from urllib.request import urlopen
+except:
+    from urllib2 import urlopen
 import requests
 
 from taggit.managers import TaggableManager
@@ -67,11 +67,7 @@ def create_thumbnail(model_instance):
                     break
 
     img_temp = NamedTemporaryFile(delete=True)
-    try:
-        img_temp.write(urllib2.urlopen(thumbnail_url).read())
-    except:
-        http = urllib3.PoolManager()
-        img_temp.write(http.request('GET', thumbnail_url).data)
+    img_temp.write(urlopen(thumbnail_url).read())
     img_temp.flush()
 
     image = WagtailImage(title=model_instance.title)
