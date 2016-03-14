@@ -8,3 +8,10 @@ Core Committers
 
 * Diogo Marques
 * Rui Martins
+
+
+Contributors
+------------
+
+* SalahAdDin
+* kaedroho

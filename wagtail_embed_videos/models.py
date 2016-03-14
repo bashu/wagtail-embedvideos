@@ -5,6 +5,7 @@ try:
     import urllib2
 except ImportError:
     import urllib3
+import requests
 
 from taggit.managers import TaggableManager
 
@@ -25,7 +26,6 @@ from wagtail.wagtailimages.models import Image as WagtailImage
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
 
-from django.conf import settings
 try:
     from django.apps import apps
     get_model = apps.get_model
@@ -33,11 +33,30 @@ except ImportError:
     from django.db.models.loading import get_model
 
 
+def checkUrl(url):
+    r = requests.head(url)
+    return int(r.status_code) < 400
+
+
+YOUTUBE_RESOLUTIONS = [
+    'maxresdefault.jpg',
+    'sddefault.jpg',
+    'mqdefault.jpg'
+]
+
+
 def create_thumbnail(model_instance):
     # CREATING IMAGE FROM THUMBNAIL
-    print(model_instance)
     backend = detect_backend(model_instance.url)
     thumbnail_url = backend.get_thumbnail_url()
+    if backend.__class__.__name__ == 'YoutubeBackend':
+        if thumbnail_url.endswith('hqdefault.jpg'):
+            for resolution in YOUTUBE_RESOLUTIONS:
+                temp_thumbnail_url = thumbnail_url.replace(
+                    'hqdefault.jpg', resolution)
+                if checkUrl(temp_thumbnail_url):
+                    thumbnail_url = temp_thumbnail_url
+                    break
 
     img_temp = NamedTemporaryFile(delete=True)
     try:
@@ -68,7 +87,8 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         related_name='+'
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by_user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, editable=False)
+    uploaded_by_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False)
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 
@@ -98,7 +118,7 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         super(AbstractEmbedVideo, self).save(*args, **kwargs)
         if not self.thumbnail:
             create_thumbnail(self)
-    
+
     @property
     def default_alt_text(self):
         return self.title
@@ -107,8 +127,10 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         if user.has_perm('wagtail_embed_videos.change_embedvideo'):
             # user has global permission to change videos
             return True
-        elif user.has_perm('wagtail_embed_videos.add_embedvideo') and self.uploaded_by_user == user:
-            # user has video add permission, which also implicitly provides permission to edit their own videos
+        elif user.has_perm('wagtail_embed_videos.add_embedvideo') and\
+                self.uploaded_by_user == user:
+            # user has video add permission, which also implicitly provides
+            # permission to edit their own videos
             return True
         else:
             return False
@@ -128,13 +150,18 @@ class EmbedVideo(AbstractEmbedVideo):
 
 def get_embed_video_model():
     try:
-        app_label, model_name = settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
+        app_label, model_name =\
+            settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
     except AttributeError:
         return EmbedVideo
     except ValueError:
-        raise ImproperlyConfigured("WAGTAILEMBEDVIDEO_VIDEO_MODEL must be of the form 'app_label.model_name'")
+        raise ImproperlyConfigured(
+            "WAGTAILEMBEDVIDEO_VIDEO_MODEL must be of the form \
+            'app_label.model_name'")
 
     embed_video_model = get_model(app_label, model_name)
     if embed_video_model is None:
-        raise ImproperlyConfigured("WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
+        raise ImproperlyConfigured(
+            "WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not \
+            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
     return embed_video_model

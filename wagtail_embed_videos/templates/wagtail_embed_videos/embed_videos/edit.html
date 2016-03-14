@@ -1,14 +1,20 @@
 {% extends "wagtailadmin/base.html" %}
-{% load compress embed_video_tags static wagtailadmin_tags wagtailimages_tags %}
+{% load embed_video_tags static wagtailadmin_tags wagtailimages_tags %}
 {% load i18n %}
 {% block titletag %}{% blocktrans with title=embed_video.title %}Editing video {{ title }}{% endblocktrans %}{% endblock %}
 {% block bodyclass %}menu-embed-videos{% endblock %}
 {% block extra_css %}
-    {% include "wagtailadmin/shared/tag_field_css.html" %}
 {% endblock %}
 
 {% block extra_js %}
-    {% include "wagtailadmin/shared/tag_field_js.html" %}
+    {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
+    <script>
+        $(function() {
+            $('#id_tags').tagit({
+                autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
+            });
+        });
+    </script>
 
     {# TODO: Find a way to inject page editor handler in the return of the view and not injecting it here #}
     <script type="text/javascript" src="{% static 'wagtailimages/js/image-chooser.js' %}"></script>

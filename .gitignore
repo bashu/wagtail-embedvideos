@@ -1,20 +1,33 @@
-*~
-*.pyc
-*.pyo
-/tmp
-/eggs
-*.egg-info/*
-**/virtualenv
-/**/project.log
-.DS_Store
-.metadata
-.project
-Thumbs.db
-local.properties
-.idea
-*.sublime*
-.sass-cache
-npm-debug.log
-node_modules
-**/migrations/*
-dist/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+MANIFEST
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+.pypirc
+
+# Sphinx
+_build
