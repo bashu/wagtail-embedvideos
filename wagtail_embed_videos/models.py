@@ -20,8 +20,9 @@ from django.core.files.temp import NamedTemporaryFile
 
 from wagtail.wagtailadmin.taggable import TagSearchable
 from wagtail.wagtailadmin.utils import get_object_usage
-from wagtail.wagtailsearch import index
+from wagtail.wagtailcore.models import CollectionMember
 from wagtail.wagtailimages.models import Image as WagtailImage
+from wagtail.wagtailsearch import index
 
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -76,7 +77,7 @@ def create_thumbnail(model_instance):
 
 
 @python_2_unicode_compatible
-class AbstractEmbedVideo(models.Model, TagSearchable):
+class AbstractEmbedVideo(CollectionMember, TagSearchable):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
@@ -145,6 +146,7 @@ class EmbedVideo(AbstractEmbedVideo):
     admin_form_fields = (
         'title',
         'url',
+        'collection',
         'thumbnail',
         'tags',
     )
