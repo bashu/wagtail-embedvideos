@@ -21,7 +21,6 @@ from django.core.files.temp import NamedTemporaryFile
 from wagtail.wagtailadmin.taggable import TagSearchable
 from wagtail.wagtailadmin.utils import get_object_usage
 from wagtail.wagtailsearch import index
-from wagtail.wagtailimages.models import Image as WagtailImage
 
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -31,6 +30,11 @@ try:
     get_model = apps.get_model
 except ImportError:
     from django.db.models.loading import get_model
+
+try:
+    image_model_name = settings.WAGTAILIMAGES_IMAGE_MODEL
+except AttributeError:
+    image_model_name = 'wagtailimages.Image'
 
 
 def checkUrl(url):
@@ -46,6 +50,10 @@ YOUTUBE_RESOLUTIONS = [
 
 
 def create_thumbnail(model_instance):
+    # http://stackoverflow.com/a/25648427/1179222
+    from wagtail.wagtailimages.models import get_image_model
+    WagtailImage = get_image_model()
+
     # CREATING IMAGE FROM THUMBNAIL
     backend = detect_backend(model_instance.url)
     thumbnail_url = backend.get_thumbnail_url()
@@ -79,7 +87,7 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
-        'wagtailimages.Image',
+        image_model_name,
         verbose_name="Thumbnail",
         null=True,
         blank=True,
