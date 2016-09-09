@@ -88,7 +88,7 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
-        'wagtailimages.Image',
+        image_model_name,
         verbose_name=_('Thumbnail'),
         null=True,
         blank=True,
