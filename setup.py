@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='wagtail_embed_videos',
-    version='0.2.2',
+    version='0.2.5',
     description='Embed Videos for Wagtail CMS.',
     long_description=(
         "Simple app that works similar to wagtailimages,"
@@ -16,9 +16,25 @@ setup(
     maintainer='Diogo Marques',
     maintainer_email='doriva.marques.29@gmail.com',
     url='https://github.com/infoportugal/wagtail-embedvideos',
-    packages=['wagtail_embed_videos', 'wagtail_embed_videos.views', 'wagtail_embed_videos.migrations'],
-    package_data={'wagtail_embed_videos': ['static/wagtail_embed_videos/js/*.js']},
-    install_requires=['django>=1.7', 'wagtail>=1.0', 'django-embed-video>=1.0'],
+    packages=[
+        'wagtail_embed_videos',
+        'wagtail_embed_videos.views',
+        'wagtail_embed_videos.migrations'],
+    package_data={
+        'wagtail_embed_videos': [
+            'static/wagtail_embed_videos/js/*.js',
+            'templates/wagtail_embed_videos/chooser/*.html',
+            'templates/wagtail_embed_videos/edit_handlers/*.html',
+            'templates/wagtail_embed_videos/embed_videos/*.html',
+            'templates/wagtail_embed_videos/widgets/*.html',
+            'templates/wagtail_embed_videos/chooser/*.js',
+            'templates/wagtail_embed_videos/edit_handlers/*.js',
+            'templates/wagtail_embed_videos/embed_videos/*.js',
+            'templates/wagtail_embed_videos/widgets/*.js'
+        ]
+    },
+    install_requires=[
+        'django>=1.7', 'wagtail>=1.0', 'django-embed-video>=1.0'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
@@ -35,3 +51,4 @@ setup(
     license='New BSD',
 
 )
+
