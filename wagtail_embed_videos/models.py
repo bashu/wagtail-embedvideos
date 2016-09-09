@@ -28,6 +28,7 @@ from embed_video.backends import detect_backend
 
 try:
     from django.apps import apps
+
     get_model = apps.get_model
 except ImportError:
     from django.db.models.loading import get_model
@@ -80,15 +81,16 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
         'wagtailimages.Image',
-        verbose_name="Thumbnail",
+        verbose_name=_('Thumbnail'),
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created'))
     uploaded_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False)
+        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False, verbose_name=_('Uploader')
+    )
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 
@@ -100,9 +102,9 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         return reverse('wagtail_embed_videos_video_usage',
                        args=(self.id,))
 
-    search_fields = TagSearchable.search_fields + (
+    search_fields = TagSearchable.search_fields + [
         index.FilterField('uploaded_by_user'),
-    )
+    ]
 
     def __str__(self):
         return self.title
@@ -127,8 +129,8 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         if user.has_perm('wagtail_embed_videos.change_embedvideo'):
             # user has global permission to change videos
             return True
-        elif user.has_perm('wagtail_embed_videos.add_embedvideo') and\
-                self.uploaded_by_user == user:
+        elif user.has_perm('wagtail_embed_videos.add_embedvideo') and \
+                        self.uploaded_by_user == user:
             # user has video add permission, which also implicitly provides
             # permission to edit their own videos
             return True
@@ -150,7 +152,7 @@ class EmbedVideo(AbstractEmbedVideo):
 
 def get_embed_video_model():
     try:
-        app_label, model_name =\
+        app_label, model_name = \
             settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
     except AttributeError:
         return EmbedVideo
