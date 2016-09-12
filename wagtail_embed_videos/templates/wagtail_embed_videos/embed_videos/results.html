@@ -3,11 +3,13 @@
 {% if embed_videos %}
     {% if is_searching %}
         <h2>
-        {% blocktrans count counter=embed_videos.paginator.count %}
-            There is one match
-        {% plural %}
-            There are {{ counter }} matches
-        {% endblocktrans %}
+            {% blocktrans count counter=embed_videos.paginator.count %}
+                There is one match
+            {% plural %}
+                There are {{ counter }} matches
+            {% endblocktrans %}
+
+            {% search_other %}
         </h2>
     {% else %}
         <h2>{% trans "Latest videos" %}</h2>
@@ -22,7 +24,8 @@
                             {% image embed_video.thumbnail max-165x165 class="show-transparency" %}
                         {% else %}
                             {% video embed_video.url as my_video %}
-                                <img src="{{ my_video.thumbnail }}" class="show-transparency" style="max-width: 165px; max-height: 165px;">
+                                <img src="{{ my_video.thumbnail }}" class="show-transparency"
+                                     style="max-width: 165px; max-height: 165px;">
                             {% endvideo %}
                         {% endif %}
                     </div>
@@ -37,8 +40,17 @@
 {% else %}
     {% if is_searching %}
         <p>{% blocktrans %}Sorry, no videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
+
+        {% search_other %}
     {% else %}
         {% url 'wagtail_embed_videos_add_embed_video' as wagtail_embed_videos_add_embed_video_url %}
-        <p>{% blocktrans %}You've not uploaded any videos. Why not <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+        {% if current_collection %}
+            <p>{% blocktrans %}You've not uploaded any videos in this collection. Why not <a
+                    href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+        {% else %}
+            <p>{% blocktrans %}You've not uploaded any videos. Why not
+                <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add
+                    one now</a>?{% endblocktrans %}</p>
+        {% endif %}
     {% endif %}
 {% endif %}

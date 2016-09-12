@@ -10,4 +10,3 @@ permission_policy = CollectionOwnershipPermissionPolicy(
     auth_model=EmbedVideo,
     owner_field_name='uploaded_by_user'
 )
-

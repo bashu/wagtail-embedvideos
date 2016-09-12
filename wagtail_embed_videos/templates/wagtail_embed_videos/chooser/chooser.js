@@ -1,85 +1,108 @@
-function(modal) {
+{% load i18n %}
+function (modal) {
     var searchUrl = $('form.embed-video-search', modal.body).attr('action');
 
-    function ajaxifyLinks (context) {
-        $('.listing a', context).click(function() {
+    var currentTag;
+
+    function ajaxifyLinks(context) {
+        $('.listing a', context).click(function () {
             modal.loadUrl(this.href);
             return false;
         });
 
-        $('.pagination a', context).click(function() {
+        $('.pagination a', context).click(function () {
             var page = this.getAttribute("data-page");
             setPage(page);
             return false;
         });
     }
 
-    function search() {
+    function fetchResults(requestData) {
         $.ajax({
             url: searchUrl,
-            data: {q: $('#id_q').val()},
-            success: function(data, status) {
+            data: requestData,
+            success: function (data, status) {
                 $('#embed-video-results').html(data);
                 ajaxifyLinks($('#embed-video-results'));
             }
+        });
+    }
+
+    function search() {
+        /* Searching causes currentTag to be cleared - otherwise there's
+         no way to de-select a tag */
+        currentTag = null;
+        fetchResults({
+            q: $('#id_q').val(),
+            collection_id: $('#collection_chooser_collection_id').val()
         });
         return false;
     }
 
     function setPage(page) {
-        if($('#id_q').val().length){
-            dataObj = {q: $('#id_q').val(), p: page};
-        }else{
-            dataObj = {p: page};
+        params = {p: page};
+        if ($('#id_q').val().length) {
+            params['q'] = $('#id_q').val();
         }
-
-        $.ajax({
-            url: searchUrl,
-            data: dataObj,
-            success: function(data, status) {
-                $('#embed-video-results').html(data);
-                ajaxifyLinks($('#embed-video-results'));
-            }
-        });
+        if (currentTag) {
+            params['tag'] = currentTag;
+        }
+        params['collection_id'] = $('#collection_chooser_collection_id').val();
+        fetchResults(params);
         return false;
     }
 
     ajaxifyLinks(modal.body);
 
-    // $('form.embed-video-upload', modal.body).submit(function() {
-    //     var formdata = new FormData(this);
 
-    //     $.ajax({
-    //         url: this.action,
-    //         data: formdata,
-    //         processData: false,
-    //         contentType: false,
-    //         type: 'POST',
-    //         dataType: 'text',
-    //         success: function(response){
-    //             modal.loadResponseText(response);
-    //         }
-    //     });
+    $('form.image-upload', modal.body).submit(function () {
+        var formdata = new FormData(this);
 
-    //     return false;
-    // });
+        $.ajax({
+            url: this.action,
+            data: formdata,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            dataType: 'text',
+            success: function (response) {
+                modal.loadResponseText(response);
+            },
+            error: function (response, textStatus, errorThrown) {
+                {% trans "Server Error" as error_label %}
+                {% trans "Report this error to your webmaster with the following information:" as error_message %}
+                message = '{{ error_message|escapejs }}<br />' + errorThrown + ' - ' + response.status;
+                $('#upload').append(
+                    '<div class="help-block help-critical">' +
+                    '<strong>{{ error_label|escapejs }}: </strong>' + message + '</div>');
+            }
+        });
+
+        return false;
+    });
 
     $('form.embed-video-search', modal.body).submit(search);
 
-    $('#id_q').on('input', function() {
+    $('#id_q').on('input', function () {
         clearTimeout($.data(this, 'timer'));
         var wait = setTimeout(search, 200);
         $(this).data('timer', wait);
     });
-    $('a.suggested-tag').click(function() {
-        $('#id_q').val($(this).text());
-        search();
+
+    $('#collection_chooser_collection_id').change(search);
+
+    $('a.suggested-tag').click(function () {
+        currentTag = $(this).text();
+        $('#id_q').val('');
+        fetchResults({
+            'tag': currentTag,
+            collection_id: $('#collection_chooser_collection_id').val()
+        });
         return false;
     });
 
     {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
 
-    /* Add tag entry interface (with autocompletion) to the tag field of the embed video upload form */
     $('#id_tags', modal.body).tagit({
         autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
     });
