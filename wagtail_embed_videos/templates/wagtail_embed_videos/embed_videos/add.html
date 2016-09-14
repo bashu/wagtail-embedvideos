@@ -1,45 +1,38 @@
 {% extends "wagtailadmin/base.html" %}
-{% load i18n static %}
+{% load i18n %}
 {% block titletag %}{% trans "Add a video" %}{% endblock %}
-{% block bodyclass %}menu-embed-videos{% endblock %}
-{% block extra_css %}
-{% endblock %}
 
 {% block extra_js %}
-{% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
-<script>
-    $(function () {
-        $('#id_tags').tagit({
-            autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
+    {{ block.super }}
+    {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
+    <script>
+        $(function () {
+            $('#id_tags').tagit({
+                autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
+            });
         });
-    });
-</script>
-
-{# TODO: Find a way to inject page editor handler in the return of the view and not injecting it here #}
-<script type="text/javascript" src="{% static 'wagtailimages/js/image-chooser.js' %}"></script>
-<script type="text/javascript" src="{% static 'wagtailadmin/js/modal-workflow.js' %}"></script>
-<script type="text/javascript">
-    window.chooserUrls = {
-        'pageChooser': '{% url "wagtailadmin_choose_page" %}'
-    };
-    window.chooserUrls.imageChooser = "{% url 'wagtailimages:chooser' %}";
-</script>
-
+    </script>
 {% endblock %}
 
-{% block content %}
-{% trans "Add video" as add_str %}
-{% include "wagtailadmin/shared/header.html" with title=add_str icon="media" %}
+{% block bodyclass %}menu-embed-videos{% endblock %}
 
-<div class="nice-padding">
-    <form action="{% url 'wagtail_embed_videos_add_embed_video' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <ul class="fields">
-            {% for field in form %}
-            {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
-            {% endfor %}
-            <li><input type="submit" value="{% trans 'Save' %}" class="button"/></li>
-        </ul>
-    </form>
-</div>
+{% block content %}
+    {% trans "Add video" as add_str %}
+    {% include "wagtailadmin/shared/header.html" with title=add_str icon="media" %}
+
+    <div class="nice-padding">
+        <form action="{% url 'wagtail_embed_videos:add' %}" method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <ul class="fields">
+                {% for field in form %}
+                    {% if field.is_hidden %}
+                        {{ field }}
+                    {% else %}
+                        {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
+                    {% endif %}
+                {% endfor %}
+                <li><input type="submit" value="{% trans 'Save' %}" class="button"/></li>
+            </ul>
+        </form>
+    </div>
 {% endblock %}

@@ -6,18 +6,18 @@
 <div class="row row-flush nice-padding">
     <div class="col6">
         {% video embed_video.url as my_video %}
-        here?
-        <img src="{{ my_video.thumbnail }}">
+            here?
+            <img src="{{ my_video.thumbnail }}">
         {% endvideo %}
     </div>
     <div class="col6">
-        <form action="{% url 'wagtail_embed_videos_chooser_select_format' embed_video.id %}" method="POST">
+        <form action="{% url 'wagtail_embed_videos:chooser_select_format' embed_video.id %}" method="POST" novalidate>
             {% csrf_token %}
             <ul class="fields">
                 {% for field in form %}
-                {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
+                    {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
                 {% endfor %}
-                <li><input type="submit" value="{% trans 'Insert video' %}"/></li>
+                <li><input type="submit" value="{% trans 'Insert video' %}" class="button"/></li>
             </ul>
         </form>
     </div>

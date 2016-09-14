@@ -2,6 +2,8 @@
 function (modal) {
     var searchUrl = $('form.embed-video-search', modal.body).attr('action');
 
+    /* currentTag stores the tag currently being filtered on, so that we can
+     preserve this when paginating */
     var currentTag;
 
     function ajaxifyLinks(context) {
@@ -54,29 +56,29 @@ function (modal) {
 
     ajaxifyLinks(modal.body);
 
-
-    $('form.image-upload', modal.body).submit(function () {
+    $('form.embed-video-upload', modal.body).submit(function () {
         var formdata = new FormData(this);
 
-        $.ajax({
-            url: this.action,
-            data: formdata,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            dataType: 'text',
-            success: function (response) {
-                modal.loadResponseText(response);
-            },
-            error: function (response, textStatus, errorThrown) {
-                {% trans "Server Error" as error_label %}
-                {% trans "Report this error to your webmaster with the following information:" as error_message %}
-                message = '{{ error_message|escapejs }}<br />' + errorThrown + ' - ' + response.status;
-                $('#upload').append(
-                    '<div class="help-block help-critical">' +
-                    '<strong>{{ error_label|escapejs }}: </strong>' + message + '</div>');
+        if ($('#id_title', modal.body).val() == '') {
+            var li = $('#id_title', modal.body).closest('li');
+            if (!li.hasClass('error')) {
+                li.addClass('error');
+                $('#id_title', modal.body).closest('.field-content').append('<p class="error-message"><span>This field is required.</span></p>')
             }
-        });
+            setTimeout(cancelSpinner, 500);
+        } else {
+            $.ajax({
+                url: this.action,
+                data: formdata,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType: 'text',
+                success: function (response) {
+                    modal.loadResponseText(response);
+                }
+            });
+        }
 
         return false;
     });
@@ -103,6 +105,7 @@ function (modal) {
 
     {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
 
+    /* Add tag entry interface (with autocompletion) to the tag field of the image upload form */
     $('#id_tags', modal.body).tagit({
         autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
     });
