@@ -1,10 +1,13 @@
-# coding: utf-8
-
 from django import forms
 from django.forms.models import modelform_factory
+from django.utils.translation import ugettext as _
 
 from wagtail.wagtailadmin.forms import BaseCollectionMemberForm
+from wagtail.wagtailadmin.forms import collection_member_permission_formset_factory
 from wagtail.wagtailimages.edit_handlers import AdminImageChooser
+
+from wagtail_embed_videos import widgets
+from wagtail_embed_videos.models import EmbedVideo
 
 from .permissions import permission_policy as embed_video_permission_policy
 
@@ -24,6 +27,7 @@ def get_embed_video_form(model):
         form=EmbedVideoInsertionForm,
         fields=fields,
         widgets={
+            # 'tags': widgets.AdminTagWidget,
             'thumbnail': AdminImageChooser,
         })
 
@@ -31,3 +35,13 @@ def get_embed_video_form(model):
 class EmbedVideoInsertionForm(BaseCollectionMemberForm):
     permission_policy = embed_video_permission_policy
     alt_text = forms.CharField()
+
+
+GroupEmbedVideoPermissionFormSet = collection_member_permission_formset_factory(
+    EmbedVideo,
+    [
+        ('add_image', _("Add"), _("Add/edit embed videos you own")),
+        ('change_image', _("Edit"), _("Edit any embed video")),
+    ],
+    'wagtail_embed_videos/permissions/includes/image_permissions_formset.html'
+)

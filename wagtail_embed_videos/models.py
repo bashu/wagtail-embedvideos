@@ -108,10 +108,16 @@ class AbstractEmbedVideo(CollectionMember, TagSearchable):
 
     @property
     def usage_url(self):
-        return reverse('wagtail_embed_videos_video_usage',
-                       args=(self.id,))
+        return reverse(
+            'wagtail_embed_videos:video_usage',
+            args=(self.id,)
+        )
 
-    search_fields = TagSearchable.search_fields + [
+    search_fields = CollectionMember.search_fields + [
+        index.SearchField('title', partial_match=True, boost=10),
+        index.RelatedFields('tags', [
+            index.SearchField('name', partial_match=True, boost=10),
+        ]),
         index.FilterField('uploaded_by_user'),
     ]
 
@@ -135,16 +141,8 @@ class AbstractEmbedVideo(CollectionMember, TagSearchable):
         return self.title
 
     def is_editable_by_user(self, user):
-        if user.has_perm('wagtail_embed_videos.change_embedvideo'):
-            # user has global permission to change videos
-            return True
-        elif user.has_perm('wagtail_embed_videos.add_embedvideo') and \
-                        self.uploaded_by_user == user:
-            # user has video add permission, which also implicitly provides
-            # permission to edit their own videos
-            return True
-        else:
-            return False
+        from .permissions import permission_policy
+        return permission_policy.user_has_permission_for_instance(user, 'change', self)
 
     class Meta:
         abstract = True
@@ -161,6 +159,7 @@ class EmbedVideo(AbstractEmbedVideo):
 
 
 def get_embed_video_model():
+    # TODO: WAGTAILEMBEDVIDEO_VIDEO_MODEL setting doesn't exist, at least in models
     try:
         app_label, model_name = \
             settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
@@ -169,11 +168,13 @@ def get_embed_video_model():
     except ValueError:
         raise ImproperlyConfigured(
             "WAGTAILEMBEDVIDEO_VIDEO_MODEL must be of the form \
-            'app_label.model_name'")
+            'app_label.model_name'"
+        )
 
     embed_video_model = get_model(app_label, model_name)
     if embed_video_model is None:
         raise ImproperlyConfigured(
             "WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not \
-            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
+            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL
+        )
     return embed_video_model
