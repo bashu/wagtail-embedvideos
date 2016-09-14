@@ -34,4 +34,4 @@ class EmbedVideoThumbnailField(Field):
 
 
 class AdminEmbedVideoSerializer(EmbedVideoSerializer):
-    thumbnail = EmbedVideoThumbnailField('max-165x165', read_only=True)
+    thumbnail = EmbedVideoThumbnailField('max-165x165')
