@@ -44,7 +44,7 @@
     {% if uploadform %}
         <section id="upload" class="{% if uploadform.errors %}active{% endif %} nice-padding">
             <form class="embed-video-upload"
-                  action="{% url 'wagtailimages:chooser_upload' %}{% if will_select_format %}?select_format=true{% endif %}"
+                  action="{% url 'wagtail_embed_videos:chooser_upload' %}{% if will_select_format %}?select_format=true{% endif %}"
                   method="POST"
                   enctype="multipart/form-data"
                   novalidate>
