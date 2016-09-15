@@ -25,9 +25,9 @@ def register_admin_urls():
     ]
 
 
-@hooks.register('construct_main_menu')
-def construct_main_menu(router):
-    router.register_endpoint('embed_video', EmbedVideosAdminAPIEndpoint)
+@hooks.register('construct_admin_api')
+def construct_admin_api(router):
+    router.register_endpoint('embed_videos', EmbedVideosAdminAPIEndpoint)
 
 
 class EmbedVideosMenuItem(MenuItem):
@@ -44,7 +44,7 @@ def register_embed_videos_menu_item():
         urlresolvers.reverse('wagtail_embed_videos:index'),
         name='embed_videos',
         classnames='icon icon-media',
-        order=300
+        order=301
     )
 
 
@@ -55,9 +55,10 @@ def editor_js():
         static('wagtail_embed_videos/js/embed-video-chooser.js'),
     ]
     js_includes = format_html_join(
-        '\n', '<script src="{0}{1}"></script>',
-        ((filename) for filename in js_files)
+        '\n', '<script src="{0}"></script>',
+        ((filename,) for filename in js_files)
     )
+
     return js_includes + format_html(
         """
         <script>
