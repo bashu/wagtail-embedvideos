@@ -1,30 +1,30 @@
-.._video_tag:
-
 WAGTAIL EMBED VIDEOS
 ====================
 
 Simple app that works similar to wagtailimages, but for embedding YouTube and Vimeo videos and music from SoundCloud.
-It's an integration of [django-embed-video](https://github.com/yetty/django-embed-video)
+It's an integration of [django-embed-video](https://github.com/yetty/django-embed-video).
 
 REQUIREMENTS
 ------------
+You have install `wagtail-embedvideos` package, use the common command:
+
         pip install wagtail-embed-videos
 
-        wagtailimages
+You need add `wagtailimages` to the current settings, is by default in any `wagtail` project.
 
 Quick start
 -----------
 
 1. Add "embed_video" and "wagtail_embed_videos" to your INSTALLED_APPS setting like this:
 
-.. code-block:: python
-
+    ```python
     INSTALLED_APPS = [
         ...
         'embed_video',
         'wagtail_embed_videos',
         ...
     ]
+    ```
 
 2. Run `python manage.py makemigrations` to create the migration for wagtail_embed_videos models
 
@@ -32,8 +32,7 @@ Quick start
 
 4. Using wagtail_embed_videos:
 
-.. code-block:: python
-
+    ```python
         from wagtail_embed_videos.edit_handlers import EmbedVideoChooserPanel
 
         class VideoBasedModel(models.Model):
@@ -47,7 +46,24 @@ Quick start
             )
             ...
             panels = [EmbedVideoChooserPanel('video')]
+    ```
+        
+5. For render your video in a template put `{% load embed_video_tags%}` for load template tags and put this code where you want render your video:
 
+    ```html
+   {% video VideoBasedModel.video.url as video %}
+        {% video video 'small' %}
+   {% endvideo %}
+   ```
+        
+6. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation.
+
+
+Use `EmbedVideo` API:
+--------------------
+You can get access to the model in python with the next instructions:
+
+```python
         # Accessing the EmbedVideoField() in the model 'wagtail_embed_videos.EmbedVideo'
         # this is the field used for storing the url of the embed video
         video_based_model_instanse.video.url
@@ -55,53 +71,44 @@ Quick start
         # Accessing the thumbnail image in the model 'wagtailimages'
         # this is a foreign key to model Image
         video_based_model_instanse.video.thumbnail
-        
-5. For render your video in a template put `{% load embed_video_tags%}` for load template tags and put this code where you want render your video:
-
-.. code-block:: html+django
-
-   {% video VideoBasedModel.video.url as video %}
-        {% video video 'small' %}
-   {% endvideo %}
-        
-6. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
+```
 
 
 EmbedVideo Block
 ----------------
 You can use `EmbedVideo` in `StreamFields` too, an example:
 
-.. code-block:: python
+```python
+    from wagtail_embed_videos.blocks import EmbedVideoChooserBlock
 
-   from wagtail_embed_videos.blocks import EmbedVideoChooserBlock
-
-   ...
-
-   class EmbedVideoFormatChoiceBlock(FieldBlock):
-        field = forms.ChoiceField(
-            choices=(
-                ('left', 'Wrap left'),
-                ('right', 'Wrap right'),
-                ('half', 'Half width'),
-                ('full', 'Full width'),
+       ...
+    
+       class EmbedVideoFormatChoiceBlock(FieldBlock):
+            field = forms.ChoiceField(
+                choices=(
+                    ('left', 'Wrap left'),
+                    ('right', 'Wrap right'),
+                    ('half', 'Half width'),
+                    ('full', 'Full width'),
+                )
             )
-        )
+        
+        
+        class EmbedVideoBlock(StructBlock):
+            video = EmbedVideoChooserBlock()
+            alignment = ImageFormatChoiceBlock()
+            caption = CharBlock()
+            attribution = CharBlock(required=False)
+        
+            class Meta:
+                icon = 'media'
     
     
-    class EmbedVideoBlock(StructBlock):
-        video = EmbedVideoChooserBlock()
-        alignment = ImageFormatChoiceBlock()
-        caption = CharBlock()
-        attribution = CharBlock(required=False)
-    
-        class Meta:
-            icon = 'media'
-
-
-    class StoryBlock(StreamBlock):
-        ...
-        aligned_video = EmbedVideoBlock(label=_('Aligned video'))
-        ...
+        class StoryBlock(StreamBlock):
+            ...
+            aligned_video = EmbedVideoBlock(label=_('Aligned video'))
+            ...
+```
 
 
 Extend EmbedVideo model
@@ -128,7 +135,6 @@ v0.0.4
 ______
 
  - Auto-create thumbnail images in wagtailimages app with tag 'video-thumbnail'
-
  - EmbedVideoChooserPanel now has a link to create a new embed video instance instead of the form (this is a fix to the problem having nested modals of wagtail)
 
 v0.0.3
