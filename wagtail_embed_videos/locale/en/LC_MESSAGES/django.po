@@ -2,13 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 03:00-0500\n"
+"POT-Creation-Date: 2016-09-16 00:28-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,25 +15,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: models.py:80 templates/wagtail_embed_videos/embed_videos/usage.html:16
+#: forms.py:43
+msgid "Add"
+msgstr ""
+
+#: forms.py:43
+msgid "Add/edit embed videos you own"
+msgstr ""
+
+#: forms.py:44 views/embed_videos.py:193
+msgid "Edit"
+msgstr ""
+
+#: forms.py:44
+msgid "Edit any embed video"
+msgstr ""
+
+#: models.py:89 templates/wagtail_embed_videos/embed_videos/usage.html:16
 msgid "Title"
 msgstr ""
 
-#: models.py:84
+#: models.py:93
 msgid "Thumbnail"
 msgstr ""
 
-#: models.py:90
+#: models.py:99
 msgid "Created"
 msgstr ""
 
-#: models.py:92
+#: models.py:101
 msgid "Uploader"
 msgstr ""
 
-#: models.py:95
+#: models.py:104
 msgid "Tags"
 msgstr ""
 
@@ -42,20 +56,21 @@ msgstr ""
 msgid "Choose an embed video"
 msgstr ""
 
-#: templates/wagtail_embed_videos/chooser/chooser.html:11
+#: templates/wagtail_embed_videos/chooser/chooser.html:7
 msgid "Search"
 msgstr ""
 
-#: templates/wagtail_embed_videos/chooser/chooser.html:14
+#: templates/wagtail_embed_videos/chooser/chooser.html:8
+#: templates/wagtail_embed_videos/chooser/chooser.html:65
+msgid "Upload"
+msgstr ""
+
+#: templates/wagtail_embed_videos/chooser/chooser.html:28
 msgid "Popular tags"
 msgstr ""
 
-#: templates/wagtail_embed_videos/chooser/chooser.html:26
-msgid "Add more "
-msgstr ""
-
-#: templates/wagtail_embed_videos/chooser/chooser.html:26
-msgid "Video"
+#: templates/wagtail_embed_videos/chooser/chooser.html:63
+msgid "Uploading..."
 msgstr ""
 
 #: templates/wagtail_embed_videos/chooser/results.html:6
@@ -63,17 +78,17 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            There is one match\n"
-"        "
+"                There is one match\n"
+"            "
 msgid_plural ""
 "\n"
-"            There are %(counter)s matches\n"
-"        "
+"                There are %(counter)s matches\n"
+"            "
 msgstr[0] ""
 msgstr[1] ""
 
 #: templates/wagtail_embed_videos/chooser/results.html:13
-#: templates/wagtail_embed_videos/embed_videos/results.html:13
+#: templates/wagtail_embed_videos/embed_videos/results.html:15
 msgid "Latest videos"
 msgstr ""
 
@@ -86,22 +101,22 @@ msgid "Insert video"
 msgstr ""
 
 #: templates/wagtail_embed_videos/embed_videos/add.html:3
-#: templates/wagtail_embed_videos/embed_videos/index.html:18
+#: templates/wagtail_embed_videos/embed_videos/index.html:27
 msgid "Add a video"
 msgstr ""
 
-#: templates/wagtail_embed_videos/embed_videos/add.html:31
+#: templates/wagtail_embed_videos/embed_videos/add.html:20
 msgid "Add video"
 msgstr ""
 
-#: templates/wagtail_embed_videos/embed_videos/add.html:41
-#: templates/wagtail_embed_videos/embed_videos/edit.html:44
+#: templates/wagtail_embed_videos/embed_videos/add.html:34
+#: templates/wagtail_embed_videos/embed_videos/edit.html:45
 msgid "Save"
 msgstr ""
 
 #: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:4
 #: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:8
-#: templates/wagtail_embed_videos/embed_videos/edit.html:44
+#: templates/wagtail_embed_videos/embed_videos/edit.html:48
 msgid "Delete video"
 msgstr ""
 
@@ -113,30 +128,41 @@ msgstr ""
 msgid "Yes, delete"
 msgstr ""
 
-#: templates/wagtail_embed_videos/embed_videos/edit.html:4
+#: templates/wagtail_embed_videos/embed_videos/edit.html:5
 #, python-format
 msgid "Editing video %(title)s"
 msgstr ""
 
-#: templates/wagtail_embed_videos/embed_videos/edit.html:32
+#: templates/wagtail_embed_videos/embed_videos/edit.html:25
 msgid "Editing"
 msgstr ""
 
 #: templates/wagtail_embed_videos/embed_videos/index.html:4
-#: templates/wagtail_embed_videos/embed_videos/index.html:17
+#: templates/wagtail_embed_videos/embed_videos/index.html:24
 msgid "Videos"
 msgstr ""
 
-#: templates/wagtail_embed_videos/embed_videos/results.html:39
+#: templates/wagtail_embed_videos/embed_videos/results.html:33
 #, python-format
 msgid "Sorry, no videos match \"<em>%(query_string)s</em>\""
 msgstr ""
 
-#: templates/wagtail_embed_videos/embed_videos/results.html:42
+#: templates/wagtail_embed_videos/embed_videos/results.html:40
 #, python-format
 msgid ""
-"You've not uploaded any videos. Why not <a href="
-"\"%(wagtail_embed_videos_add_embed_video_url)s\">add one now</a>?"
+"You've not uploaded any videos in this collection. Why not\n"
+"                    <a href=\"%(wagtail_embed_videos_add_embed_video_url)s"
+"\">add one now</a>?\n"
+"                "
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/results.html:46
+#, python-format
+msgid ""
+"You've not uploaded any videos. Why not\n"
+"                    <a href=\"%(wagtail_embed_videos_add_embed_video_url)s"
+"\">add one now</a>?\n"
+"                "
 msgstr ""
 
 #: templates/wagtail_embed_videos/embed_videos/usage.html:3
@@ -160,48 +186,76 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: templates/wagtail_embed_videos/embed_videos/usage.html:26
+#: templates/wagtail_embed_videos/embed_videos/usage.html:27
 msgid "Edit this page"
 msgstr ""
 
-#: views/embed_videos.py:36 views/embed_videos.py:51
-msgid "Search videos"
+#: templates/wagtail_embed_videos/homepage/site_summary_videos.html:5
+#, python-format
+msgid ""
+"\n"
+"            <span>%(total)s</span> Video\n"
+"        "
+msgid_plural ""
+"\n"
+"            <span>%(total)s</span> Videos\n"
+"        "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/wagtail_embed_videos/permissions/includes/video_permissions_formset.html:4
+msgid "Embed video permissions"
 msgstr ""
 
-#: views/embed_videos.py:107
+#: templates/wagtail_embed_videos/permissions/includes/video_permissions_formset.html:5
+msgid "Add an embed video permission"
+msgstr ""
+
+#: views/embed_videos.py:41 views/embed_videos.py:47
+msgid "Search images"
+msgstr ""
+
+#: views/embed_videos.py:118
 #, python-brace-format
 msgid "Video '{0}' updated."
 msgstr ""
 
-#: views/embed_videos.py:108
+#: views/embed_videos.py:124
 msgid "Edit again"
 msgstr ""
 
-#: views/embed_videos.py:112
+#: views/embed_videos.py:130
 msgid "The video could not be saved due to errors."
 msgstr ""
 
-#: views/embed_videos.py:140
+#: views/embed_videos.py:162
 #, python-brace-format
 msgid "Video '{0}' deleted."
 msgstr ""
 
-#: views/embed_videos.py:163
+#: views/embed_videos.py:186
 #, python-brace-format
 msgid "Video '{0}' added."
 msgstr ""
 
-#: views/embed_videos.py:164
-msgid "Edit"
-msgstr ""
-
-#: views/embed_videos.py:168
+#: views/embed_videos.py:199
 msgid "The video could not be created due to errors."
 msgstr ""
 
-#: wagtail_hooks.py:35
+#: wagtail_hooks.py:43
 msgid "Embed Videos"
 msgstr ""
+
+#: wagtail_hooks.py:97
+msgid "Embed videos"
+msgstr ""
+
+#: wagtail_hooks.py:118
+#, python-format
+msgid "%(count)s video"
+msgid_plural "%(count)s videos"
+msgstr[0] ""
+msgstr[1] ""
 
 #: widgets.py:14
 msgid "Choose another embed video"
