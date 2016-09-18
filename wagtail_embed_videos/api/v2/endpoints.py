@@ -7,7 +7,7 @@ from ...models import get_embed_video_model
 from .serializers import EmbedVideoSerializer
 
 
-class ImagesAPIEndpoint(BaseAPIEndpoint):
+class EmbedVideosAPIEndpoint(BaseAPIEndpoint):
     base_serializer_class = EmbedVideoSerializer
     filter_backends = [FieldsFilter, OrderingFilter, SearchFilter]
     body_fields = BaseAPIEndpoint.body_fields + ['title', 'url', 'thumbnail']

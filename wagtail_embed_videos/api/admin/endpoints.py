@@ -1,17 +1,17 @@
 from __future__ import absolute_import, unicode_literals
 
-from ..v2.endpoints import ImagesAPIEndpoint
-from .serializers import EmbedVideoSerializer
+from ..v2.endpoints import EmbedVideosAPIEndpoint
+from .serializers import AdminEmbedVideoSerializer
 
 
-class EmbedVideosAdminAPIEndpoint(ImagesAPIEndpoint):
-    base_serializer_class = EmbedVideoSerializer
+class EmbedVideosAdminAPIEndpoint(EmbedVideosAPIEndpoint):
+    base_serializer_class = AdminEmbedVideoSerializer
 
-    body_fields = ImagesAPIEndpoint.body_fields + [
+    body_fields = EmbedVideosAPIEndpoint.body_fields + [
         'thumbnail',
     ]
 
-    listing_default_fields = ImagesAPIEndpoint.listing_default_fields + [
+    listing_default_fields = EmbedVideosAPIEndpoint.listing_default_fields + [
         'width',
         'height',
         'thumbnail',
