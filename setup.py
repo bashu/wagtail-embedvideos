@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='wagtail_embed_videos',
-    version='0.2.5',
+    version='0.3.0',
     description='Embed Videos for Wagtail CMS.',
     long_description=(
         "Simple app that works similar to wagtailimages,"
@@ -19,7 +19,8 @@ setup(
     packages=[
         'wagtail_embed_videos',
         'wagtail_embed_videos.views',
-        'wagtail_embed_videos.migrations'],
+        'wagtail_embed_videos.migrations',
+        'wagtail_embed_videos.api'],
     package_data={
         'wagtail_embed_videos': [
             'static/wagtail_embed_videos/js/*.js',
@@ -43,6 +44,7 @@ setup(
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Operating System :: OS Independent',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',

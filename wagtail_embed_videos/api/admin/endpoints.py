@@ -4,7 +4,7 @@ from ..v2.endpoints import ImagesAPIEndpoint
 from .serializers import EmbedVideoSerializer
 
 
-class ImagesAdminAPIEndpoint(ImagesAPIEndpoint):
+class EmbedVideosAdminAPIEndpoint(ImagesAPIEndpoint):
     base_serializer_class = EmbedVideoSerializer
 
     body_fields = ImagesAPIEndpoint.body_fields + [
