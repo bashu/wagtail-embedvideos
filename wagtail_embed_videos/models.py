@@ -18,7 +18,6 @@ from django.core.urlresolvers import reverse
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
-from wagtail.wagtailadmin.taggable import TagSearchable
 from wagtail.wagtailadmin.utils import get_object_usage
 from wagtail.wagtailcore.models import CollectionMember
 from wagtail.wagtailsearch import index
@@ -85,7 +84,7 @@ def create_thumbnail(model_instance):
 
 
 @python_2_unicode_compatible
-class AbstractEmbedVideo(CollectionMember, TagSearchable):
+class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
