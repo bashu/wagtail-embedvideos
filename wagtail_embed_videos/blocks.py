@@ -1,6 +1,7 @@
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property	
 
 from wagtail.wagtailcore.blocks import ChooserBlock
+from embed_video.templatetags.embed_video_tags import VideoNode
 
 
 class EmbedVideoChooserBlock(ChooserBlock):
@@ -16,7 +17,7 @@ class EmbedVideoChooserBlock(ChooserBlock):
 
     def render_basic(self, value):
         if value:
-            return value.thumbnail
+            return VideoNode.embed(value.url, size = 'medium')
         else:
             return ''
 
