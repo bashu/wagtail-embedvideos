@@ -55,7 +55,11 @@
             {% video embed_video.url as my_video %}
             {% video my_video "small" %}
                 <br/>
-                <strong>Backend</strong>: {{ my_video.backend }}
+                <strong>Backend:</strong> {{ my_video.backend }}
+                <br>
+                <strong>URL:</strong> {{ my_video.url }}
+                <br>
+                <strong>Thumbnail from backend:</strong> {{ my_video.thumbnail }}
             {% endvideo %}
         </div>
     </div>
