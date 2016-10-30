@@ -14,9 +14,9 @@
                 {% endvideo %}
             {% endif %}
         {% else %}
-            <img>
+            <img src="" />
         {% endif %}
     </div>
 {% endblock %}
 
-{% block edit_chosen_item_url %}{% if embed_video %}{% url 'wagtail_embed_videos_edit_embed_video' embed_video.id %}{% endif %}{% endblock %}
+{% block edit_chosen_item_url %}{% if embed_video %}{% url 'wagtail_embed_videos:edit' embed_video.id %}{% endif %}{% endblock %}

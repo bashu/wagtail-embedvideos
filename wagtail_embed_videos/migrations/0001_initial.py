@@ -2,10 +2,11 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import embed_video.fields
-import wagtail.wagtailadmin.taggable
-import django.db.models.deletion
 from django.conf import settings
+import django.db.models.deletion
+
+import embed_video.fields
+import wagtail.wagtailsearch.index
 import taggit.managers
 
 
@@ -32,6 +33,6 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(models.Model, wagtail.wagtailadmin.taggable.TagSearchable),
+            bases=(models.Model, wagtail.wagtailsearch.index.Indexed),
         ),
     ]

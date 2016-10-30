@@ -18,8 +18,8 @@ from django.core.urlresolvers import reverse
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
-from wagtail.wagtailadmin.taggable import TagSearchable
 from wagtail.wagtailadmin.utils import get_object_usage
+from wagtail.wagtailcore.models import CollectionMember
 from wagtail.wagtailsearch import index
 
 from embed_video.fields import EmbedVideoField
@@ -27,6 +27,7 @@ from embed_video.backends import detect_backend
 
 try:
     from django.apps import apps
+
     get_model = apps.get_model
 except ImportError:
     from django.db.models.loading import get_model
@@ -79,20 +80,21 @@ def create_thumbnail(model_instance):
 
 
 @python_2_unicode_compatible
-class AbstractEmbedVideo(models.Model, TagSearchable):
+class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
         image_model_name,
-        verbose_name="Thumbnail",
+        verbose_name=_('Thumbnail'),
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created'))
     uploaded_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False)
+        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False, verbose_name=_('Uploader')
+    )
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 
@@ -101,12 +103,18 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
 
     @property
     def usage_url(self):
-        return reverse('wagtail_embed_videos_video_usage',
-                       args=(self.id,))
+        return reverse(
+            'wagtail_embed_videos:video_usage',
+            args=(self.id,)
+        )
 
-    search_fields = TagSearchable.search_fields + (
+    search_fields = CollectionMember.search_fields + [
+        index.SearchField('title', partial_match=True, boost=10),
+        index.RelatedFields('tags', [
+            index.SearchField('name', partial_match=True, boost=10),
+        ]),
         index.FilterField('uploaded_by_user'),
-    )
+    ]
 
     def __str__(self):
         return self.title
@@ -128,16 +136,8 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         return self.title
 
     def is_editable_by_user(self, user):
-        if user.has_perm('wagtail_embed_videos.change_embedvideo'):
-            # user has global permission to change videos
-            return True
-        elif user.has_perm('wagtail_embed_videos.add_embedvideo') and\
-                self.uploaded_by_user == user:
-            # user has video add permission, which also implicitly provides
-            # permission to edit their own videos
-            return True
-        else:
-            return False
+        from .permissions import permission_policy
+        return permission_policy.user_has_permission_for_instance(user, 'change', self)
 
     class Meta:
         abstract = True
@@ -147,25 +147,29 @@ class EmbedVideo(AbstractEmbedVideo):
     admin_form_fields = (
         'title',
         'url',
+        'collection',
         'thumbnail',
         'tags',
     )
 
 
 def get_embed_video_model():
+    # TODO: WAGTAILEMBEDVIDEO_VIDEO_MODEL setting doesn't exist, at least in models
     try:
-        app_label, model_name =\
+        app_label, model_name = \
             settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
     except AttributeError:
         return EmbedVideo
     except ValueError:
         raise ImproperlyConfigured(
             "WAGTAILEMBEDVIDEO_VIDEO_MODEL must be of the form \
-            'app_label.model_name'")
+            'app_label.model_name'"
+        )
 
     embed_video_model = get_model(app_label, model_name)
     if embed_video_model is None:
         raise ImproperlyConfigured(
             "WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not \
-            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
+            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL
+        )
     return embed_video_model
