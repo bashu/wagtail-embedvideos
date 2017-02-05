@@ -21,6 +21,7 @@ from django.core.files.temp import NamedTemporaryFile
 from wagtail.wagtailadmin.utils import get_object_usage
 from wagtail.wagtailcore.models import CollectionMember
 from wagtail.wagtailsearch import index
+from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
 
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -82,6 +83,8 @@ def create_thumbnail(model_instance):
     model_instance.thumbnail.tags.add('video-thumbnail')
     model_instance.save()
 
+class EmbedVideoQuerySet(SearchableQuerySetMixin, models.QuerySet):
+    pass
 
 @python_2_unicode_compatible
 class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
@@ -120,6 +123,8 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
         index.FilterField('uploaded_by_user'),
     ]
 
+    objects = EmbedVideoQuerySet.as_manager()
+    
     def __str__(self):
         return self.title
 
