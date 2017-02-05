@@ -42,5 +42,5 @@ GroupEmbedVideoPermissionFormSet = collection_member_permission_formset_factory(
         ('add_image', _("Add"), _("Add/edit embed videos you own")),
         ('change_image', _("Edit"), _("Edit any embed video")),
     ],
-    'wagtail_embed_videos/permissions/includes/image_permissions_formset.html'
+    'wagtail_embed_videos/permissions/includes/video_permissions_formset.html'
 )
