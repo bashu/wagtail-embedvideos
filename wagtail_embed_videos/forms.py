@@ -34,7 +34,6 @@ def get_embed_video_form(model):
 
 class EmbedVideoInsertionForm(BaseCollectionMemberForm):
     permission_policy = embed_video_permission_policy
-    alt_text = forms.CharField()
 
 
 GroupEmbedVideoPermissionFormSet = collection_member_permission_formset_factory(
