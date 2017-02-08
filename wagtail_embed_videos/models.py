@@ -104,9 +104,9 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         return reverse('wagtail_embed_videos_video_usage',
                        args=(self.id,))
 
-    search_fields = TagSearchable.search_fields + (
+    search_fields = TagSearchable.search_fields + [
         index.FilterField('uploaded_by_user'),
-    )
+    ]
 
     def __str__(self):
         return self.title
