@@ -19,3 +19,6 @@ class EmbedVideoChooserBlock(ChooserBlock):
             return value.thumbnail
         else:
             return ''
+
+    class Meta:
+        icon = "media"
