@@ -3,19 +3,24 @@
 {% include "wagtailadmin/shared/header.html" with title=choose_str merged=1 tabbed=1 icon="media" %}
 
 <section id="search" class="{% if not uploadform.errors %}active{% endif %} nice-padding">
-    <form class="embed-video-search search-bar" action="{% url 'wagtail_embed_videos_chooser' %}{% if will_select_format %}?select_format=true{% endif %}" method="GET" autocomplete="off">
+    <form class="embed-video-search search-bar"
+          action="{% url 'wagtail_embed_videos_chooser' %}{% if will_select_format %}?select_format=true{% endif %}"
+          method="GET" autocomplete="off">
         <ul class="fields">
             {% for field in searchform %}
-                {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
+            {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
             {% endfor %}
-            <li class="submit"><input type="submit" value="{% trans 'Search' %}" /></li>
+            {% if collections %}
+            {% include "wagtailadmin/shared/collection_chooser.html" %}
+            {% endif %}
             {% if popular_tags %}
-                <li class="taglist">
-                    <h3>{% trans 'Popular tags' %}</h3>
-                    {% for tag in popular_tags %}
-                        <a class="suggested-tag tag" href="{% url 'wagtail_embed_videos_index' %}?q={{ tag.name|urlencode }}">{{ tag.name }}</a>
-                    {% endfor %}
-                </li>
+            <li class="taglist">
+                <h3>{% trans 'Popular tags' %}</h3>
+                {% for tag in popular_tags %}
+                <a class="suggested-tag tag" href="{% url 'wagtail_embed_videos_index' %}?q={{ tag.name|urlencode }}">{{
+                    tag.name }}</a>
+                {% endfor %}
+            </li>
             {% endif %}
         </ul>
     </form>
@@ -23,6 +28,7 @@
         {% include "wagtail_embed_videos/chooser/results.html" %}
     </div>
     {% if can_add %}
-        <p>{% blocktrans %}Add more {% endblocktrans %}<a href="{% url "wagtail_embed_videos_add_embed_video" %}" target="_blank">{% trans "Video" %}</p>
+    <p>{% blocktrans %}Add more {% endblocktrans %}<a href="{% url " wagtail_embed_videos_add_embed_video" %}"
+        target="_blank">{% trans "Video" %}</p>
     {% endif %}
 </section>

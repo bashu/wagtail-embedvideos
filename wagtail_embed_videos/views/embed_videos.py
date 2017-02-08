@@ -11,10 +11,12 @@ from django.http import HttpResponse
 
 from wagtail.wagtailadmin.forms import SearchForm
 from wagtail.wagtailadmin import messages
+from wagtail.wagtailcore.models import Collection
 from wagtail.wagtailsearch.backends import get_search_backends
 
 from wagtail_embed_videos.models import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
+from wagtail_embed_videos.permissions import permission_policy
 
 
 @permission_required('wagtail_embed_videos.add_embedvideo')
@@ -38,7 +40,7 @@ def index(request):
             query_string = form.cleaned_data['q']
 
             if not request.user.has_perm(
-                'wagtail_embed_videos.change_embedvideo'
+                    'wagtail_embed_videos.change_embedvideo'
             ):
                 # restrict to the user's own embed videos
                 embed_videos = EmbedVideo.search(
@@ -50,6 +52,16 @@ def index(request):
     else:
         form = SearchForm(placeholder=_("Search videos"))
 
+    # Filter by collection
+    current_collection = None
+    collection_id = request.GET.get('collection_id')
+    if collection_id:
+        try:
+            current_collection = Collection.objects.get(id=collection_id)
+            embed_videos = embed_videos.filter(collection=current_collection)
+        except (ValueError, Collection.DoesNotExist):
+            pass
+
     # Pagination
     p = request.GET.get('p', 1)
     paginator = Paginator(embed_videos, 20)
@@ -60,6 +72,12 @@ def index(request):
         embed_videos = paginator.page(1)
     except EmptyPage:
         embed_videos = paginator.page(paginator.num_pages)
+
+    collections = permission_policy.collections_user_has_any_permission_for(
+        request.user, ['add', 'change']
+    )
+    if len(collections) < 2:
+        collections = None
 
     # Create response
     if request.is_ajax():
@@ -80,8 +98,12 @@ def index(request):
                 'embed_videos': embed_videos,
                 'query_string': query_string,
                 'is_searching': bool(query_string),
+
                 'search_form': form,
                 'popular_tags': EmbedVideo.popular_tags(),
+                'collections': collections,
+                'current_collection': current_collection,
+                'user_can_add': permission_policy.user_has_permission(request.user, 'add'),
             }
         )
 
@@ -96,7 +118,7 @@ def edit(request, embed_video_id):
         raise PermissionDenied
 
     if request.POST:
-        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video)
+        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
         if form.is_valid():
             form.save()
 
@@ -105,13 +127,14 @@ def edit(request, embed_video_id):
                 backend.add(embed_video)
 
             messages.success(request, _("Video '{0}' updated.").format(embed_video.title), buttons=[
-                messages.button(reverse('wagtail_embed_videos_edit_embed_video', args=(embed_video.id,)), _('Edit again'))
+                messages.button(reverse('wagtail_embed_videos_edit_embed_video', args=(embed_video.id,)),
+                                _('Edit again'))
             ])
             return redirect('wagtail_embed_videos_index')
         else:
             messages.error(request, _("The video could not be saved due to errors."))
     else:
-        form = EmbedVideoForm(instance=embed_video)
+        form = EmbedVideoForm(instance=embed_video, user=request.user)
 
     return render(request, "wagtail_embed_videos/embed_videos/edit.html", {
         'embed_video': embed_video,
@@ -152,7 +175,7 @@ def add(request):
 
     if request.POST:
         embed_video = EmbedVideoModel(uploaded_by_user=request.user)
-        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video)
+        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
         if form.is_valid():
             form.save()
 
@@ -167,7 +190,7 @@ def add(request):
         else:
             messages.error(request, _("The video could not be created due to errors."))
     else:
-        form = EmbedVideoForm()
+        form = EmbedVideoForm(user=request.user)
 
     return render(request, "wagtail_embed_videos/embed_videos/add.html", {
         'form': form,
