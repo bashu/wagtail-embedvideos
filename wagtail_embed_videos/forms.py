@@ -39,8 +39,8 @@ class EmbedVideoInsertionForm(BaseCollectionMemberForm):
 GroupEmbedVideoPermissionFormSet = collection_member_permission_formset_factory(
     EmbedVideo,
     [
-        ('add_image', _("Add"), _("Add/edit embed videos you own")),
-        ('change_image', _("Edit"), _("Edit any embed video")),
+        ('add_embed_video', _("Add"), _("Add/edit embed videos you own")),
+        ('change_embed_video', _("Edit"), _("Edit any embed video")),
     ],
     'wagtail_embed_videos/permissions/includes/video_permissions_formset.html'
 )
