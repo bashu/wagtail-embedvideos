@@ -19,17 +19,17 @@ def add_embed_videos_permissions_to_admin_groups(apps, schema_editor):
 
     add_embed_permission, _created = Permission.objects.get_or_create(
         content_type=embedvideo_content_type,
-        codename='add_embed_video',
+        codename='add_embedvideo',
         defaults={'name': 'Can add embed video'}
     )
     change_embed_permission, _created = Permission.objects.get_or_create(
         content_type=embedvideo_content_type,
-        codename='change_embed_video',
+        codename='change_embedvideo',
         defaults={'name': 'Can change embed video'}
     )
     delete_embed_permission, _created = Permission.objects.get_or_create(
         content_type=embedvideo_content_type,
-        codename='delete_embed_video',
+        codename='delete_embedvideo',
         defaults={'name': 'Can delete embed video'}
     )
 
@@ -49,7 +49,7 @@ def remove_embed_videos_permissions(apps, schema_editor):
     # This cascades to Group
     Permission.objects.filter(
         content_type=embed_video_content_type,
-        codename__in=('add_embed_video', 'change_embed_video', 'delete_embed_video')
+        codename__in=('add_embedvideo', 'change_embedvideo', 'delete_embedvideo')
     ).delete()
 
 
