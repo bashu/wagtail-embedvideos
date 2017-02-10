@@ -7,6 +7,7 @@ from wagtail.wagtailadmin.forms import collection_member_permission_formset_fact
 from wagtail.wagtailimages.edit_handlers import AdminImageChooser
 
 from wagtail_embed_videos import widgets
+from wagtail_embed_videos.widgets import AdminEmbedVideoChooser
 from wagtail_embed_videos.models import EmbedVideo
 
 from .permissions import permission_policy as embed_video_permission_policy
@@ -28,7 +29,7 @@ def get_embed_video_form(model):
         fields=fields,
         widgets={
             # 'tags': widgets.AdminTagWidget,
-            'thumbnail': AdminImageChooser,
+            'thumbnail': AdminEmbedVideoChooser,
         })
 
 
