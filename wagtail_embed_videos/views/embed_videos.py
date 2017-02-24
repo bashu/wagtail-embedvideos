@@ -38,13 +38,13 @@ def index(request):
     # Search
     query_string = None
     if 'q' in request.GET:
-        form = SearchForm(request.GET, placeholder=_("Search images"))
+        form = SearchForm(request.GET, placeholder=_("Search videos"))
         if form.is_valid():
             query_string = form.cleaned_data['q']
 
             embed_videos = embed_videos.search(query_string)
     else:
-        form = SearchForm(placeholder=_("Search images"))
+        form = SearchForm(placeholder=_("Search videos"))
 
     # Filter by collection
     current_collection = None

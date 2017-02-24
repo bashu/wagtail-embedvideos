@@ -34,14 +34,13 @@ def get_embed_video_form(model):
 
 class EmbedVideoInsertionForm(BaseCollectionMemberForm):
     permission_policy = embed_video_permission_policy
-    alt_text = forms.CharField()
 
 
 GroupEmbedVideoPermissionFormSet = collection_member_permission_formset_factory(
     EmbedVideo,
     [
-        ('add_image', _("Add"), _("Add/edit embed videos you own")),
-        ('change_image', _("Edit"), _("Edit any embed video")),
+        ('add_embedvideo', _("Add"), _("Add/edit embed videos you own")),
+        ('change_embedvideo', _("Edit"), _("Edit any embed video")),
     ],
-    'wagtail_embed_videos/permissions/includes/image_permissions_formset.html'
+    'wagtail_embed_videos/permissions/includes/video_permissions_formset.html'
 )
