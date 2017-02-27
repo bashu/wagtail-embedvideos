@@ -67,19 +67,10 @@ If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of
 
 ## Release Notes
 
-### v0.0.5
+### v0.3.0
 
- - Now it shows the video when editing
+ - Changed the structure of "AbstractEmbedVideo", because "TagSearchable" is not used anymore;
 
-### v0.0.4
+### v0.2.5
 
- - Auto-create thumbnail images in wagtailimages app with tag 'video-thumbnail'
-
- - EmbedVideoChooserPanel now has a link to create a new embed video instance instead of the form
- (this is a fix to the problem having nested modals of wagtail)
-
-### v0.0.3
-
-- Fixed injection of js file for embed video chooser
-
-- Removed more unnecessary files
+ - This is the last version compatible with Wagtail <= 1.6, because TagSearchable was deprecated and then removed.
