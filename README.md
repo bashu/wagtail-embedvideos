@@ -3,6 +3,13 @@
 Simple app that works similar to wagtailimages, but for embedding YouTube and Vimeo videos and music from SoundCloud.
 It's an integration of [django-embed-video](https://github.com/yetty/django-embed-video)
 
+
+## WARNING
+
+With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 1.6!
+
+If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of "wagtail_embed_videos"
+
 ## REQUIREMENTS
 
         pip install wagtail-embed-videos
@@ -47,14 +54,14 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
         # accessing the thumbnail image in the model 'wagtailimages'
         # this is a foreign key to model Image
         video_based_model_instanse.video.thumbnail
-        
+
 5. For render your video in a template put `{% load embed_video_tags%}` for load template tags and put this code where you want render your video:
         ```html
         {% video VideoBasedModel.video.url as video %}
                 {% video video 'small' %}
         {% endvideo %}
         ```
-        
+
 6. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
 
 
