@@ -8,6 +8,7 @@ Core Committers
 
 * Diogo Marques
 * Rui Martins
+* Tiago Costa
 
 
 Contributors

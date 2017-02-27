@@ -3,6 +3,13 @@
 Simple app that works similar to wagtailimages, but for embedding YouTube and Vimeo videos and music from SoundCloud.
 It's an integration of [django-embed-video](https://github.com/yetty/django-embed-video)
 
+
+## WARNING
+
+With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 1.6!
+
+If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of "wagtail_embed_videos"
+
 ## REQUIREMENTS
 
         pip install wagtail-embed-videos
@@ -47,32 +54,23 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
         # accessing the thumbnail image in the model 'wagtailimages'
         # this is a foreign key to model Image
         video_based_model_instanse.video.thumbnail
-        
+
 5. For render your video in a template put `{% load embed_video_tags%}` for load template tags and put this code where you want render your video:
         ```html
         {% video VideoBasedModel.video.url as video %}
                 {% video video 'small' %}
         {% endvideo %}
         ```
-        
+
 6. Check [django-embed-video](https://github.com/yetty/django-embed-video) for more documentation
 
 
 ## Release Notes
 
-### v0.0.5
+### v0.3.0
 
- - Now it shows the video when editing
+ - Changed the structure of "AbstractEmbedVideo", because "TagSearchable" is not used anymore;
 
-### v0.0.4
+### v0.2.5
 
- - Auto-create thumbnail images in wagtailimages app with tag 'video-thumbnail'
-
- - EmbedVideoChooserPanel now has a link to create a new embed video instance instead of the form
- (this is a fix to the problem having nested modals of wagtail)
-
-### v0.0.3
-
-- Fixed injection of js file for embed video chooser
-
-- Removed more unnecessary files
+ - This is the last version compatible with Wagtail <= 1.6, because TagSearchable was deprecated and then removed.
