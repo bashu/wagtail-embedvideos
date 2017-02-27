@@ -11,6 +11,7 @@ from django.http import HttpResponse
 
 from wagtail.wagtailadmin.forms import SearchForm
 from wagtail.wagtailadmin import messages
+from wagtail.wagtailadmin.utils import popular_tags_for_model
 from wagtail.wagtailsearch.backends import get_search_backends
 
 from wagtail_embed_videos.models import get_embed_video_model
@@ -41,12 +42,12 @@ def index(request):
                 'wagtail_embed_videos.change_embedvideo'
             ):
                 # restrict to the user's own embed videos
-                embed_videos = EmbedVideo.search(
+                embed_videos = EmbedVideo.objects.search(
                     query_string,
                     filters={'uploaded_by_user_id': request.user.id}
                 )
             else:
-                embed_videos = EmbedVideo.search(query_string)
+                embed_videos = EmbedVideo.objects.search(query_string)
     else:
         form = SearchForm(placeholder=_("Search videos"))
 
@@ -81,7 +82,7 @@ def index(request):
                 'query_string': query_string,
                 'is_searching': bool(query_string),
                 'search_form': form,
-                'popular_tags': EmbedVideo.popular_tags(),
+                'popular_tags': popular_tags_for_model(EmbedVideo),
             }
         )
 
