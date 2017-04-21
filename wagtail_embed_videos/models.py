@@ -20,6 +20,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 from wagtail.wagtailadmin.utils import get_object_usage
 from wagtail.wagtailimages.models import Image as WagtailImage
+from wagtail.wagtailimages import get_image_model
 from wagtail.wagtailsearch import index
 from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
 
@@ -63,7 +64,7 @@ def create_thumbnail(model_instance):
                     thumbnail_url = temp_thumbnail_url
                     break
 
-    img_temp = NamedTemporaryFile(delete=True)
+    img_temp = NamedTemporaryFile()
     try:
         img_temp.write(urllib2.urlopen(thumbnail_url).read())
     except:
@@ -71,7 +72,7 @@ def create_thumbnail(model_instance):
         img_temp.write(http.request('GET', thumbnail_url).data)
     img_temp.flush()
 
-    image = WagtailImage(title=model_instance.title)
+    image = get_image_model()(title=model_instance.title)
     image.file.save(model_instance.title + '.jpg', File(img_temp))
 
     model_instance.thumbnail = image
