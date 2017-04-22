@@ -20,6 +20,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 from wagtail.wagtailadmin.utils import get_object_usage
 from wagtail.wagtailcore.models import CollectionMember
+from wagtail.wagtailimages import get_image_model
 from wagtail.wagtailsearch import index
 from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
 
@@ -52,9 +53,6 @@ YOUTUBE_RESOLUTIONS = [
 
 
 def create_thumbnail(model_instance):
-    # http://stackoverflow.com/a/25648427/1179222
-    from wagtail.wagtailimages.models import get_image_model
-    WagtailImage = get_image_model()
 
     # CREATING IMAGE FROM THUMBNAIL
     backend = detect_backend(model_instance.url)
@@ -68,7 +66,7 @@ def create_thumbnail(model_instance):
                     thumbnail_url = temp_thumbnail_url
                     break
 
-    img_temp = NamedTemporaryFile(delete=True)
+    img_temp = NamedTemporaryFile()
     try:
         img_temp.write(urllib2.urlopen(thumbnail_url).read())
     except:
@@ -76,15 +74,17 @@ def create_thumbnail(model_instance):
         img_temp.write(http.request('GET', thumbnail_url).data)
     img_temp.flush()
 
-    image = WagtailImage(title=model_instance.title)
+    image = get_image_model()(title=model_instance.title)
     image.file.save(model_instance.title + '.jpg', File(img_temp))
 
     model_instance.thumbnail = image
     model_instance.thumbnail.tags.add('video-thumbnail')
     model_instance.save()
 
+
 class EmbedVideoQuerySet(SearchableQuerySetMixin, models.QuerySet):
     pass
+
 
 @python_2_unicode_compatible
 class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
@@ -105,6 +105,8 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 
+    objects = EmbedVideoQuerySet.as_manager()
+
     def get_usage(self):
         return get_object_usage(self)
 
@@ -122,8 +124,6 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
         ]),
         index.FilterField('uploaded_by_user'),
     ]
-
-    objects = EmbedVideoQuerySet.as_manager()
     
     def __str__(self):
         return self.title
@@ -182,3 +182,4 @@ def get_embed_video_model():
             been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL
         )
     return embed_video_model
+

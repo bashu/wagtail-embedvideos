@@ -10,15 +10,15 @@ setup(
         "but for embedding YouTube and Vimeo videos and music from SoundCloud."
         "It's an integration of django-embed-video."
         ),
-    author='Diogo Marques',
-    author_email='doriva.marques.29@gmail.com',
-    maintainer='Diogo Marques',
-    maintainer_email='doriva.marques.29@gmail.com',
+    author='InfoPortugal S.A.',
+    author_email='suporte24@gmail.com',
+    maintainer='InfoPortugal S.A.',
+    maintainer_email='suporte24@gmail.com',
     url='https://github.com/infoportugal/wagtail-embedvideos',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'django>=1.7', 'wagtail>=1.0', 'django-embed-video>=1.0'],
+        'django>=1.7', 'wagtail>=1.6', 'django-embed-video>=1.0'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
@@ -36,4 +36,3 @@ setup(
     license='New BSD',
 
 )
-

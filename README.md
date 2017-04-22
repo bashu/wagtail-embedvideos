@@ -4,6 +4,15 @@ WAGTAIL EMBED VIDEOS
 Simple app that works similar to wagtailimages, but for embedding YouTube and Vimeo videos and music from SoundCloud.
 It's an integration of [django-embed-video](https://github.com/yetty/django-embed-video).
 
+
+WARNING
+-------
+
+With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 1.6!
+
+If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of `wagtail_embed_videos`.
+
+
 REQUIREMENTS
 ------------
 You have install `wagtail-embedvideos` package, use the common command:
@@ -11,6 +20,7 @@ You have install `wagtail-embedvideos` package, use the common command:
         pip install wagtail-embed-videos
 
 You need add `wagtailimages` to the current settings, is by default in any `wagtail` project.
+
 
 Quick start
 -----------
@@ -30,7 +40,7 @@ Quick start
 
 3. Run `python manage.py migrate` to create the models of wagtail_embed_videos app
 
-4. Using wagtail_embed_videos:
+4. Using `wagtail_embed_videos`:
 
     ```python
         from wagtail_embed_videos.edit_handlers import EmbedVideoChooserPanel
@@ -114,11 +124,19 @@ You can use `EmbedVideo` in `StreamFields` too, an example:
 Extend EmbedVideo model
 -----------------------
 You can extend the `EmbedVideo` model in the same way that `wagtail` image models. Use this setting:
-`WAGTAILEMBEDVIDEO_VIDEO_MODEL`
+`WAGTAILEMBEDVIDEO_VIDEO_MODEL`.
 
 
 Release Notes
 -------------
+
+__v0.3.0__
+
+ - Changed the structure of "AbstractEmbedVideo", because "TagSearchable" is not used anymore;
+
+__v0.2.5__
+
+ - This is the last version compatible with Wagtail <= 1.6, because TagSearchable was deprecated and then removed.
 
 __v0.0.6__
 
