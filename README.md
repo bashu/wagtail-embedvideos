@@ -36,9 +36,9 @@ Quick start
     ]
     ```
 
-2. Run `python manage.py makemigrations` to create the migration for wagtail_embed_videos models
+2. Run `python manage.py makemigrations` to create the migration for `wagtail_embed_videos` models.
 
-3. Run `python manage.py migrate` to create the models of wagtail_embed_videos app
+3. Run `python manage.py migrate` to create the models of `wagtail_embed_videos` app.
 
 4. Using `wagtail_embed_videos`:
 
