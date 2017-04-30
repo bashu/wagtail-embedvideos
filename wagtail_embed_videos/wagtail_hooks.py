@@ -40,7 +40,7 @@ class EmbedVideosMenuItem(MenuItem):
 @hooks.register('register_admin_menu_item')
 def register_embed_videos_menu_item():
     return EmbedVideosMenuItem(
-        _('Embed Videos'),
+        _('Videos'),
         urlresolvers.reverse('wagtail_embed_videos:index'),
         name='embed_videos',
         classnames='icon icon-media',
@@ -50,7 +50,6 @@ def register_embed_videos_menu_item():
 
 @hooks.register('insert_editor_js')
 def editor_js():
-    # TODO: Perhaps use a halloplugin for embed videos.
     js_files = [
         static('wagtail_embed_videos/js/embed-video-chooser.js'),
     ]
@@ -94,7 +93,7 @@ class EmbedVideosSearchArea(SearchArea):
 @hooks.register('register_admin_search_area')
 def register_embed_videos_search_area():
     return EmbedVideosSearchArea(
-        _('Embed videos'),
+        _('Videos'),
         urlresolvers.reverse('wagtail_embed_videos:index'),
         name='embed_videos',
         classnames='icon icon-media',
