@@ -9,7 +9,6 @@ import requests
 
 from taggit.managers import TaggableManager
 
-from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _

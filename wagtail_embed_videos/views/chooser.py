@@ -193,7 +193,9 @@ def chooser_select_format(request, embed_video_id):
                 {'embed_video_json': embed_video_json}
             )
     else:
-        form = EmbedVideoInsertionForm(initial={'alt_text': embed_video.default_alt_text})
+        initial = {'alt_text': embed_video.default_alt_text}
+        initial.update(request.GET.dict())
+        form = EmbedVideoInsertionForm(initial=initial)
 
     return render_modal_workflow(
         request, 'wagtail_embed_videos/chooser/select_format.html', 'wagtail_embed_videos/chooser/select_format.js',
