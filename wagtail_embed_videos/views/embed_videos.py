@@ -18,7 +18,7 @@ from wagtail.wagtailadmin.utils import popular_tags_for_model
 from wagtail.wagtailcore.models import Collection
 from wagtail.wagtailsearch import index as search_index
 
-from wagtail_embed_videos.models import get_embed_video_model
+from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
 from wagtail_embed_videos.permissions import permission_policy
 

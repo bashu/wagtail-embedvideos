@@ -160,26 +160,3 @@ class EmbedVideo(AbstractEmbedVideo):
         'thumbnail',
         'tags',
     )
-
-
-def get_embed_video_model():
-    # TODO: WAGTAILEMBEDVIDEO_VIDEO_MODEL setting doesn't exist, at least in models
-    try:
-        app_label, model_name = \
-            settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split('.')
-    except AttributeError:
-        return EmbedVideo
-    except ValueError:
-        raise ImproperlyConfigured(
-            "WAGTAILEMBEDVIDEO_VIDEO_MODEL must be of the form \
-            'app_label.model_name'"
-        )
-
-    embed_video_model = get_model(app_label, model_name)
-    if embed_video_model is None:
-        raise ImproperlyConfigured(
-            "WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not \
-            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL
-        )
-    return embed_video_model
-
