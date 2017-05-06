@@ -14,7 +14,7 @@ from wagtail.wagtailadmin.menu import MenuItem
 from wagtail_embed_videos import admin_urls
 from wagtail_embed_videos.api.admin.endpoints import EmbedVideosAdminAPIEndpoint
 from wagtail_embed_videos.forms import GroupEmbedVideoPermissionFormSet
-from wagtail_embed_videos.models import get_embed_video_model
+from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.permissions import permission_policy
 
 
@@ -76,6 +76,11 @@ class EmbedVideosSummaryItem(SummaryItem):
         return {
             'total_videos': get_embed_video_model().objects.count(),
         }
+
+    def is_shown(self):
+        return permission_policy.user_has_any_permission(
+            self.request.user, ['add', 'change', 'delete']
+        )
 
 
 @hooks.register('construct_homepage_summary_items')

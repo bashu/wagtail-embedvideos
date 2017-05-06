@@ -8,12 +8,13 @@ from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
 from wagtail.wagtailadmin.forms import SearchForm
 from wagtail.wagtailadmin.utils import PermissionPolicyChecker
 from wagtail.wagtailadmin.utils import popular_tags_for_model
+from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.models import Collection
 from wagtail.wagtailsearch import index as search_index
 
 from embed_video.backends import detect_backend
 
-from wagtail_embed_videos.models import get_embed_video_model
+from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form, EmbedVideoInsertionForm
 # from wagtail_embed_videos.formats import get_embed_video_format
 from wagtail_embed_videos.permissions import permission_policy
@@ -52,6 +53,11 @@ def chooser(request):
 
     embed_videos = EmbedVideo.objects.order_by('-created_at')
 
+    # TODO: Make test for this functionality
+    # allow hooks to modify the queryset
+    for hook in hooks.get_hooks('construct_embed_video_chooser_queryset'):
+        embed_videos = hook(embed_videos, request)
+
     q = None
     if 'q' in request.GET or 'p' in request.GET or 'tag' in request.GET or 'collection_id' in request.GET:
         collection_id = request.GET.get('collection_id')
@@ -88,20 +94,20 @@ def chooser(request):
 
         paginator, embed_videos = paginate(request, embed_videos, per_page=12)
 
-    return render_modal_workflow(
-        request,
-        'wagtail_embed_videos/chooser/chooser.html',
-        'wagtail_embed_videos/chooser/chooser.js',
-        {
-            'embed_videos': embed_videos,
-            'uploadform': uploadform,
-            'searchform': searchform,
-            'is_searching': False,
-            'query_string': q,
-            'popular_tags': popular_tags_for_model(EmbedVideo),
-            'collections': collections,
-        }
-    )
+        return render_modal_workflow(
+            request,
+            'wagtail_embed_videos/chooser/chooser.html',
+            'wagtail_embed_videos/chooser/chooser.js',
+            {
+                'embed_videos': embed_videos,
+                'uploadform': uploadform,
+                'searchform': searchform,
+                'is_searching': False,
+                'query_string': q,
+                'popular_tags': popular_tags_for_model(EmbedVideo),
+                'collections': collections,
+            }
+        )
 
 
 def embed_video_chosen(request, embed_video_id):
@@ -187,7 +193,9 @@ def chooser_select_format(request, embed_video_id):
                 {'embed_video_json': embed_video_json}
             )
     else:
-        form = EmbedVideoInsertionForm(initial={'alt_text': embed_video.default_alt_text})
+        initial = {'alt_text': embed_video.default_alt_text}
+        initial.update(request.GET.dict())
+        form = EmbedVideoInsertionForm(initial=initial)
 
     return render_modal_workflow(
         request, 'wagtail_embed_videos/chooser/select_format.html', 'wagtail_embed_videos/chooser/select_format.js',

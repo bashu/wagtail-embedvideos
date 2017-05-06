@@ -1,9 +1,6 @@
 import json
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import permission_required
-from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
 from django.core.urlresolvers import reverse
@@ -18,7 +15,7 @@ from wagtail.wagtailadmin.utils import popular_tags_for_model
 from wagtail.wagtailcore.models import Collection
 from wagtail.wagtailsearch import index as search_index
 
-from wagtail_embed_videos.models import get_embed_video_model
+from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
 from wagtail_embed_videos.permissions import permission_policy
 
