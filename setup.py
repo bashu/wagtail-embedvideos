@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='wagtail_embed_videos',
-    version='0.3.0',
+    version='0.3.2',
     description='Embed Videos for Wagtail CMS.',
     long_description=(
         "Simple app that works similar to wagtailimages,"
@@ -18,7 +18,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'django>=1.7', 'wagtail>=1.6', 'django-embed-video>=1.0'],
+        'django>=1.7', 'wagtail>=1.7', 'django-embed-video>=1.0'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
