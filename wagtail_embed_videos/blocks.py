@@ -13,7 +13,7 @@ class EmbedVideoChooserBlock(ChooserBlock):
         from wagtail_embed_videos.widgets import AdminEmbedVideoChooser
         return AdminEmbedVideoChooser
 
-    def render_basic(self, value):
+    def render_basic(self, value, context=None):
         if value:
             return VideoNode.embed(value.url, size = 'medium')
         else:
