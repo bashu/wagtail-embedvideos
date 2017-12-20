@@ -128,6 +128,10 @@ Release Notes
 
 **v0.3.0**
 
+-	Added collections feature;
+
+**v0.3.0**
+
 -	Changed the structure of "AbstractEmbedVideo", because "TagSearchable" is not used anymore;
 
 **v0.2.5**
