@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import permission_required
 from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
 from wagtail.wagtailadmin.forms import SearchForm
 from wagtail.wagtailsearch.backends import get_search_backends
+from wagtail.wagtailadmin.utils import popular_tags_for_model
 
 from embed_video.backends import detect_backend
 
@@ -100,7 +101,7 @@ def chooser(request):
             'is_searching': False,
             'can_add': can_add,
             'query_string': q,
-            'popular_tags': EmbedVideo.popular_tags(),
+            'popular_tags': popular_tags_for_model(EmbedVideo),
         }
     )
 

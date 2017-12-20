@@ -18,10 +18,11 @@ from django.core.urlresolvers import reverse
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
-from wagtail.wagtailadmin.taggable import TagSearchable
 from wagtail.wagtailadmin.utils import get_object_usage
-from wagtail.wagtailsearch import index
 from wagtail.wagtailimages.models import Image as WagtailImage
+from wagtail.wagtailimages import get_image_model
+from wagtail.wagtailsearch import index
+from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
 
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -31,6 +32,11 @@ try:
     get_model = apps.get_model
 except ImportError:
     from django.db.models.loading import get_model
+
+try:
+    image_model_name = settings.WAGTAILIMAGES_IMAGE_MODEL
+except AttributeError:
+    image_model_name = 'wagtailimages.Image'
 
 
 def checkUrl(url):
@@ -58,7 +64,7 @@ def create_thumbnail(model_instance):
                     thumbnail_url = temp_thumbnail_url
                     break
 
-    img_temp = NamedTemporaryFile(delete=True)
+    img_temp = NamedTemporaryFile()
     try:
         img_temp.write(urllib2.urlopen(thumbnail_url).read())
     except:
@@ -66,7 +72,7 @@ def create_thumbnail(model_instance):
         img_temp.write(http.request('GET', thumbnail_url).data)
     img_temp.flush()
 
-    image = WagtailImage(title=model_instance.title)
+    image = get_image_model()(title=model_instance.title)
     image.file.save(model_instance.title + '.jpg', File(img_temp))
 
     model_instance.thumbnail = image
@@ -74,12 +80,16 @@ def create_thumbnail(model_instance):
     model_instance.save()
 
 
+class EmbedVideoQuerySet(SearchableQuerySetMixin, models.QuerySet):
+    pass
+
+
 @python_2_unicode_compatible
-class AbstractEmbedVideo(models.Model, TagSearchable):
+class AbstractEmbedVideo(index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
-        'wagtailimages.Image',
+        image_model_name,
         verbose_name="Thumbnail",
         null=True,
         blank=True,
@@ -92,6 +102,8 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 
+    objects = EmbedVideoQuerySet.as_manager()
+
     def get_usage(self):
         return get_object_usage(self)
 
@@ -100,7 +112,11 @@ class AbstractEmbedVideo(models.Model, TagSearchable):
         return reverse('wagtail_embed_videos_video_usage',
                        args=(self.id,))
 
-    search_fields = TagSearchable.search_fields + [
+    search_fields = [
+        index.SearchField('title', partial_match=True, boost=10),
+        index.RelatedFields('tags', [
+            index.SearchField('name', partial_match=True, boost=10),
+        ]),
         index.FilterField('uploaded_by_user'),
     ]
 
