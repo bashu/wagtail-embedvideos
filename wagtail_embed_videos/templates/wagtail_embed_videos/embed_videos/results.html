@@ -3,11 +3,13 @@
 {% if embed_videos %}
     {% if is_searching %}
         <h2>
-        {% blocktrans count counter=embed_videos.paginator.count %}
-            There is one match
-        {% plural %}
-            There are {{ counter }} matches
-        {% endblocktrans %}
+            {% blocktrans count counter=embed_videos.paginator.count %}
+                There is one match
+            {% plural %}
+                There are {{ counter }} matches
+            {% endblocktrans %}
+
+            {% search_other %}
         </h2>
     {% else %}
         <h2>{% trans "Latest videos" %}</h2>
@@ -16,29 +18,35 @@
     <ul class="listing horiz images">
         {% for embed_video in embed_videos %}
             <li>
-                <a class="image-choice" href="{% url 'wagtail_embed_videos_edit_embed_video' embed_video.id %}">
-                    <div class="image">
-                        {% if embed_video.thumbnail %}
-                            {% image embed_video.thumbnail max-165x165 class="show-transparency" %}
-                        {% else %}
-                            {% video embed_video.url as my_video %}
-                                <img src="{{ my_video.thumbnail }}" class="show-transparency" style="max-width: 165px; max-height: 165px;">
-                            {% endvideo %}
-                        {% endif %}
-                    </div>
+                <a class="image-choice" href="{% url 'wagtail_embed_videos:edit' embed_video.id %}">
+                    {% include "wagtail_embed_videos/embed_videos/results_video.html" %}
                     <h3>{{ embed_video.title|ellipsistrim:60 }}</h3>
                 </a>
             </li>
         {% endfor %}
     </ul>
 
-    {% include "wagtailadmin/shared/pagination_nav.html" with items=embed_videos is_searching=is_searching query_string=query_string linkurl="wagtail_embed_videos_index" %}
+    {% include "wagtailadmin/shared/pagination_nav.html" with items=embed_videos is_searching=is_searching query_string=query_string linkurl="wagtail_embed_videos:index" %}
 
 {% else %}
     {% if is_searching %}
         <p>{% blocktrans %}Sorry, no videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
+
+        {% search_other %}
     {% else %}
-        {% url 'wagtail_embed_videos_add_embed_video' as wagtail_embed_videos_add_embed_video_url %}
-        <p>{% blocktrans %}You've not uploaded any videos. Why not <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+        {% url 'wagtail_embed_videos:add' as wagtail_embed_videos_add_embed_video_url %}
+        {% if current_collection %}
+            <p>
+                {% blocktrans %}You've not uploaded any videos in this collection. Why not
+                    <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?
+                {% endblocktrans %}
+            </p>
+        {% else %}
+            <p>
+                {% blocktrans %}You've not uploaded any videos. Why not
+                    <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?
+                {% endblocktrans %}
+            </p>
+        {% endif %}
     {% endif %}
 {% endif %}
