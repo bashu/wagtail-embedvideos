@@ -11,7 +11,6 @@ from taggit.managers import TaggableManager
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.db.models import Q
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
@@ -152,11 +151,6 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
             return True
         else:
             return False
-
-    @classmethod
-    def search(klass, q, results_per_page=10, page=1):
-        ret = klass.objects.filter(Q(title__contains=q) | Q(tags__name__in=[q]))
-        return ret.all()
 
     class Meta:
         abstract = True
