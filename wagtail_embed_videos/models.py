@@ -82,7 +82,9 @@ def create_thumbnail(model_instance):
 
 
 class EmbedVideoQuerySet(SearchableQuerySetMixin, models.QuerySet):
-    pass
+    def search(self, q, results_per_page=10, page=1):
+        ret = self.filter(Q(title__contains=q) | Q(tags__name__in=[q]))
+        return ret.all()
 
 
 @python_2_unicode_compatible
