@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 try:
@@ -23,6 +23,7 @@ from wagtail.wagtailimages.models import Image as WagtailImage
 from wagtail.wagtailimages import get_image_model
 from wagtail.wagtailsearch import index
 from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
+from wagtail.wagtailcore.models import CollectionMember
 
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -81,11 +82,13 @@ def create_thumbnail(model_instance):
 
 
 class EmbedVideoQuerySet(SearchableQuerySetMixin, models.QuerySet):
-    pass
+    def search(self, q, results_per_page=10, page=1):
+        ret = self.filter(Q(title__contains=q) | Q(tags__name__in=[q]))
+        return ret.all()
 
 
 @python_2_unicode_compatible
-class AbstractEmbedVideo(index.Indexed, models.Model):
+class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
@@ -112,7 +115,7 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
         return reverse('wagtail_embed_videos_video_usage',
                        args=(self.id,))
 
-    search_fields = [
+    search_fields = CollectionMember.search_fields + [
         index.SearchField('title', partial_match=True, boost=10),
         index.RelatedFields('tags', [
             index.SearchField('name', partial_match=True, boost=10),
@@ -161,6 +164,7 @@ class EmbedVideo(AbstractEmbedVideo):
         'url',
         'thumbnail',
         'tags',
+        'collection',
     )
 
 

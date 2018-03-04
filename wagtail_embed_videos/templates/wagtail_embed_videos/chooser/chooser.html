@@ -17,6 +17,9 @@
                     {% endfor %}
                 </li>
             {% endif %}
+            {% if collections %}
+                {% include "wagtailadmin/shared/collection_chooser.html" %}
+            {% endif %}
         </ul>
     </form>
     <div id="embed-video-results">

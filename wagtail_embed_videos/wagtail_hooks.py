@@ -10,6 +10,8 @@ from wagtail.wagtailcore import hooks
 from wagtail.wagtailadmin.menu import MenuItem
 
 from wagtail_embed_videos import admin_urls
+from wagtail_embed_videos.forms import GroupEmbedVideoPermissionFormSet
+from wagtail_embed_videos.permissions import permission_policy
 
 
 @hooks.register('register_admin_urls')
@@ -26,7 +28,9 @@ def construct_main_menu(request, menu_items):
 
 class EmbedVideosMenuItem(MenuItem):
     def is_shown(self, request):
-        return request.user.has_perm('wagtail_embed_videos.add_embedvideo')
+        return permission_policy.user_has_any_permission(
+            request.user, ['add', 'change', 'delete']
+        )
 
 
 @hooks.register('register_admin_menu_item')
@@ -55,10 +59,6 @@ def editor_js():
     )
 
 
-@hooks.register('register_permissions')
-def register_permissions():
-    embed_video_content_type = ContentType.objects.get(
-        app_label='wagtail_embed_videos', model='embedvideo')
-    embed_video_permissions = Permission.objects.filter(
-        content_type=embed_video_content_type)
-    return embed_video_permissions
+@hooks.register('register_group_permission_panel')
+def register_embed_videos_permissions_panel():
+    return GroupEmbedVideoPermissionFormSet
