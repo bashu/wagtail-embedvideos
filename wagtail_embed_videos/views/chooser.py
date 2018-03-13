@@ -39,7 +39,7 @@ def get_embed_video_json(embed_video):
 def chooser(request):
     EmbedVideo = get_embed_video_model()
 
-    if request.user.has_perm('wagtail_embed_videos.add_embedvideo'):
+    if request.user.has_perm('wagtail_embed_videos.add_embedvideo') or request.user.is_superuser:
         can_add = True
     else:
         can_add = False
@@ -53,7 +53,15 @@ def chooser(request):
             # page number
             p = request.GET.get("p", 1)
 
-            embed_videos = EmbedVideo.search(q, results_per_page=10, page=p)
+            # Get all the searchable fields from the model, and create a filter dict to use later on
+            filter_query = {}
+            for field in EmbedVideo.get_searchable_search_fields():
+                filter_query[field.field_name + '__icontains'] = q
+
+            embed_videos = EmbedVideo.objects.filter(**filter_query)
+            paginator = Paginator(embed_videos, 10)
+
+            embed_videos = paginator.page(p)
 
             is_searching = True
 
