@@ -26,7 +26,7 @@ def index(request):
     embed_videos = EmbedVideo.objects.order_by('-created_at')
 
     # Permissions
-    if not request.user.has_perm('wagtail_embed_videos.change_embedvideo'):
+    if not request.user.has_perm('wagtail_embed_videos.change_embedvideo') and not request.user.is_superuser:
         # restrict to the user's own embed videos
         embed_videos = embed_videos.filter(uploaded_by_user=request.user)
 
@@ -37,16 +37,12 @@ def index(request):
         if form.is_valid():
             query_string = form.cleaned_data['q']
 
-            if not request.user.has_perm(
-                'wagtail_embed_videos.change_embedvideo'
-            ):
-                # restrict to the user's own embed videos
-                embed_videos = EmbedVideo.search(
-                    query_string,
-                    filters={'uploaded_by_user_id': request.user.id}
-                )
-            else:
-                embed_videos = EmbedVideo.search(query_string)
+            # Get all the searchable fields from the model, and create a filter dict to use later on
+            filter_query = {}
+            for field in EmbedVideo.get_searchable_search_fields():
+                filter_query[field.field_name + '__icontains'] = query_string
+
+            embed_videos = embed_videos.filter(**filter_query)
     else:
         form = SearchForm(placeholder=_("Search videos"))
 
