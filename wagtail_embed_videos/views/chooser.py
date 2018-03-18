@@ -1,14 +1,14 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import permission_required
 
-from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
-from wagtail.wagtailadmin.forms import SearchForm
-from wagtail.wagtailsearch.backends import get_search_backends
-from wagtail.wagtailadmin.utils import popular_tags_for_model
+from wagtail.admin.modal_workflow import render_modal_workflow
+from wagtail.admin.forms import SearchForm
+from wagtail.search.backends import get_search_backends
+from wagtail.admin.utils import popular_tags_for_model
 
 from embed_video.backends import detect_backend
 
