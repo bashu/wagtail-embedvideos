@@ -75,8 +75,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'wagtail.core.middleware.SiteMiddleware',
-
-    'wagtail.redirects.middleware.RedirectMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 )
 
 INSTALLED_APPS = (
