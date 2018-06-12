@@ -32,3 +32,6 @@ class AdminEmbedVideoChooser(AdminChooser):
 
     def render_js_init(self, id_, name, value):
         return "createEmbedVideoChooser({0});".format(json.dumps(id_))
+
+    class Media:
+        js = ['wagtail_embed_videos/js/embed-video-chooser.js']

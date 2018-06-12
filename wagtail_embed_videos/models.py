@@ -33,10 +33,6 @@ try:
 except ImportError:
     from django.db.models.loading import get_model
 
-try:
-    image_model_name = settings.WAGTAILIMAGES_IMAGE_MODEL
-except AttributeError:
-    image_model_name = 'wagtailimages.Image'
 
 
 def checkUrl(url):
@@ -89,7 +85,7 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
-        image_model_name,
+        WagtailImage,
         verbose_name="Thumbnail",
         null=True,
         blank=True,
@@ -162,6 +158,10 @@ class EmbedVideo(AbstractEmbedVideo):
         'thumbnail',
         'tags',
     )
+
+    class Meta:
+        verbose_name = _('wagtail_embed_video')
+        verbose_name_plural = _('wagtail_embed_videos')
 
 
 def get_embed_video_model():
