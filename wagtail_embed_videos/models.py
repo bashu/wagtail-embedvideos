@@ -160,8 +160,8 @@ class EmbedVideo(AbstractEmbedVideo):
     )
 
     class Meta:
-        verbose_name = _('wagtail_embed_video')
-        verbose_name_plural = _('wagtail_embed_videos')
+        verbose_name = _('video')
+        verbose_name_plural = _('videos')
 
 
 def get_embed_video_model():
