@@ -121,13 +121,13 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
 
     def __init__(self, *args, **kwargs):
 
-        super(AbstractEmbedVideo, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if args:
             if args[3] is None:
                 create_thumbnail(self)
 
     def save(self, *args, **kwargs):
-        super(AbstractEmbedVideo, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if not self.thumbnail:
             create_thumbnail(self)
 
