@@ -31,3 +31,6 @@ nosetests.xml
 
 # Sphinx
 _build
+
+# Virtual Environment
+env
