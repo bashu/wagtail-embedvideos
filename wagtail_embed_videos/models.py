@@ -94,7 +94,7 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     uploaded_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False, on_delete=models.SET_NULL)
+        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False)
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 
@@ -158,10 +158,6 @@ class EmbedVideo(AbstractEmbedVideo):
         'thumbnail',
         'tags',
     )
-
-    class Meta:
-        verbose_name = _('video')
-        verbose_name_plural = _('videos')
 
 
 def get_embed_video_model():
