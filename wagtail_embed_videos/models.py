@@ -86,11 +86,7 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
-        # get_image_model(),
-        # TODO: use get_image_model()
-        # Throws:
-        # django.core.exceptions.AppRegistryNotReady: Models aren't loaded yet.
-        WagtailImage,
+        image_model_name,
         verbose_name="Thumbnail",
         null=True,
         blank=True,
