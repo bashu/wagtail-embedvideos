@@ -33,7 +33,6 @@ With recent changes to keep up with Wagtail current versions, we do **not** supp
 4. Using wagtail_embed_videos:
 
         from wagtail_embed_videos.edit_handlers import EmbedVideoChooserPanel
-        from wagtail.
 
         class VideoBasedModel(models.Model):
             video = models.ForeignKey(
