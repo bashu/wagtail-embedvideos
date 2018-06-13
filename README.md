@@ -6,9 +6,8 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
 ## WARNING
 
-With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 1.6!
+With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 2.0!
 
-If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of "wagtail_embed_videos"
 
 ## REQUIREMENTS
 
@@ -34,10 +33,11 @@ If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of
 4. Using wagtail_embed_videos:
 
         from wagtail_embed_videos.edit_handlers import EmbedVideoChooserPanel
+        from wagtail_embed_videos.models import EmbedVideo
 
         class VideoBasedModel(models.Model):
             video = models.ForeignKey(
-                'wagtail_embed_videos.EmbedVideo',
+                EmbedVideo,
                 verbose_name="Video",
                 null=True,
                 blank=True,

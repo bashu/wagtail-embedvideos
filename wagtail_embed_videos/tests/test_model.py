@@ -1,11 +1,12 @@
 import sys
 
+import django
 from django.conf import settings
 from django.test import TestCase
 
 from mock_django.models import ModelMock
 
-from wagtail.images.models import get_image_model
+from wagtail.images import get_image_model
 from wagtail_embed_videos.models import EmbedVideo, create_thumbnail
 
 
@@ -46,7 +47,7 @@ class EmbedVideoTestCase(TestCase):
         """Fetch a thumbnail from a video service."""
         video = ModelMock(EmbedVideo)
 
-        video.url = 'https://www.youtube.com/watch?v=-YGDyPAwQz0'
+        video.url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         video.title = 'Test title'
         create_thumbnail(video)
         Image = get_image_model()
