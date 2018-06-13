@@ -34,3 +34,6 @@ _build
 
 # Virtual Environment
 env
+
+# Test Media
+wagtail_embed_videos/tests/test-media/
