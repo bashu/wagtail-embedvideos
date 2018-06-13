@@ -20,7 +20,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 from wagtail.admin.utils import get_object_usage
 from wagtail.images.models import Image as WagtailImage
-from wagtail.images import get_image_model
+from wagtail.images import get_image_model, get_image_model_string
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
@@ -33,6 +33,7 @@ try:
 except ImportError:
     from django.db.models.loading import get_model
 
+image_model_name = get_image_model_string()
 
 
 def checkUrl(url):
@@ -85,6 +86,10 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
+        # get_image_model(),
+        # TODO: use get_image_model()
+        # Throws:
+        # django.core.exceptions.AppRegistryNotReady: Models aren't loaded yet.
         WagtailImage,
         verbose_name="Thumbnail",
         null=True,
@@ -176,5 +181,5 @@ def get_embed_video_model():
     if embed_video_model is None:
         raise ImproperlyConfigured(
             "WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not \
-            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
+            been installed" % settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL)
     return embed_video_model
