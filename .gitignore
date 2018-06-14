@@ -37,3 +37,6 @@ env
 
 # Test Media
 wagtail_embed_videos/tests/test-media/
+
+# VS code stuff
+.vscode
