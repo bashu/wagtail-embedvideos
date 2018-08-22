@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.conf.urls import include, url
-from django.core import urlresolvers
+from django.urls import reverse
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
-from wagtail.wagtailcore import hooks
-from wagtail.wagtailadmin.menu import MenuItem
+from wagtail.core import hooks
+from wagtail.admin.menu import MenuItem
 
 from wagtail_embed_videos import admin_urls
 
@@ -33,7 +33,7 @@ class EmbedVideosMenuItem(MenuItem):
 def register_embed_videos_menu_item():
     return EmbedVideosMenuItem(
         _('Embed Videos'),
-        urlresolvers.reverse('wagtail_embed_videos_index'),
+        reverse('wagtail_embed_videos_index'),
         classnames='icon icon-media', order=301)
 
 
@@ -51,7 +51,7 @@ def editor_js():
             window.chooserUrls.embedVideoChooser = '{0}';
         </script>
         """,
-        urlresolvers.reverse('wagtail_embed_videos_chooser')
+        reverse('wagtail_embed_videos_chooser')
     )
 
 
