@@ -6,9 +6,8 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
 ## WARNING
 
-With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 1.6!
+With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 2.0!
 
-If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of "wagtail_embed_videos"
 
 ## REQUIREMENTS
 

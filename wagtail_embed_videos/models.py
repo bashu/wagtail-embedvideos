@@ -20,7 +20,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 from wagtail.admin.utils import get_object_usage
 from wagtail.images.models import Image as WagtailImage
-from wagtail.images import get_image_model
+from wagtail.images import get_image_model, get_image_model_string
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
@@ -33,10 +33,7 @@ try:
 except ImportError:
     from django.db.models.loading import get_model
 
-try:
-    image_model_name = settings.WAGTAILIMAGES_IMAGE_MODEL
-except AttributeError:
-    image_model_name = 'wagtailimages.Image'
+image_model_name = get_image_model_string()
 
 
 def checkUrl(url):
@@ -98,7 +95,8 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     uploaded_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False, on_delete=models.SET_NULL)
+        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False,
+        on_delete=models.SET_NULL)
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 
@@ -125,13 +123,13 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
 
     def __init__(self, *args, **kwargs):
 
-        super(AbstractEmbedVideo, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if args:
             if args[3] is None:
                 create_thumbnail(self)
 
     def save(self, *args, **kwargs):
-        super(AbstractEmbedVideo, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if not self.thumbnail:
             create_thumbnail(self)
 
@@ -179,5 +177,5 @@ def get_embed_video_model():
     if embed_video_model is None:
         raise ImproperlyConfigured(
             "WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not \
-            been installed" % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL)
+            been installed" % settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL)
     return embed_video_model
