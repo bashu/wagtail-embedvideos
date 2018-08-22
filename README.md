@@ -56,6 +56,7 @@ If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of
         video_based_model_instanse.video.thumbnail
 
 5. For render your video in a template put `{% load embed_video_tags%}` for load template tags and put this code where you want render your video:
+
         ```html
         {% video VideoBasedModel.video.url as video %}
                 {% video video 'small' %}
@@ -66,6 +67,13 @@ If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of
 
 
 ## Release Notes
+
+### v0.4.0
+
+ - Wagtail version >= 2.0 supported;
+ - Django version >= 2.0 supported;
+ - Dropped support for Wagtail < 2.0;
+ - Dropped support for Django < 2.0;
 
 ### v0.3.0
 

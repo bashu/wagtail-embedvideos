@@ -6,13 +6,7 @@ Authors
 Core Committers
 ---------------
 
-* Diogo Marques
-* Rui Martins
-* Tiago Costa
-
-
-Contributors
-------------
-
-* SalahAdDin
-* kaedroho
+* DiogoMarques29
+* rmartins90
+* tiagofmc
+* Alexandre27

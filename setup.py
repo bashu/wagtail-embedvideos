@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='wagtail_embed_videos',
-    version='0.3.2',
+    version='0.4.0',
     description='Embed Videos for Wagtail CMS.',
     long_description=(
         "Simple app that works similar to wagtailimages,"
@@ -12,9 +12,9 @@ setup(
         "It's an integration of django-embed-video."
         ),
     author='InfoPortugal S.A.',
-    author_email='suporte24@gmail.com',
+    author_email='suporte24@infoportugal.com',
     maintainer='InfoPortugal S.A.',
-    maintainer_email='suporte24@gmail.com',
+    maintainer_email='suporte24@infoportugal.com',
     url='https://github.com/infoportugal/wagtail-embedvideos',
     packages=[
         'wagtail_embed_videos',
@@ -34,7 +34,7 @@ setup(
         ]
     },
     install_requires=[
-        'django>=1.7', 'wagtail>=1.7', 'django-embed-video>=1.0'],
+        'django>=2.0', 'wagtail>=2.0', 'django-embed-video>=1.0'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
@@ -43,6 +43,8 @@ setup(
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Operating System :: OS Independent',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
