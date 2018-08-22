@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='wagtail_embed_videos',
-    version='0.4.0',
+    version='0.4.1',
     description='Embed Videos for Wagtail CMS.',
     long_description=(
         "Simple app that works similar to wagtailimages,"
@@ -34,7 +34,8 @@ setup(
         ]
     },
     install_requires=[
-        'django>=2.0', 'wagtail>=2.0', 'django-embed-video>=1.0'],
+        'wagtail>=2.0',
+        'django-embed-video>=1.0'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',

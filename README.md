@@ -8,7 +8,7 @@ It's an integration of [django-embed-video](https://github.com/yetty/django-embe
 
 With recent changes to keep up with Wagtail current versions, we do **not** support versions <= 1.6!
 
-If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of "wagtail_embed_videos"
+Latest version only suports django>=1.11 and wagtail>=2.0
 
 ## REQUIREMENTS
 
@@ -68,12 +68,11 @@ If you use previous versions of Wagtail (<=1.6), please consider using v0.2.5 of
 
 ## Release Notes
 
-### v0.4.0
+### v0.4.1
 
  - Wagtail version >= 2.0 supported;
  - Django version >= 2.0 supported;
  - Dropped support for Wagtail < 2.0;
- - Dropped support for Django < 2.0;
 
 ### v0.3.0
 
