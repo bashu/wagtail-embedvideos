@@ -57,9 +57,9 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'extensions': [
-                'wagtail.wagtailcore.jinja2tags.core',
-                'wagtail.wagtailadmin.jinja2tags.userbar',
-                'wagtail.wagtailimages.jinja2tags.images',
+                'wagtail.core.jinja2tags.core',
+                'wagtail.admin.jinja2tags.userbar',
+                'wagtail.images.jinja2tags.images',
             ],
         },
     },
@@ -74,26 +74,26 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'wagtail.wagtailcore.middleware.SiteMiddleware',
+    'wagtail.core.middleware.SiteMiddleware',
 
-    'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+    'wagtail.redirects.middleware.RedirectMiddleware',
 )
 
 INSTALLED_APPS = (
     # Install wagtailredirects with its appconfig
     # Theres nothing special about wagtailredirects, we just need to have one
     # app which uses AppConfigs to test that hooks load properly
-    'wagtail.wagtailforms',
-    'wagtail.wagtailredirects',
-    'wagtail.wagtailembeds',
-    'wagtail.wagtailsites',
-    'wagtail.wagtailusers',
-    'wagtail.wagtailsnippets',
-    'wagtail.wagtaildocs',
-    'wagtail.wagtailimages',
-    'wagtail.wagtailsearch',
-    'wagtail.wagtailadmin',
-    'wagtail.wagtailcore',
+    'wagtail.forms',
+    'wagtail.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.docs',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
     'wagtail.contrib.wagtailapi',
 
     'modelcluster',
@@ -132,13 +132,13 @@ COMPRESS_ENABLED = False  # disable compression so that we can run tests on the 
 
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.wagtailsearch.backends.db',
+        'BACKEND': 'wagtail.search.backends.db',
     }
 }
 
 if 'ELASTICSEARCH_URL' in os.environ:
     WAGTAILSEARCH_BACKENDS['elasticsearch'] = {
-        'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch',
+        'BACKEND': 'wagtail.search.backends.elasticsearch',
         'URLS': [os.environ['ELASTICSEARCH_URL']],
         'TIMEOUT': 10,
         'max_retries': 1,

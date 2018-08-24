@@ -14,15 +14,15 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
-from wagtail.wagtailadmin.utils import get_object_usage
-from wagtail.wagtailimages.models import Image as WagtailImage
-from wagtail.wagtailimages import get_image_model
-from wagtail.wagtailsearch import index
-from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
+from wagtail.admin.utils import get_object_usage
+from wagtail.images.models import Image as WagtailImage
+from wagtail.images import get_image_model
+from wagtail.search import index
+from wagtail.search.queryset import SearchableQuerySetMixin
 
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -98,7 +98,7 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     uploaded_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False)
+        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False, on_delete=models.SET_NULL)
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
 

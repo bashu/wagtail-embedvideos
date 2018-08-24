@@ -3,7 +3,7 @@
 from django import forms
 from django.forms.models import modelform_factory
 
-from wagtail.wagtailimages.edit_handlers import AdminImageChooser
+from wagtail.images.edit_handlers import AdminImageChooser
 
 
 def get_embed_video_form(model):

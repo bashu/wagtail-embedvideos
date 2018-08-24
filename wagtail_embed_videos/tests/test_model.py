@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from mock_django.models import ModelMock
 
-from wagtail.wagtailimages.models import get_image_model
+from wagtail.images.models import get_image_model
 from wagtail_embed_videos.models import EmbedVideo, create_thumbnail
 
 
