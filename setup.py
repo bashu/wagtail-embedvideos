@@ -19,7 +19,8 @@ setup(
     packages=[
         'wagtail_embed_videos',
         'wagtail_embed_videos.views',
-        'wagtail_embed_videos.migrations'],
+        'wagtail_embed_videos.migrations',
+    ],
     package_data={
         'wagtail_embed_videos': [
             'static/wagtail_embed_videos/js/*.js',
@@ -33,9 +34,6 @@ setup(
             'templates/wagtail_embed_videos/widgets/*.js'
         ]
     },
-    install_requires=[
-        'wagtail>=2.0',
-        'django-embed-video>=1.0'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
