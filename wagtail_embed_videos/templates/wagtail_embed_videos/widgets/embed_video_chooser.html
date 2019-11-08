@@ -9,7 +9,7 @@
             {% if embed_video.thumbnail %}
                 {% image embed_video.thumbnail max-130x130%}
             {% else %}
-                {% video embed_video.url as my_video %}
+                {% video embed_video.url is_secure=True as my_video %}
                     <img src="{{ my_video.thumbnail }}" style="max-width: 130px; max-height: 130px;">
                 {% endvideo %}
             {% endif %}
