@@ -5,7 +5,7 @@ from embed_video.backends import detect_backend
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.utils import popular_tags_for_model
-from wagtail.utils.pagination import paginate
+# from wagtail.utils.pagination import paginate
 
 from wagtail_embed_videos.models import get_embed_video_model
 
@@ -54,7 +54,9 @@ def chooser(request):
             q = None
 
         # Pagination
-        paginator, embed_videos = paginate(request, embed_videos, per_page=12)
+        # paginator, embed_videos = paginate(request, embed_videos, per_page=12) DEPRECATED
+        paginator = Paginator(embed_videos, per_page=12)
+        embed_videos = paginator.get_page(request.GET.get('p'))
 
         return render(request, "wagtail_embed_videos/chooser/results.html", {
             'embed_videos': embed_videos,
