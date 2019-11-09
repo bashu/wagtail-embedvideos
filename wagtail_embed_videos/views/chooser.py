@@ -65,7 +65,9 @@ def chooser(request):
             'query_string': q,
         })
     else:
-        paginator, embed_videos = paginate(request, embed_videos, per_page=12)
+        # paginator, embed_videos = paginate(request, embed_videos, per_page=12)
+        paginator = Paginator(embed_videos, per_page=12)
+        embed_videos = paginator.get_page(request.GET.get('p'))
 
         searchform = SearchForm()
 
