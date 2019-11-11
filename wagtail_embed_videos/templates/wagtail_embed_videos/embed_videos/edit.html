@@ -47,8 +47,8 @@
             </form>
         </div>
         <div class="col6 divider-before">
+            {% video embed_video.url is_secure=True "small" %}
             {% video embed_video.url is_secure=True as my_video %}
-                {% video my_video is_secure=True "small" %}
                 <br />
                 <strong>Backend</strong>: {{ my_video.backend }}
             {% endvideo %}
