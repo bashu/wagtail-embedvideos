@@ -23,6 +23,8 @@ setup(
     package_data={
         'wagtail_embed_videos': [
             'static/wagtail_embed_videos/js/*.js',
+            'locale/*/LC_MESSAGES/django.po',
+            'locale/*/LC_MESSAGES/django.mo',
             'templates/wagtail_embed_videos/chooser/*.html',
             'templates/wagtail_embed_videos/edit_handlers/*.html',
             'templates/wagtail_embed_videos/embed_videos/*.html',
