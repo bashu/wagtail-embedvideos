@@ -90,7 +90,7 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
         image_model_name,
-        verbose_name="Thumbnail",
+        verbose_name=_("Thumbnail"),
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
