@@ -1,5 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
+from io import BytesIO
+from PIL import Image
 
 try:
     import urllib2
@@ -56,20 +58,28 @@ def create_thumbnail(model_instance):
     backend = detect_backend(model_instance.url)
     thumbnail_url = backend.get_thumbnail_url()
     if backend.__class__.__name__ == 'YoutubeBackend':
-        if thumbnail_url.endswith('hqdefault.jpg'):
-            for resolution in YOUTUBE_RESOLUTIONS:
-                temp_thumbnail_url = thumbnail_url.replace(
-                    'hqdefault.jpg', resolution)
-                if checkUrl(temp_thumbnail_url):
-                    thumbnail_url = temp_thumbnail_url
-                    break
-
+        if thumbnail_url:
+            if thumbnail_url.endswith('hqdefault.jpg'):
+                for resolution in YOUTUBE_RESOLUTIONS:
+                    temp_thumbnail_url = thumbnail_url.replace(
+                        'hqdefault.jpg', resolution)
+                    if checkUrl(temp_thumbnail_url):
+                        thumbnail_url = temp_thumbnail_url
+                        break
+    
     img_temp = NamedTemporaryFile()
-    try:
-        img_temp.write(urllib2.urlopen(thumbnail_url).read())
-    except:
-        http = urllib3.PoolManager()
-        img_temp.write(http.request('GET', thumbnail_url).data)
+
+    if not thumbnail_url:
+        image = Image.new('RGB', (165,92), (255,255,255))
+        bytesArr = BytesIO()
+        image.save(bytesArr, 'PNG')
+        img_temp.write(bytesArr.getvalue())
+    else:
+        try:
+            img_temp.write(urllib2.urlopen(thumbnail_url).read())
+        except:
+            http = urllib3.PoolManager()
+            img_temp.write(http.request('GET', thumbnail_url).data)
     img_temp.flush()
 
     image = get_image_model()(title=model_instance.title)
@@ -90,7 +100,7 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
         image_model_name,
-        verbose_name=_("Thumbnail"),
+        verbose_name="Thumbnail",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
