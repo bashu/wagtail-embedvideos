@@ -55,7 +55,7 @@ YOUTUBE_RESOLUTIONS = [
 
 def create_thumbnail(model_instance):
     # CREATING IMAGE FROM THUMBNAIL
-    backend = detect_backend(model_instance.url)
+    backend = detect_backend(model_instance.url.strip())
     thumbnail_url = backend.get_thumbnail_url()
     if backend.__class__.__name__ == 'YoutubeBackend':
         if thumbnail_url:
