@@ -9,13 +9,17 @@ except ImportError:
     import urllib3
 import requests
 
+try:
+    from django.utils.encoding import python_2_unicode_compatible
+except ImportError:
+    from six import python_2_unicode_compatible
+
 from taggit.managers import TaggableManager
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import python_2_unicode_compatible
 from django.urls import reverse
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
