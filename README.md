@@ -1,3 +1,7 @@
+# ABANDONED
+
+With the introduction of Embedded Content in wagtail 1.12 [https://docs.wagtail.io/en/v1.12.6/releases/1.12.html#improved-embed-configuration](https://docs.wagtail.io/en/v1.12.6/releases/1.12.html#improved-embed-configuration), this package will no longer be maintained.
+
 # WAGTAIL EMBED VIDEOS
 
 Simple app that works similar to wagtailimages, but for embedding YouTube and Vimeo videos and music from SoundCloud.
