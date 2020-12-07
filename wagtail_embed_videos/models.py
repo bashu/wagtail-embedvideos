@@ -24,7 +24,7 @@ from django.urls import reverse
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
-from wagtail.admin.utils import get_object_usage
+from wagtail.admin.models import get_object_usage
 from wagtail.images.models import Image as WagtailImage
 from wagtail.images import get_image_model
 from wagtail.search import index

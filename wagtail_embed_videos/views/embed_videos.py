@@ -11,7 +11,7 @@ from django.http import HttpResponse
 
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin import messages
-from wagtail.admin.utils import popular_tags_for_model
+from wagtail.admin.models import popular_tags_for_model
 from wagtail.search.backends import get_search_backends
 
 from wagtail_embed_videos.models import get_embed_video_model
