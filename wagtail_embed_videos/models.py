@@ -1,11 +1,9 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-try:
-    import urllib2
-except ImportError:
-    import urllib3
+import certifi
 import requests
+import urllib3 as ul
 
 from taggit.managers import TaggableManager
 
@@ -25,7 +23,7 @@ from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
 from embed_video.fields import EmbedVideoField
-from embed_video.backends import detect_backend
+from embed_video.backends import VideoDoesntExistException, detect_backend
 
 try:
     from django.apps import apps
@@ -39,11 +37,6 @@ except AttributeError:
     image_model_name = 'wagtailimages.Image'
 
 
-def checkUrl(url):
-    r = requests.head(url)
-    return int(r.status_code) < 400
-
-
 YOUTUBE_RESOLUTIONS = [
     'maxresdefault.jpg',
     'sddefault.jpg',
@@ -54,22 +47,23 @@ YOUTUBE_RESOLUTIONS = [
 def create_thumbnail(model_instance):
     # CREATING IMAGE FROM THUMBNAIL
     backend = detect_backend(model_instance.url)
-    thumbnail_url = backend.get_thumbnail_url()
+    try:
+        thumbnail_url = backend.get_thumbnail_url()
+    except VideoDoesntExistException:
+        return
+
     if backend.__class__.__name__ == 'YoutubeBackend':
         if thumbnail_url.endswith('hqdefault.jpg'):
             for resolution in YOUTUBE_RESOLUTIONS:
-                temp_thumbnail_url = thumbnail_url.replace(
-                    'hqdefault.jpg', resolution)
-                if checkUrl(temp_thumbnail_url):
+                temp_thumbnail_url = thumbnail_url.replace('hqdefault.jpg', resolution)
+                if int(requests.head(temp_thumbnail_url).status_code) < 400:
                     thumbnail_url = temp_thumbnail_url
                     break
 
-    img_temp = NamedTemporaryFile()
-    try:
-        img_temp.write(urllib2.urlopen(thumbnail_url).read())
-    except:
-        http = urllib3.PoolManager()
-        img_temp.write(http.request('GET', thumbnail_url).data)
+    http = ul.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
+
+    img_temp = NamedTemporaryFile(suffix='.jpg', delete=False)
+    img_temp.write(http.request('GET', thumbnail_url).data)
     img_temp.flush()
 
     image = get_image_model()(title=model_instance.title)
