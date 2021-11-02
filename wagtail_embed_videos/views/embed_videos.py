@@ -9,7 +9,7 @@ from django.views.decorators.vary import vary_on_headers
 from django.urls import reverse
 from django.http import HttpResponse
 
-from wagtail.admin.forms import SearchForm
+from wagtail.admin.forms.search import SearchForm
 from wagtail.admin import messages
 from wagtail.admin.utils import popular_tags_for_model
 from wagtail.search.backends import get_search_backends
