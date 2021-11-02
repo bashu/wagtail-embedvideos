@@ -1,39 +1,28 @@
 # coding: utf-8
-from __future__ import unicode_literals
 
 import certifi
 import requests
 import urllib3 as ul
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.db import models
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from embed_video.backends import VideoDoesntExistException, detect_backend
 from embed_video.fields import EmbedVideoField
 from taggit.managers import TaggableManager
 from wagtail.admin.utils import get_object_usage
-from wagtail.images import get_image_model
+from wagtail.core.models import CollectionMember
+from wagtail.images import get_image_model, get_image_model_string
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
-try:
-    from django.apps import apps
-
-    get_model = apps.get_model
-except ImportError:
-    from django.db.models.loading import get_model
-
-try:
-    image_model_name = settings.WAGTAILIMAGES_IMAGE_MODEL
-except AttributeError:
-    image_model_name = "wagtailimages.Image"
-
-
 YOUTUBE_RESOLUTIONS = ["maxresdefault.jpg", "sddefault.jpg", "mqdefault.jpg"]
+
+
+class EmbedVideoQuerySet(SearchableQuerySetMixin, models.QuerySet):
+    pass
 
 
 def create_thumbnail(model_instance):
@@ -62,27 +51,31 @@ def create_thumbnail(model_instance):
     image.file.save(model_instance.title + ".jpg", File(img_temp))
 
     model_instance.thumbnail = image
-    model_instance.thumbnail.tags.add("video-thumbnail")
     model_instance.save()
 
 
-class EmbedVideoQuerySet(SearchableQuerySetMixin, models.QuerySet):
-    pass
-
-
-@python_2_unicode_compatible
-class AbstractEmbedVideo(index.Indexed, models.Model):
-    title = models.CharField(max_length=255, verbose_name=_("Title"))
+class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
+    title = models.CharField(max_length=255, verbose_name=_("title"))
     url = EmbedVideoField()
     thumbnail = models.ForeignKey(
-        image_model_name, verbose_name="Thumbnail", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
+        get_image_model_string(),
+        verbose_name=_("thumbnail"),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(verbose_name=_("created at"), auto_now_add=True, db_index=True)
     uploaded_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, editable=False, on_delete=models.SET_NULL
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("uploaded by user"),
+        null=True,
+        blank=True,
+        editable=False,
+        on_delete=models.SET_NULL,
     )
 
-    tags = TaggableManager(help_text=None, blank=True, verbose_name=_("Tags"))
+    tags = TaggableManager(help_text=None, blank=True, verbose_name=_("tags"))
 
     objects = EmbedVideoQuerySet.as_manager()
 
@@ -91,14 +84,17 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
 
     @property
     def usage_url(self):
-        return reverse("wagtail_embed_videos_video_usage", args=(self.id,))
+        return reverse("wagtail_embed_videos:embed_video_usage", args=(self.id,))
 
-    search_fields = [
+    search_fields = CollectionMember.search_fields + [
         index.SearchField("title", partial_match=True, boost=10),
+        index.AutocompleteField("title"),
+        index.FilterField("title"),
         index.RelatedFields(
             "tags",
             [
                 index.SearchField("name", partial_match=True, boost=10),
+                index.AutocompleteField("name"),
             ],
         ),
         index.FilterField("uploaded_by_user"),
@@ -107,32 +103,22 @@ class AbstractEmbedVideo(index.Indexed, models.Model):
     def __str__(self):
         return self.title
 
-    def __init__(self, *args, **kwargs):
-
-        super(AbstractEmbedVideo, self).__init__(*args, **kwargs)
-        if args:
-            if args[3] is None:
-                create_thumbnail(self)
-
-    def save(self, *args, **kwargs):
-        super(AbstractEmbedVideo, self).save(*args, **kwargs)
-        if not self.thumbnail:
-            create_thumbnail(self)
-
     @property
     def default_alt_text(self):
+        # by default the alt text field (used in rich text insertion) is populated
+        # from the title. Subclasses might provide a separate alt field, and
+        # override this
         return self.title
 
     def is_editable_by_user(self, user):
-        if user.has_perm("wagtail_embed_videos.change_embedvideo"):
-            # user has global permission to change videos
-            return True
-        elif user.has_perm("wagtail_embed_videos.add_embedvideo") and self.uploaded_by_user == user:
-            # user has video add permission, which also implicitly provides
-            # permission to edit their own videos
-            return True
-        else:
-            return False
+        from wagtail_embed_videos.permissions import permission_policy
+
+        return permission_policy.user_has_permission_for_instance(user, "change", self)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.thumbnail:
+            create_thumbnail(self)
 
     class Meta:
         abstract = True
@@ -143,26 +129,10 @@ class EmbedVideo(AbstractEmbedVideo):
         "title",
         "url",
         "thumbnail",
+        "collection",
         "tags",
     )
 
-
-def get_embed_video_model():
-    try:
-        app_label, model_name = settings.WAGTAILEMBEDVIDEO_VIDEO_MODEL.split(".")
-    except AttributeError:
-        return EmbedVideo
-    except ValueError:
-        raise ImproperlyConfigured(
-            "WAGTAILEMBEDVIDEO_VIDEO_MODEL must be of the form \
-            'app_label.model_name'"
-        )
-
-    embed_video_model = get_model(app_label, model_name)
-    if embed_video_model is None:
-        raise ImproperlyConfigured(
-            "WAGTAILEMBEDVIDEO_VIDEO_MODEL refers to model '%s' that has not \
-            been installed"
-            % settings.WAGTAILEMBEDVIDEO_VIDE_MODEL
-        )
-    return embed_video_model
+    class Meta:
+        verbose_name = _("embed video")
+        verbose_name_plural = _("embed videos")

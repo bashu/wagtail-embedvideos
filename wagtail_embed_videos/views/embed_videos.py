@@ -1,60 +1,60 @@
-import json
-
-from django.contrib.auth.decorators import permission_required
-from django.core.exceptions import PermissionDenied
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
-from wagtail.admin.utils import popular_tags_for_model
+from wagtail.admin.utils import PermissionPolicyChecker, permission_denied, popular_tags_for_model
+from wagtail.core.models import Collection
+from wagtail.search import index as search_index
 from wagtail.search.backends import get_search_backends
 
+from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
-from wagtail_embed_videos.models import get_embed_video_model
+from wagtail_embed_videos.permissions import permission_policy
+from wagtail_embed_videos.utils import paginate
+
+permission_checker = PermissionPolicyChecker(permission_policy)
 
 
-@permission_required("wagtail_embed_videos.add_embedvideo")
+@permission_checker.require_any("add", "change", "delete")
 @vary_on_headers("X-Requested-With")
 def index(request):
     EmbedVideo = get_embed_video_model()
 
-    # Get embed videos
-    embed_videos = EmbedVideo.objects.order_by("-created_at")
-
-    # Permissions
-    if not request.user.has_perm("wagtail_embed_videos.change_embedvideo"):
-        # restrict to the user's own embed videos
-        embed_videos = embed_videos.filter(uploaded_by_user=request.user)
+    # Get embed videos (filtered by user permission)
+    embed_videos = permission_policy.instances_user_has_any_permission_for(request.user, ["change", "delete"]).order_by(
+        "-created_at"
+    )
 
     # Search
     query_string = None
     if "q" in request.GET:
-        form = SearchForm(request.GET, placeholder=_("Search videos"))
+        form = SearchForm(request.GET, placeholder=_("Search embed videos"))
         if form.is_valid():
             query_string = form.cleaned_data["q"]
 
-            if not request.user.has_perm("wagtail_embed_videos.change_embedvideo"):
-                # restrict to the user's own embed videos
-                embed_videos = EmbedVideo.objects.search(query_string, filters={"uploaded_by_user_id": request.user.id})
-            else:
-                embed_videos = EmbedVideo.objects.search(query_string)
+            embed_videos = embed_videos.search(query_string)
     else:
-        form = SearchForm(placeholder=_("Search videos"))
+        form = SearchForm(placeholder=_("Search embed videos"))
 
-    # Pagination
-    p = request.GET.get("p", 1)
-    paginator = Paginator(embed_videos, 20)
+    # Filter by collection
+    current_collection = None
+    collection_id = request.GET.get("collection_id")
+    if collection_id:
+        try:
+            current_collection = Collection.objects.get(id=collection_id)
+            embed_videos = embed_videos.filter(collection=current_collection)
+        except (ValueError, Collection.DoesNotExist):
+            pass
 
-    try:
-        embed_videos = paginator.page(p)
-    except PageNotAnInteger:
-        embed_videos = paginator.page(1)
-    except EmptyPage:
-        embed_videos = paginator.page(paginator.num_pages)
+    paginator, embed_videos = paginate(request, embed_videos)
+
+    collections = permission_policy.collections_user_has_any_permission_for(request.user, ["add", "change"])
+    if len(collections) < 2:
+        collections = None
+    else:
+        collections = Collection.order_for_display(collections)
 
     # Create response
     if request.is_ajax():
@@ -77,20 +77,24 @@ def index(request):
                 "is_searching": bool(query_string),
                 "search_form": form,
                 "popular_tags": popular_tags_for_model(EmbedVideo),
+                "collections": collections,
+                "current_collection": current_collection,
+                "user_can_add": permission_policy.user_has_permission(request.user, "add"),
             },
         )
 
 
+@permission_checker.require("change")
 def edit(request, embed_video_id):
     EmbedVideo = get_embed_video_model()
     EmbedVideoForm = get_embed_video_form(EmbedVideo)
 
     embed_video = get_object_or_404(EmbedVideo, id=embed_video_id)
 
-    if not embed_video.is_editable_by_user(request.user):
-        raise PermissionDenied
+    if not permission_policy.user_has_permission_for_instance(request.user, "change", embed_video):
+        return permission_denied(request)
 
-    if request.POST:
+    if request.method == "POST":
         form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video)
         if form.is_valid():
             form.save()
@@ -103,16 +107,14 @@ def edit(request, embed_video_id):
                 request,
                 _("Video '{0}' updated.").format(embed_video.title),
                 buttons=[
-                    messages.button(
-                        reverse("wagtail_embed_videos_edit_embed_video", args=(embed_video.id,)), _("Edit again")
-                    )
+                    messages.button(reverse("wagtail_embed_videos:edit", args=(embed_video.id,)), _("Edit again"))
                 ],
             )
-            return redirect("wagtail_embed_videos_index")
+            return redirect("wagtail_embed_videos:index")
         else:
             messages.error(request, _("The video could not be saved due to errors."))
     else:
-        form = EmbedVideoForm(instance=embed_video)
+        form = EmbedVideoForm(instance=embed_video, user=request.user)
 
     return render(
         request,
@@ -120,30 +122,22 @@ def edit(request, embed_video_id):
         {
             "embed_video": embed_video,
             "form": form,
+            "user_can_delete": permission_policy.user_has_permission_for_instance(request.user, "delete", embed_video),
         },
     )
 
 
-def json_response(document, status=200):
-    return HttpResponse(json.dumps(document), content_type="application/json", status=status)
-
-
-def preview(request, embed_video_id):
-    embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
-
-    return HttpResponse({"embed_video_preview": embed_video.url.thumbnail}, content_type="image/jpeg")
-
-
+@permission_checker.require("delete")
 def delete(request, embed_video_id):
     embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
 
-    if not embed_video.is_editable_by_user(request.user):
-        raise PermissionDenied
+    if not permission_policy.user_has_permission_for_instance(request.user, "delete", embed_video):
+        return permission_denied(request)
 
-    if request.POST:
+    if request.method == "POST":
         embed_video.delete()
         messages.success(request, _("Video '{0}' deleted.").format(embed_video.title))
-        return redirect("wagtail_embed_videos_index")
+        return redirect("wagtail_embed_videos:index")
 
     return render(
         request,
@@ -154,33 +148,30 @@ def delete(request, embed_video_id):
     )
 
 
-@permission_required("wagtail_embed_videos.add_embedvideo")
+@permission_checker.require("add")
 def add(request):
     EmbedVideoModel = get_embed_video_model()
     EmbedVideoForm = get_embed_video_form(EmbedVideoModel)
 
-    if request.POST:
+    if request.method == "POST":
         embed_video = EmbedVideoModel(uploaded_by_user=request.user)
-        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video)
+        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
         if form.is_valid():
             form.save()
 
             # Reindex the embed video to make sure all tags are indexed
-            for backend in get_search_backends():
-                backend.add(embed_video)
+            search_index.insert_or_update_object(embed_video)
 
             messages.success(
                 request,
                 _("Video '{0}' added.").format(embed_video.title),
-                buttons=[
-                    messages.button(reverse("wagtail_embed_videos_edit_embed_video", args=(embed_video.id,)), _("Edit"))
-                ],
+                buttons=[messages.button(reverse("wagtail_embed_videos:edit", args=(embed_video.id,)), _("Edit"))],
             )
-            return redirect("wagtail_embed_videos_index")
+            return redirect("wagtail_embed_videos:index")
         else:
             messages.error(request, _("The video could not be created due to errors."))
     else:
-        form = EmbedVideoForm()
+        form = EmbedVideoForm(user=request.user)
 
     return render(
         request,
@@ -194,16 +185,7 @@ def add(request):
 def usage(request, embed_video_id):
     embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
 
-    # Pagination
-    p = request.GET.get("p", 1)
-    paginator = Paginator(embed_video.get_usage(), 20)
-
-    try:
-        used_by = paginator.page(p)
-    except PageNotAnInteger:
-        used_by = paginator.page(1)
-    except EmptyPage:
-        used_by = paginator.page(paginator.num_pages)
+    paginator, used_by = paginate(request, embed_video.get_usage())
 
     return render(
         request, "wagtail_embed_videos/embed_videos/usage.html", {"embed_video": embed_video, "used_by": used_by}

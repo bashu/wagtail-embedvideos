@@ -1,25 +1,43 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n %}
 
-{% block titletag %}{% trans "Videos" %}{% endblock %}
-{% block bodyclass %}menu-embed-videos{% endblock %}
+{% block titletag %}{% trans "Embed Videos" %}{% endblock %}
 {% block extra_js %}
     <script>
         window.headerSearch = {
-            url: "{% url 'wagtail_embed_videos_index' %}",
+            url: "{% url 'wagtail_embed_videos:index' %}",
             termInput: "#id_q",
-            targetOutput: "#embed-video-results"
+            targetOutput: "#embed_video-results"
         }
+
+        $(function() {
+            $('#collection_chooser_collection_id').on('change', function() {
+                this.form.submit();
+            })
+        });
     </script>
 {% endblock %}
 
 {% block content %}
-    {% trans "Videos" as ev_str %}
-    {% trans "Add a video" as add_ev_str %}
-    {% include "wagtailadmin/shared/header.html" with title=ev_str add_link="wagtail_embed_videos_add_embed_video" icon="media" add_text=add_ev_str search_url="wagtail_embed_videos_index" %}
+    {% trans "Embed Videos" as ev_str %}
+
+    {% if user_can_add %}
+        {% trans "Add a video" as add_ev_str %}
+        {% include "wagtailadmin/shared/header.html" with title=ev_str add_link="wagtail_embed_videos:add" icon="media" add_text=add_ev_str search_url="wagtail_embed_videos:index" %}
+    {% else %}
+        {% include "wagtailadmin/shared/header.html" with title=ev_str icon="media" search_url="wagtal_embed_videos:index" %}
+    {% endif %}
 
     <div class="nice-padding">
-        <div id="embed-video-results">
+        {% if collections %}
+            <form class="embed_video-search search-bar" action="{% url 'wagtail_embed_videos:index' %}" method="GET" novalidate>
+                <ul class="fields">
+                    {% include "wagtailadmin/shared/collection_chooser.html" %}
+                </ul>
+            </form>
+        {% endif %}
+
+        <div id="embed_video-results">
             {% include "wagtail_embed_videos/embed_videos/results.html" %}
         </div>
     </div>
