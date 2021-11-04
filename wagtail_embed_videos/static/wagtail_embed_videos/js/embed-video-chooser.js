@@ -1,6 +1,6 @@
 function createEmbedVideoChooser(id) {
     var chooserElement = $('#' + id + '-chooser');
-    var previewEmbedVideo = chooserElement.find('.preview-image img');
+    var previewEmbedVideo = chooserElement.find('.preview-embedvideo img');
     var input = $('#' + id);
     var editLink = chooserElement.find('.edit-link');
 
@@ -22,6 +22,37 @@ function createEmbedVideoChooser(id) {
     });
 
     $('.action-clear', chooserElement).click(function() {
+        input.val('');
+        chooserElement.addClass('blank');
+    });
+}
+
+function createEmbedVideoChooser(id) {
+    var chooserElement = $('#' + id + '-chooser');
+    var previewEmbedVideo = chooserElement.find('.preview-embedvideo img');
+    var input = $('#' + id);
+    var editLink = chooserElement.find('.edit-link');
+
+    $('.action-choose', chooserElement).on('click', function() {
+        ModalWorkflow({
+            url: window.chooserUrls.embedVideoChooser,
+            onload: EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS,
+            responses: {
+                embedVideoChosen: function(embedVideoData) {
+                    input.val(embedVideoData.id);
+                    previewEmbedVideo.attr({
+                        src: embedVideoData.preview.url,
+                        alt: embedVideoData.title,
+                        title: embedVideoData.title
+                    });
+                    chooserElement.removeClass('blank');
+                    editLink.attr('href', embedVideoData.edit_link);
+                }
+            }
+        });
+    });
+
+    $('.action-clear', chooserElement).on('click', function() {
         input.val('');
         chooserElement.addClass('blank');
     });

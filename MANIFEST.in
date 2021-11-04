@@ -1,8 +1,6 @@
-include *.txt *.rst *.md
-recursive-include docs *.rst conf.py Makefile make.bat
-recursive-include wagtail_embed_videos/static *
-recursive-include wagtail_embed_videos/templates *
-recursive-include wagtail_embed_videos/views *
-recursive-include wagtail_embed_videos/migrations *
-global-exclude *.pyc
-global-exclude *.DS_Store
+include README.rst
+include LICENSE
+recursive-exclude example *
+recursive-include wagtail_embed_videos/static *.css *.js
+recursive-include wagtail_embed_videos/templates *.html
+recursive-include wagtail_embed_videos/locale *.po *.mo
