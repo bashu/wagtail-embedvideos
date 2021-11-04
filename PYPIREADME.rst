@@ -18,11 +18,10 @@ Simple app that works similar to wagtailimages, but for embedding YouTube and Vi
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.
 
-.. raw:: html
-
-    <p align="center">
-        <img src="https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png">
-    </p>
+.. image:: https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png
+   :target: https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png
+   :align: center
+   :width: 600px
 
 Compatibility
 ~~~~~~~~~~~~~
