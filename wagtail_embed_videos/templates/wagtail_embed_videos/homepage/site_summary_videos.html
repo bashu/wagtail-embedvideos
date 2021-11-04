@@ -1,0 +1,11 @@
+{% load i18n wagtailadmin_tags %}
+
+<li class="icon icon-media">
+    <a href="{% url 'wagtail_embed_videos:index' %}">
+    {% blocktrans count counter=total_videos with total_videos|intcomma as total %}
+        <span>{{ total }}</span> Embed Video
+    {% plural %}
+        <span>{{ total }}</span> Embed Videos
+    {% endblocktrans %}
+    </a>
+</li>

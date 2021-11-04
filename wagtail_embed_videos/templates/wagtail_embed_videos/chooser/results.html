@@ -1,10 +1,10 @@
-{% load wagtailadmin_tags embed_video_tags wagtailimages_tags %}
+{% load embed_video_tags wagtailimages_tags wagtailadmin_tags %}
 {% load i18n %}
 {% if embed_videos %}
     {% if is_searching %}
         <h2>
         {% blocktrans count counter=embed_videos.paginator.count %}
-            There is one match
+            There is {{ counter }} match
         {% plural %}
             There are {{ counter }} matches
         {% endblocktrans %}
@@ -16,7 +16,7 @@
     <ul class="listing horiz images chooser">
         {% for embed_video in embed_videos %}
             <li>
-                <a class="image-choice" href="{% url 'wagtail_embed_videos_embed_video_chosen' embed_video.id %}">
+                <a class="image-choice" title="{% if collections %}{{ embed_video.collection.name }} » {% endif %}{{ embed_video.title }}" href="{% url 'wagtail_embed_videos:embed_video_chosen' embed_video.id %}">
                     <div class="image">
                         {% if embed_video.thumbnail %}
                             {% image embed_video.thumbnail max-165x165 class="show-transparency" %}

@@ -21,3 +21,6 @@ class EmbedVideoChooserBlock(ChooserBlock):
             return VideoNode.embed(value.url, size="medium")
         else:
             return ""
+
+    class Meta:
+        icon = "media"

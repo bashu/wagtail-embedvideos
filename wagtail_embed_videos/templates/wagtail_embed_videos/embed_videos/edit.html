@@ -1,12 +1,17 @@
 {% extends "wagtailadmin/base.html" %}
-{% load embed_video_tags static wagtailadmin_tags wagtailimages_tags %}
-{% load i18n %}
+{% load wagtailadmin_tags wagtailimages_tags embed_video_tags static i18n l10n %}
 {% block titletag %}{% blocktrans with title=embed_video.title %}Editing video {{ title }}{% endblocktrans %}{% endblock %}
-{% block bodyclass %}menu-embed-videos{% endblock %}
 {% block extra_css %}
+    {{ block.super }}
+    {% include "wagtailadmin/pages/_editor_css.html" %}
+    {{ form.media.css }}
 {% endblock %}
 
 {% block extra_js %}
+    {{ block.super }}
+    {% include "wagtailadmin/pages/_editor_js.html" %}
+    {{ form.media.js }}
+
     {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
     <script>
         $(function() {
@@ -15,43 +20,56 @@
             });
         });
     </script>
-
-    {# TODO: Find a way to inject page editor handler in the return of the view and not injecting it here #}
-    <script type="text/javascript" src="{% static 'wagtailimages/js/image-chooser-modal.js' %}"></script>
-    <script type="text/javascript" src="{% static 'wagtailimages/js/image-chooser.js' %}"></script>
-    <script type="text/javascript" src="{% static 'wagtailadmin/js/modal-workflow.js' %}"></script>
-    <script type="text/javascript">
-        window.chooserUrls = {
-            'pageChooser': '{% url "wagtailadmin_choose_page" %}'
-        };
-        window.chooserUrls.imageChooser = "{% url 'wagtailimages:chooser' %}";
-    </script>
-
 {% endblock %}
 
 {% block content %}
     {% trans "Editing" as editing_str %}
     {% include "wagtailadmin/shared/header.html" with title=editing_str subtitle=embed_video.title icon="media" usage_object=embed_video %}
 
-    <div class="row row-flush nice-padding">
-
-        <div class="col6">
-            <form action="{% url 'wagtail_embed_videos_edit_embed_video' embed_video.id %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+    <form action="{% url 'wagtail_embed_videos:edit' embed_video.id %}" method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="row row-flush nice-padding">
+            <div class="col6">
                 <ul class="fields">
                     {% for field in form %}
-                        {% include "wagtailadmin/shared/field_as_li.html" %}
+                        {% if field.is_hidden %}
+                            {{ field }}
+                        {% else %}
+                            {% include "wagtailadmin/shared/field_as_li.html" with li_classes="label-above label-uppercase" %}
+                        {% endif %}
                     {% endfor %}
-                    <li><input type="submit" value="{% trans 'Save' %}" class="button" /><a href="{% url 'wagtail_embed_videos_delete_embed_video' embed_video.id %}" class="button button-secondary no">{% trans "Delete video" %}</a></li>
                 </ul>
-            </form>
+                <div class="u-hidden@xs">
+                    <input type="submit" value="{% trans 'Save' %}" class="button" />
+                    {% if user_can_delete %}
+                        <a href="{% url 'wagtail_embed_videos:delete' embed_video.id %}" class="button button-secondary no">{% trans "Delete video" %}</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col6">
+                {% video embed_video.url as my_video %}
+                    {% video my_video "small" %}
+                    <div class="row">
+                        <div class="col12">
+                            <dl>
+                                <dt>{% trans "URL" %}</dt>
+                                <dd>{{ my_video.url }}</dd>
+                                <dt>{% trans "Backend" %}</dt>
+                                <dd>{{ my_video.backend }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                {% endvideo %}
+            </div>
         </div>
-        <div class="col6 divider-before">
-            {% video embed_video.url as my_video %}
-                {% video my_video "small" %}
-                <br />
-                <strong>Backend</strong>: {{ my_video.backend }}
-            {% endvideo %}
+
+        <div class="row row-flush nice-padding u-hidden@sm">
+            <div class="col5">
+                <input type="submit" value="{% trans 'Save' %}" class="button" />
+                {% if user_can_delete %}
+                    <a href="{% url 'wagtail_embed_videos:delete' embed_video.id %}" class="button button-secondary no">{% trans "Delete video" %}</a>
+                {% endif %}
+            </div>
         </div>
-    </div>
+    </form>
 {% endblock %}
