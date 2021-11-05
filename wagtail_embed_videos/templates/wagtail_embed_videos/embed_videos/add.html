@@ -1,15 +1,11 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n static %}
 {% block titletag %}{% trans "Add a video" %}{% endblock %}
-{% block extra_css %}
-    {{ block.super }}
-    {% include "wagtailadmin/pages/_editor_css.html" %}
-    {{ form.media.css }}
-{% endblock %}
 
 {% block extra_js %}
     {{ block.super }}
     {% include "wagtailadmin/pages/_editor_js.html" %}
+
     {{ form.media.js }}
 
     {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
@@ -20,6 +16,12 @@
             });
         });
     </script>
+{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+    {% include "wagtailadmin/pages/_editor_css.html" %}
+    {{ form.media.css }}
 {% endblock %}
 
 {% block content %}

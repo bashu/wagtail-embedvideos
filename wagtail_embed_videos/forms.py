@@ -4,11 +4,13 @@ from django import forms
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext as _
 from wagtail.admin import widgets
-from wagtail.admin.forms.collections import BaseCollectionMemberForm, collection_member_permission_formset_factory
+from wagtail.admin.forms.collections import (
+    BaseCollectionMemberForm, collection_member_permission_formset_factory)
 from wagtail.images.edit_handlers import AdminImageChooser
 
 from wagtail_embed_videos.models import EmbedVideo
-from wagtail_embed_videos.permissions import permission_policy as embed_videos_permission_policy
+from wagtail_embed_videos.permissions import \
+    permission_policy as embed_videos_permission_policy
 
 
 # Callback to allow us to override the default form field for the embed video file field

@@ -54,6 +54,8 @@ def editor_js():
     )
 
 
+# TODO: implement register_embedvideo_feature
+
 # class EmbedVideosSummaryItem(SummaryItem):
 #     order = 201
 #     template = "wagtail_embed_videos/homepage/site_summary_videos.html"

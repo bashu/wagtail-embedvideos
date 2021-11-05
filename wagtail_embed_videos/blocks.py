@@ -22,5 +22,7 @@ class EmbedVideoChooserBlock(ChooserBlock):
         else:
             return ""
 
+    # TODO: implement get_comparison_class
+
     class Meta:
         icon = "media"

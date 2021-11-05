@@ -1,10 +1,10 @@
 {% load embed_video_tags wagtailimages_tags %}
 <div class="image">
     {% if embed_video.thumbnail %}
-        {% image embed_video.thumbnail max-165x165 class="show-transparency" %}
+        {% image embed_video.thumbnail max-165x165 class="show-transparency" alt="" %}
     {% else %}
         {% video embed_video.url as my_video %}
-            <img src="{{ my_video.thumbnail }}" class="show-transparency" style="max-width: 165px; max-height: 165px;">
+            <img src="{{ my_video.thumbnail }}" class="show-transparency" alt="" style="max-width: 165px; max-height: 165px;">
         {% endvideo %}
     {% endif %}
 </div>

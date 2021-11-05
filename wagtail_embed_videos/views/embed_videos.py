@@ -1,20 +1,24 @@
+from django.conf import settings
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
-from wagtail.admin.utils import PermissionPolicyChecker, permission_denied, popular_tags_for_model
+from wagtail.admin.utils import (PermissionPolicyChecker, permission_denied,
+                                 popular_tags_for_model)
 from wagtail.core.models import Collection
 from wagtail.search import index as search_index
-from wagtail.search.backends import get_search_backends
 
 from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
 from wagtail_embed_videos.permissions import permission_policy
-from wagtail_embed_videos.utils import paginate
 
 permission_checker = PermissionPolicyChecker(permission_policy)
+
+INDEX_PAGE_SIZE = getattr(settings, "WAGTAILEMBEDVIDEOS_INDEX_PAGE_SIZE", 20)
+USAGE_PAGE_SIZE = getattr(settings, "WAGTAILEMBEDVIDEOS_USAGE_PAGE_SIZE", 20)
 
 
 @permission_checker.require_any("add", "change", "delete")
@@ -48,7 +52,8 @@ def index(request):
         except (ValueError, Collection.DoesNotExist):
             pass
 
-    paginator, embed_videos = paginate(request, embed_videos)
+    paginator = Paginator(embed_videos, per_page=INDEX_PAGE_SIZE)
+    embed_videos = paginator.get_page(request.GET.get("p"))
 
     collections = permission_policy.collections_user_has_any_permission_for(request.user, ["add", "change"])
     if len(collections) < 2:
@@ -95,13 +100,12 @@ def edit(request, embed_video_id):
         return permission_denied(request)
 
     if request.method == "POST":
-        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video)
+        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
         if form.is_valid():
             form.save()
 
-            # Reindex the embed_video to make sure all tags are indexed
-            for backend in get_search_backends():
-                backend.add(embed_video)
+            # Reindex the embed video to make sure all tags are indexed
+            search_index.insert_or_update_object(embed_video)
 
             messages.success(
                 request,
@@ -150,11 +154,11 @@ def delete(request, embed_video_id):
 
 @permission_checker.require("add")
 def add(request):
-    EmbedVideoModel = get_embed_video_model()
-    EmbedVideoForm = get_embed_video_form(EmbedVideoModel)
+    EmbedVideo = get_embed_video_model()
+    EmbedVideoForm = get_embed_video_form(EmbedVideo)
 
     if request.method == "POST":
-        embed_video = EmbedVideoModel(uploaded_by_user=request.user)
+        embed_video = EmbedVideo(uploaded_by_user=request.user)
         form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
         if form.is_valid():
             form.save()
@@ -185,7 +189,8 @@ def add(request):
 def usage(request, embed_video_id):
     embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
 
-    paginator, used_by = paginate(request, embed_video.get_usage())
+    paginator = Paginator(embed_video.get_usage(), per_page=USAGE_PAGE_SIZE)
+    used_by = paginator.get_page(request.GET.get("p"))
 
     return render(
         request, "wagtail_embed_videos/embed_videos/usage.html", {"embed_video": embed_video, "used_by": used_by}

@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -12,9 +14,10 @@ from wagtail.search import index as search_index
 from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
 from wagtail_embed_videos.permissions import permission_policy
-from wagtail_embed_videos.utils import paginate
 
 permission_checker = PermissionPolicyChecker(permission_policy)
+
+CHOOSER_PAGE_SIZE = getattr(settings, "WAGTAILEMBEDVIDEOS_CHOOSER_PAGE_SIZE", 12)
 
 
 def get_chooser_js_data():
@@ -102,7 +105,8 @@ def chooser(request):
                 embed_videos = embed_videos.filter(tags__name=tag_name)
 
         # Pagination
-        paginator, embed_videos = paginate(request, embed_videos, per_page=12)
+        paginator = Paginator(embed_videos, per_page=CHOOSER_PAGE_SIZE)
+        embed_videos = paginator.get_page(request.GET.get("p"))
 
         return render(
             request,
@@ -114,9 +118,8 @@ def chooser(request):
             },
         )
     else:
-        paginator, embed_videos = paginate(request, embed_videos, per_page=12)
-
-        searchform = SearchForm()
+        paginator = Paginator(embed_videos, per_page=CHOOSER_PAGE_SIZE)
+        embed_videos = paginator.get_page(request.GET.get("p"))
 
         context = get_chooser_context(request)
         context.update(
@@ -149,7 +152,9 @@ def chooser_upload(request):
 
     if request.method == "POST":
         embed_video = EmbedVideo(uploaded_by_user=request.user)
-        form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
+        form = EmbedVideoForm(
+            request.POST, request.FILES, instance=embed_video, user=request.user, prefix="embed_video-chooser-upload"
+        )
 
         if form.is_valid():
             form.save()
@@ -165,7 +170,7 @@ def chooser_upload(request):
                 json_data={"step": "embed_video_chosen", "result": get_embed_video_result_data(embed_video)},
             )
     else:
-        form = EmbedVideoForm(user=request.user)
+        form = EmbedVideoForm(user=request.user, prefix="embed_video-chooser-upload")
 
     embed_videos = EmbedVideo.objects.order_by("-created_at")
 
@@ -173,7 +178,8 @@ def chooser_upload(request):
     for hook in hooks.get_hooks("construct_embed_video_chooser_queryset"):
         embed_videos = hook(embed_videos, request)
 
-    paginator, embed_videos = paginate(request, embed_videos, per_page=12)
+    paginator = Paginator(embed_videos, per_page=CHOOSER_PAGE_SIZE)
+    embed_videos = paginator.get_page(request.GET.get("p"))
 
     context = get_chooser_context(request)
     context.update(

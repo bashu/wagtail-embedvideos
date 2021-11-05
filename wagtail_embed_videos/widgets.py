@@ -1,7 +1,9 @@
 import json
 
+from django import forms
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from wagtail.admin.staticfiles import versioned_static
 from wagtail.admin.widgets import AdminChooser
 
 from wagtail_embed_videos import get_embed_video_model
@@ -34,9 +36,14 @@ class AdminEmbedVideoChooser(AdminChooser):
     def render_js_init(self, id_, name, value):
         return "createEmbedVideoChooser({0});".format(json.dumps(id_))
 
-    class Media:
-        js = [
-            "wagtail_embed_videos/js/embed-video-chooser-modal.js",
-            "wagtail_embed_videos/js/embed-video-chooser.js",
-        ]
-        css = {"all": ("wagtail_embed_videos/css/embed-video-chooser.css",)}
+    @property
+    def media(self):
+        return forms.Media(
+            js=[
+                versioned_static("wagtail_embed_videos/js/embed-video-chooser-modal.js"),
+                versioned_static("wagtail_embed_videos/js/embed-video-chooser.js"),
+            ],
+            css={
+                "all": (versioned_static("wagtail_embed_videos/css/embed-video-chooser.css"),),
+            },
+        )
