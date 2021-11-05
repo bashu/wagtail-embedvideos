@@ -18,14 +18,19 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
                 return false;
             });
         }
+        var request;
 
         function fetchResults(requestData) {
-            $.ajax({
+            request = $.ajax({
                 url: searchUrl,
                 data: requestData,
                 success: function(data, status) {
+                    request = null;
                     $('#embed_video-results').html(data);
                     ajaxifyLinks($('#embed_video-results'));
+                },
+                error: function() {
+                    request = null;
                 }
             });
         }
@@ -42,7 +47,7 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         }
 
         function setPage(page) {
-            params = {p: page};
+            var params = {p: page};
             if ($('#id_q').val().length){
                 params['q'] = $('#id_q').val();
             }
@@ -90,6 +95,9 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         $('form.embed_video-search', modal.body).on('submit', search);
 
         $('#id_q').on('input', function() {
+            if (request) {
+                request.abort();
+            }
             clearTimeout($.data(this, 'timer'));
             var wait = setTimeout(search, 200);
             $(this).data('timer', wait);

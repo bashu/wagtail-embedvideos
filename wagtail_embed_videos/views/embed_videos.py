@@ -6,8 +6,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
-from wagtail.admin.utils import (PermissionPolicyChecker, permission_denied,
-                                 popular_tags_for_model)
+from wagtail.admin.utils import PermissionPolicyChecker, permission_denied, popular_tags_for_model
 from wagtail.core.models import Collection
 from wagtail.search import index as search_index
 
@@ -52,6 +51,14 @@ def index(request):
         except (ValueError, Collection.DoesNotExist):
             pass
 
+    # Filter by tag
+    current_tag = request.GET.get("tag")
+    if current_tag:
+        try:
+            embed_videos = embed_videos.filter(tags__name=current_tag)
+        except (AttributeError):
+            current_tag = None
+
     paginator = Paginator(embed_videos, per_page=INDEX_PAGE_SIZE)
     embed_videos = paginator.get_page(request.GET.get("p"))
 
@@ -82,6 +89,7 @@ def index(request):
                 "is_searching": bool(query_string),
                 "search_form": form,
                 "popular_tags": popular_tags_for_model(EmbedVideo),
+                "current_tag": current_tag,
                 "collections": collections,
                 "current_collection": current_collection,
                 "user_can_add": permission_policy.user_has_permission(request.user, "add"),
