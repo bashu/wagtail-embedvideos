@@ -1,10 +1,10 @@
 Changes
 -------
 
-0.5.1 (unreleased)
+0.5.1 (2021-11-05)
 ~~~~~~~~~~~~~~~~~~
 
-- Wagtail version >= 2.7 supported.
+- Wagtail version >= 2.8 supported.
 
 0.5.0 (2021-11-04)
 ~~~~~~~~~~~~~~~~~~
