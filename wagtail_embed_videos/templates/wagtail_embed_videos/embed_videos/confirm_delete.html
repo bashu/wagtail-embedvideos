@@ -27,6 +27,7 @@
             <form action="{% url 'wagtail_embed_videos:delete' embed_video.id %}" method="POST">
                 {% csrf_token %}
                 <input type="submit" value="{% trans 'Yes, delete' %}" class="button serious" />
+                <a href="{% url 'wagtail_embed_videos:index' %}" class="button button-secondary">{% trans "No, don't delete" %}</a>
             </form>
         </div>
     </div>

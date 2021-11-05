@@ -1,4 +1,4 @@
-{% load wagtailadmin_tags embed_video_tags wagtailimages_tags %}
+{% load embed_video_tags wagtailadmin_tags wagtailimages_tags %}
 {% load i18n %}
 {% if embed_videos %}
     {% if is_searching %}
@@ -34,11 +34,11 @@
 
         {% search_other %}
     {% else %}
-        {% url 'wagtail_embed_videos:add' as wagtail_embed_videos_add_embed_video_url %}
+        {% url 'wagtail_embed_videos:add' as wagtail_embedvideos_add_embed_video_url %}
         {% if current_collection %}
-            <p>{% blocktrans %}You haven't uploaded any videos in this collection. Why not <a href="{{ wagtail_embed_videos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+            <p>{% blocktrans %}You haven't uploaded any videos in this collection. Why not <a href="{{ wagtail_embedvideos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
         {% else %}
-            <p>{% blocktrans %}You haven't uploaded any videos. Why not <a href="{{ wagtal_embed_videos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+            <p>{% blocktrans %}You haven't uploaded any videos. Why not <a href="{{ wagtal_embedvideos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
         {% endif %}
     {% endif %}
 {% endif %}

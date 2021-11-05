@@ -13,7 +13,7 @@ wagtail-embedvideos
 .. image:: https://img.shields.io/travis/bashu/wagtail-embedvideos.svg
     :target: https://travis-ci.com/github/bashu/wagtail-embedvideos/
 
-Simple app that works similar to wagtailimages, but for embedding YouTube and Vimeo videos and music from SoundCloud.
+Simple app that works similar to ``wagtailimages``, but for embedding YouTube and Vimeo videos and music from SoundCloud.
 
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.
