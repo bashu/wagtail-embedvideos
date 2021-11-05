@@ -4,7 +4,7 @@ from django.contrib import admin
 from wagtail_embed_videos.models import EmbedVideo
 
 if (
-    hasattr(settings, "WAGTAILEMBEDVIDEO_EMBEDVIDEO_MODEL")
+    hasattr(settings, "WAGTAILEMBEDVIDEOS_EMBEDVIDEO_MODEL")
     and settings.WAGTAILEMBEDVIDEOS_EMBEDVIDEO_MODEL != "wagtail_embed_videos.EmbedVideo"
 ):
     # This installation provides its own custom embed video class;
