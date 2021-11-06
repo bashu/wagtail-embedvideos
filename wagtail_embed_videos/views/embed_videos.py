@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
+from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.vary import vary_on_headers
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
@@ -70,7 +71,7 @@ def index(request):
 
     # Create response
     if request.is_ajax():
-        return render(
+        return TemplateResponse(
             request,
             "wagtail_embed_videos/embed_videos/results.html",
             {
@@ -80,7 +81,7 @@ def index(request):
             },
         )
     else:
-        return render(
+        return TemplateResponse(
             request,
             "wagtail_embed_videos/embed_videos/index.html",
             {
@@ -128,7 +129,7 @@ def edit(request, embed_video_id):
     else:
         form = EmbedVideoForm(instance=embed_video, user=request.user)
 
-    return render(
+    return TemplateResponse(
         request,
         "wagtail_embed_videos/embed_videos/edit.html",
         {
@@ -151,7 +152,7 @@ def delete(request, embed_video_id):
         messages.success(request, _("Video '{0}' deleted.").format(embed_video.title))
         return redirect("wagtail_embed_videos:index")
 
-    return render(
+    return TemplateResponse(
         request,
         "wagtail_embed_videos/embed_videos/confirm_delete.html",
         {
@@ -185,7 +186,7 @@ def add(request):
     else:
         form = EmbedVideoForm(user=request.user)
 
-    return render(
+    return TemplateResponse(
         request,
         "wagtail_embed_videos/embed_videos/add.html",
         {
@@ -200,6 +201,6 @@ def usage(request, embed_video_id):
     paginator = Paginator(embed_video.get_usage(), per_page=USAGE_PAGE_SIZE)
     used_by = paginator.get_page(request.GET.get("p"))
 
-    return render(
+    return TemplateResponse(
         request, "wagtail_embed_videos/embed_videos/usage.html", {"embed_video": embed_video, "used_by": used_by}
     )

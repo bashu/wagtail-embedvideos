@@ -2,7 +2,7 @@
 
 from django import forms
 from django.forms.models import modelform_factory
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from wagtail.admin import widgets
 from wagtail.admin.forms.collections import (
     BaseCollectionMemberForm, collection_member_permission_formset_factory)

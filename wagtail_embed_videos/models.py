@@ -8,7 +8,7 @@ from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from embed_video.backends import VideoDoesntExistException, detect_backend
 from embed_video.fields import EmbedVideoField
 from taggit.managers import TaggableManager

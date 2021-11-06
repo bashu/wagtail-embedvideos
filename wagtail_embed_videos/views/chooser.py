@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from embed_video.backends import detect_backend
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
@@ -108,7 +109,7 @@ def chooser(request):
         paginator = Paginator(embed_videos, per_page=CHOOSER_PAGE_SIZE)
         embed_videos = paginator.get_page(request.GET.get("p"))
 
-        return render(
+        return TemplateResponse(
             request,
             "wagtail_embed_videos/chooser/results.html",
             {

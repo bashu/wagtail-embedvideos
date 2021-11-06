@@ -2,7 +2,7 @@
 {% load i18n %}
 {% if embed_videos %}
     {% if is_searching %}
-        <h2>
+        <h2 role="alert">
         {% blocktrans count counter=embed_videos.paginator.count %}
             There is {{ counter }} match
         {% plural %}
@@ -30,7 +30,7 @@
 
 {% else %}
     {% if is_searching %}
-        <h2>{% blocktrans %}Sorry, no videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</h2>
+        <h2 role="alert">{% blocktrans %}Sorry, no videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</h2>
 
         {% search_other %}
     {% else %}
