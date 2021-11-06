@@ -1,8 +1,8 @@
 from django.conf.urls import include, url
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ungettext
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, ngettext
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.search import SearchArea
 # from wagtail.admin.site_summary import SummaryItem
@@ -102,7 +102,7 @@ def describe_collection_docs(collection):
         url = reverse("wagtail_embed_videos:index") + ("?collection_id=%d" % collection.id)
         return {
             "count": embedvideos_count,
-            "count_text": ungettext("%(count)s embed video", "%(count)s embed videos", embedvideos_count)
+            "count_text": ngettext("%(count)s embed video", "%(count)s embed videos", embedvideos_count)
             % {"count": embedvideos_count},
             "url": url,
         }

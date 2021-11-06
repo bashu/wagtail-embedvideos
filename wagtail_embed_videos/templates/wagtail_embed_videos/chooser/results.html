@@ -2,7 +2,7 @@
 {% load i18n %}
 {% if embed_videos %}
     {% if is_searching %}
-        <h2>
+        <h2 role="alert">
         {% blocktrans count counter=embed_videos.paginator.count %}
             There is {{ counter }} match
         {% plural %}
