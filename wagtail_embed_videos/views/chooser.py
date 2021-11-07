@@ -7,7 +7,8 @@ from django.utils.translation import gettext as _
 from embed_video.backends import detect_backend
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
-from wagtail.admin.utils import PermissionPolicyChecker, popular_tags_for_model
+from wagtail.admin.auth import PermissionPolicyChecker
+from wagtail.admin.models import popular_tags_for_model
 from wagtail.core import hooks
 from wagtail.core.models import Collection
 from wagtail.search import index as search_index
