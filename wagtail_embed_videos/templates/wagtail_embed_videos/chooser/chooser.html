@@ -1,3 +1,4 @@
+{% load wagtailadmin_tags %}
 {% load i18n %}
 {% trans "Choose an embed video" as choose_str %}
 {% include "wagtailadmin/shared/header.html" with title=choose_str merged=1 tabbed=1 icon="media" %}
@@ -38,6 +39,7 @@
     </section>
     {% if uploadform %}
         <section id="upload" class="{% if uploadform.errors %}active{% endif %} nice-padding">
+            {% include "wagtailadmin/shared/non_field_errors.html" with form=uploadform %}
             <form class="embed_video-upload" action="{% url 'wagtail_embed_videos:chooser_upload' %}" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <ul class="fields">
@@ -49,7 +51,7 @@
                         {% endif %}
                     {% endfor %}
                     <li>
-                        <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Upload' %}</em></button>
+                        <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}">{% icon name="spinner" %}<em>{% trans 'Upload' %}</em></button>
                     </li>
                 </ul>
             </form>

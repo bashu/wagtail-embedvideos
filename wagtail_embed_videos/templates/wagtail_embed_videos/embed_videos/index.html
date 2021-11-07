@@ -25,7 +25,8 @@
 
     {% if user_can_add %}
         {% trans "Add a video" as add_ev_str %}
-        {% include "wagtailadmin/shared/header.html" with title=ev_str add_link="wagtail_embed_videos:add" icon="media" add_text=add_ev_str search_url="wagtail_embed_videos:index" %}
+        {% url "wagtail_embed_videos:add" as add_link %}
+        {% include "wagtailadmin/shared/header.html" with title=ev_str action_url=add_link icon="media" action_text=add_ev_str search_url="wagtail_embed_videos:index" %}
     {% else %}
         {% include "wagtailadmin/shared/header.html" with title=ev_str icon="media" search_url="wagtal_embed_videos:index" %}
     {% endif %}
@@ -45,13 +46,13 @@
                             <legend>{% trans 'Popular Tags:' %}</legend>
                             {% for tag in popular_tags %}
                                 {% if tag.name != current_tag %}
-                                    <a class="button button-small button-secondary bicolor icon icon-tag" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{{ tag.name }}</a>
+                                    <a class="button button-small button-secondary bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
                                 {% else %}
-                                    <a class="button button-small bicolor icon icon-tag" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{{ tag.name }}</a>
+                                    <a class="button button-small bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
                                 {% endif %}
                             {% endfor %}
                             {% if current_tag %}
-                                <a class="button button-small bicolor button-secondary icon icon-cross" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% trans 'Clear choice' %}</a>
+                                <a class="button button-small bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear choice' %}</a>
                             {% endif %}
                         </fieldset>
                     </li>
