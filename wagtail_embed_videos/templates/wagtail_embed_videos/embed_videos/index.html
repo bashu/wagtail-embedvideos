@@ -4,6 +4,7 @@
 
 {% block titletag %}{% trans "Embed Videos" %}{% endblock %}
 {% block extra_js %}
+    {{ block.super }}
     <script>
         window.headerSearch = {
             url: "{% url 'wagtail_embed_videos:index' %}",
@@ -41,17 +42,17 @@
                 {% if popular_tags %}
                     <li>
                         <fieldset class="tagfilter">
-                        <legend>{% trans 'Popular Tags:' %}</legend>
-                        {% for tag in popular_tags %}
-                            {% if tag.name != current_tag %}
-                                <a class="button button-small button-secondary bicolor icon icon-tag" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{{ tag.name }}</a>
-                            {% else %}
-                                <a class="button button-small bicolor icon icon-tag" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{{ tag.name }}</a>
+                            <legend>{% trans 'Popular Tags:' %}</legend>
+                            {% for tag in popular_tags %}
+                                {% if tag.name != current_tag %}
+                                    <a class="button button-small button-secondary bicolor icon icon-tag" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{{ tag.name }}</a>
+                                {% else %}
+                                    <a class="button button-small bicolor icon icon-tag" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{{ tag.name }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            {% if current_tag %}
+                                <a class="button button-small bicolor button-secondary icon icon-cross" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% trans 'Clear choice' %}</a>
                             {% endif %}
-                        {% endfor %}
-                        {% if current_tag %}
-                            <a class="button button-small bicolor button-secondary icon icon-cross" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% trans 'Clear choice' %}</a>
-                        {% endif %}
                         </fieldset>
                     </li>
                 {% endif %}

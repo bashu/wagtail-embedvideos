@@ -107,7 +107,7 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
             currentTag = $(this).text();
             $('#id_q').val('');
             fetchResults({
-                'tag': currentTag,
+                tag: currentTag,
                 collection_id: $('#collection_chooser_collection_id').val()
             });
             return false;

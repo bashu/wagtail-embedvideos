@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from embed_video.backends import VideoDoesntExistException, detect_backend
 from embed_video.fields import EmbedVideoField
 from taggit.managers import TaggableManager
-from wagtail.admin.utils import get_object_usage
+from wagtail.admin.models import get_object_usage
 from wagtail.core.models import CollectionMember
 from wagtail.images import get_image_model, get_image_model_string
 from wagtail.search import index
