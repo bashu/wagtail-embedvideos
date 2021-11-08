@@ -2,6 +2,7 @@
 {% load embed_video_tags wagtailimages_tags %}
 
 {% block chooser_class %}embed_video-chooser{% endblock %}
+{% block chooser_attributes %}data-chooser-url="{% url "wagtail_embed_videos:chooser" %}"{% endblock %}
 
 {% block chosen_state_view %}
     <div class="preview-embedvideo">

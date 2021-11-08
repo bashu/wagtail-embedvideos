@@ -5,7 +5,8 @@ from django.forms.models import modelform_factory
 from django.utils.translation import gettext as _
 from wagtail.admin import widgets
 from wagtail.admin.forms.collections import (
-    BaseCollectionMemberForm, collection_member_permission_formset_factory)
+    BaseCollectionMemberForm, CollectionChoiceField, collection_member_permission_formset_factory)
+from wagtail.core.models import Collection
 from wagtail.images.edit_handlers import AdminImageChooser
 
 from wagtail_embed_videos.models import EmbedVideo
@@ -13,8 +14,12 @@ from wagtail_embed_videos.permissions import \
     permission_policy as embed_videos_permission_policy
 
 
-# Callback to allow us to override the default form field for the embed video file field
+# Callback to allow us to override the default form field for the collection field.
 def formfield_for_dbfield(db_field, **kwargs):
+    # Check if this is the collection field
+    if db_field.name == 'collection':
+        return CollectionChoiceField(queryset=Collection.objects.all(), empty_label=None, **kwargs)
+
     # For all other fields, just call its formfield() method.
     return db_field.formfield(**kwargs)
 

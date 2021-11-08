@@ -6,7 +6,7 @@ function createEmbedVideoChooser(id) {
 
     $('.action-choose', chooserElement).on('click', function() {
         ModalWorkflow({
-            url: window.chooserUrls.embedVideoChooser,
+            url: chooserElement.data('chooserUrl'),
             onload: EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS,
             responses: {
                 embedVideoChosen: function(embedVideoData) {
