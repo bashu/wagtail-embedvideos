@@ -1,5 +1,4 @@
-from django.conf.urls import include, url
-from django.urls import reverse
+from django.urls import include, path, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext, ngettext
@@ -16,7 +15,7 @@ from wagtail_embed_videos.permissions import permission_policy
 @hooks.register("register_admin_urls")
 def register_admin_urls():
     return [
-        url(r"^embed_videos/", include(admin_urls, namespace="wagtail_embed_videos")),
+        path("embed_videos/", include(admin_urls, namespace="wagtail_embed_videos")),
     ]
 
 
@@ -37,7 +36,7 @@ def register_embedvideos_menu_item():
         _("Embed Videos"),
         reverse("wagtail_embed_videos:index"),
         name="embedvideos",
-        classnames="icon icon-media",
+        icon_name="media",
         order=301,
     )
 

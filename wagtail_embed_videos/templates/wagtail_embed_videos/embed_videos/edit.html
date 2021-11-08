@@ -1,5 +1,5 @@
 {% extends "wagtailadmin/base.html" %}
-{% load wagtailadmin_tags wagtailimages_tags embed_video_tags static i18n l10n %}
+{% load embed_video_tags wagtailimages_tags wagtailadmin_tags static i18n l10n %}
 {% block titletag %}{% blocktrans with title=embed_video.title %}Editing video {{ title }}{% endblocktrans %}{% endblock %}
 {% block extra_css %}
     {{ block.super }}
@@ -25,6 +25,7 @@
 {% block content %}
     {% trans "Editing" as editing_str %}
     {% include "wagtailadmin/shared/header.html" with title=editing_str subtitle=embed_video.title icon="media" usage_object=embed_video %}
+    {% include "wagtailadmin/shared/non_field_errors.html" %}
 
     <form action="{% url 'wagtail_embed_videos:edit' embed_video.id %}" method="POST" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
