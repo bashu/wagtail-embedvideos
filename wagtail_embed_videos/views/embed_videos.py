@@ -1,6 +1,7 @@
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
-from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
+from wagtail.admin.auth import PermissionPolicyChecker
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -67,8 +68,6 @@ def index(request):
     collections = permission_policy.collections_user_has_any_permission_for(request.user, ["add", "change"])
     if len(collections) < 2:
         collections = None
-    else:
-        collections = Collection.order_for_display(collections)
 
     # Create response
     if request.is_ajax():
@@ -107,7 +106,7 @@ def edit(request, embed_video_id):
     embed_video = get_object_or_404(EmbedVideo, id=embed_video_id)
 
     if not permission_policy.user_has_permission_for_instance(request.user, "change", embed_video):
-        return permission_denied(request)
+        raise PermissionDenied
 
     if request.method == "POST":
         form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
@@ -146,7 +145,7 @@ def delete(request, embed_video_id):
     embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
 
     if not permission_policy.user_has_permission_for_instance(request.user, "delete", embed_video):
-        return permission_denied(request)
+        raise PermissionDenied
 
     if request.method == "POST":
         embed_video.delete()
