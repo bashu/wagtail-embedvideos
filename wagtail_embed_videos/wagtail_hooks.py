@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.search import SearchArea
+
 # from wagtail.admin.site_summary import SummaryItem
 from wagtail.core import hooks
 

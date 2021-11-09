@@ -6,18 +6,6 @@
 
 {% block chosen_state_view %}
     <div class="preview-embedvideo">
-        {% if embed_video %}
-            {% if embed_video.thumbnail %}
-                {% image embed_video.thumbnail max-165x165 class="show-transparency" title=embed_video.title %}
-            {% else %}
-                {% video embed_video.url as my_video %}
-                    <img src="{{ my_video.thumbnail }}" style="max-width: 165px; max-height: 165px;">
-                {% endvideo %}
-            {% endif %}
-        {% else %}
-            <img alt="">
-        {% endif %}
+        <img alt="{{ title }}" class="show-transparency" height="{{ preview.height }}" src="{{ preview.url }}" title="{{ title }}" width="{{ preview.width }}">
     </div>
 {% endblock %}
-
-{% block edit_chosen_item_url %}{% if embed_video %}{% url 'wagtail_embed_videos:edit' embed_video.id %}{% endif %}{% endblock %}
