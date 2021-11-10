@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
@@ -5,12 +7,11 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from embed_video.backends import detect_backend
+from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
-from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.models import popular_tags_for_model
 from wagtail.core import hooks
-from wagtail.core.models import Collection
 from wagtail.search import index as search_index
 
 from wagtail_embed_videos import get_embed_video_model
@@ -38,16 +39,22 @@ def get_embed_video_result_data(embed_video):
     embed video chooser panel
     """
     if embed_video.thumbnail:
-        preview_url = embed_video.thumbnail.get_rendition("max-165x165").url
+        preview = embed_video.thumbnail.get_rendition("max-165x165")
     else:
-        preview_url = detect_backend(embed_video.url).get_thumbnail_url()
+        preview = SimpleNamespace(
+            url=detect_backend(embed_video.url).get_thumbnail_url(),
+            width=165,
+            height=92,
+        )
 
     return {
         "id": embed_video.id,
         "edit_link": reverse("wagtail_embed_videos:edit", args=(embed_video.id,)),
         "title": embed_video.title,
         "preview": {
-            "url": preview_url,
+            "url": preview.url,
+            "width": preview.width,
+            "height": preview.height,
         },
     }
 
@@ -55,7 +62,7 @@ def get_embed_video_result_data(embed_video):
 def get_chooser_context(request):
     """Helper function to return common template context variables for the main chooser view"""
 
-    collections = Collection.objects.all()
+    collections = permission_policy.collections_user_has_permission_for(request.user, "choose")
     if len(collections) < 2:
         collections = None
 
@@ -77,7 +84,9 @@ def chooser(request):
     else:
         uploadform = None
 
-    embed_videos = EmbedVideo.objects.order_by("-created_at")
+    embed_videos = permission_policy.instances_user_has_any_permission_for(request.user, ["choose"]).order_by(
+        "-created_at"
+    )
 
     # allow hooks to modify the queryset
     for hook in hooks.get_hooks("construct_embed_video_chooser_queryset"):

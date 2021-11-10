@@ -133,6 +133,9 @@ class EmbedVideo(AbstractEmbedVideo):
         "tags",
     )
 
-    class Meta:
+    class Meta(AbstractEmbedVideo.Meta):
         verbose_name = _("embed video")
         verbose_name_plural = _("embed videos")
+        permissions = [
+            ("choose_embedvideo", "Can choose embed video"),
+        ]

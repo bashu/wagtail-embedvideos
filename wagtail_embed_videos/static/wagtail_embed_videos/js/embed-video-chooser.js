@@ -13,6 +13,8 @@ function createEmbedVideoChooser(id) {
                     input.val(embedVideoData.id);
                     previewEmbedVideo.attr({
                         src: embedVideoData.preview.url,
+                        width: embedVideoData.preview.width,
+                        height: embedVideoData.preview.height,
                         alt: embedVideoData.title,
                         title: embedVideoData.title
                     });

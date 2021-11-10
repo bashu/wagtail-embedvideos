@@ -1,5 +1,4 @@
-from wagtail.core.permission_policies.collections import \
-    CollectionOwnershipPermissionPolicy
+from wagtail.core.permission_policies.collections import CollectionOwnershipPermissionPolicy
 
 from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.models import EmbedVideo
