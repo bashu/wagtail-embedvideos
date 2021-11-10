@@ -1,6 +1,9 @@
 {% extends "wagtailadmin/widgets/chooser.html" %}
-{% load embed_video_tags wagtailimages_tags %}
+{% load embed_video_tags wagtailadmin_tags wagtailimages_tags %}
 
+{% block unchosen_icon %}{% icon name="media" %}{% endblock unchosen_icon %}
+{# Embed Video chooser doesn't have a chosen icon. It shows an preview of the chosen embed video instead .#}
+{% block chosen_icon %}{% endblock chosen_icon %}
 {% block chooser_class %}embed_video-chooser{% endblock %}
 {% block chooser_attributes %}data-chooser-url="{% url "wagtail_embed_videos:chooser" %}"{% endblock %}
 
