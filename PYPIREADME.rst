@@ -24,7 +24,7 @@ Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
    :width: 600px
 
 Compatibility
-~~~~~~~~~~~~~
+-------------
 
 The current version is tested for compatiblily with the following:
 
@@ -33,13 +33,13 @@ The current version is tested for compatiblily with the following:
 - Python versions 3.6 and 3.9
 
 Requirements
-~~~~~~~~~~~~
+------------
 
 You must have *django-embed-video* installed and configured, see the
 django-embed-video_ documentation for details and setup instructions.
 
 Installation
-============
+------------
 
 First install the module, preferably in a virtual environment. It can be installed from PyPI:
 
@@ -48,7 +48,7 @@ First install the module, preferably in a virtual environment. It can be install
     pip install wagtail-embedvideos
 
 Setup
-=====
+-----
 
 Make sure the project is configured for django-embed-video_.
 
@@ -63,7 +63,7 @@ Then add the following settings:
 Then run ``./manage.py migrate`` to create the required database tables.
 
 Usage
-=====
+-----
 
 In models, implement as a ``ForeignKey`` relation, same as ``wagtailimages``.
 
@@ -105,18 +105,18 @@ In templates, load the ``embed_video_tags`` library in every template where you 
 Check django-embed-video_ documentation for more details.
 
 Contributing
-============
+------------
 
 If you like this module, forked it, or would like to improve it, please let us know!
 Pull requests are welcome too. :-)
 
 Credits
-=======
+-------
 
 `wagtail-embedvideos <https://github.com/bashu/wagtail-embedvideos/>`_ was originally started by `InfoPortugal, S.A. <https://github.com/infoportugal/>`_ who has now unfortunately abandoned the project.
 
 License
-=======
+-------
 
 ``wagtail-embedvideos`` is released under the BSD license.
 
