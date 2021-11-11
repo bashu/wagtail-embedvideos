@@ -1,22 +1,22 @@
 .embed_video-chooser .chosen:before,
 .embed_video-chooser .unchosen:before {
-    content:""
+    display: none;
 }
 .embed_video-chooser .chosen {
-    padding-left:130px;
+    padding-left: 130px;
 }
 .embed_video-chooser .chosen:before {
-    content:"";
+    display: inline-block;
 }
 .embed_video-chooser .chosen .preview-embedvideo {
-    float:left;
-    margin-left:-130px;
-    margin-right:1em;
-    max-width:130px
+    float: left;
+    margin-left: -130px;
+    margin-right: 1em;
+    max-width: 130px
 }
 .embed_video-chooser .chosen .preview-embedvideo img {
-    max-width:130px;
-    max-height:130px;
-    height:auto;
-    width:auto
+    max-width: 130px;
+    max-height: 130px;
+    height: auto;
+    width: auto
 }

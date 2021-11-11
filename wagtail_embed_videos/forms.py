@@ -19,7 +19,9 @@ from wagtail_embed_videos.permissions import permission_policy as embed_videos_p
 def formfield_for_dbfield(db_field, **kwargs):
     # Check if this is the collection field
     if db_field.name == "collection":
-        return CollectionChoiceField(queryset=Collection.objects.all(), empty_label=None, **kwargs)
+        return CollectionChoiceField(
+            label=_("Collection"), queryset=Collection.objects.all(), empty_label=None, **kwargs
+        )
 
     # For all other fields, just call its formfield() method.
     return db_field.formfield(**kwargs)
