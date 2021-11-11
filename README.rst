@@ -29,7 +29,7 @@ Compatibility
 
 The current version is tested for compatiblily with the following:
 
-- Wagtail versions 2.7 to 2.11
+- Wagtail versions 2.7 to 2.13
 - Django versions 2.2 to 3.2
 - Python versions 3.6 and 3.9
 
