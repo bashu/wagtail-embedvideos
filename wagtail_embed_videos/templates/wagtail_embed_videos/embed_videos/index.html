@@ -7,7 +7,7 @@
     {{ block.super }}
     <script>
         window.headerSearch = {
-            url: "{% url 'wagtail_embed_videos:index' %}",
+            url: "{% url 'wagtail_embed_videos:listing_results' %}",
             termInput: "#id_q",
             targetOutput: "#embed_video-results"
         }

@@ -4,8 +4,9 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
-from django.views.decorators.vary import vary_on_headers
+from django.views.generic import TemplateView
 from wagtail.admin import messages
 from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm
@@ -23,79 +24,89 @@ INDEX_PAGE_SIZE = getattr(settings, "WAGTAILEMBEDVIDEOS_INDEX_PAGE_SIZE", 20)
 USAGE_PAGE_SIZE = getattr(settings, "WAGTAILEMBEDVIDEOS_USAGE_PAGE_SIZE", 20)
 
 
-@permission_checker.require_any("add", "change", "delete")
-@vary_on_headers("X-Requested-With")
-def index(request):
-    EmbedVideo = get_embed_video_model()
+class BaseListingView(TemplateView):
+    @method_decorator(permission_checker.require_any("add", "change", "delete"))
+    def get(self, request):
+        return super().get(request)
 
-    # Get embed videos (filtered by user permission)
-    embed_videos = permission_policy.instances_user_has_any_permission_for(request.user, ["change", "delete"]).order_by(
-        "-created_at"
-    )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    # Search
-    query_string = None
-    if "q" in request.GET:
-        form = SearchForm(request.GET, placeholder=_("Search embed videos"))
-        if form.is_valid():
-            query_string = form.cleaned_data["q"]
-
-            embed_videos = embed_videos.search(query_string)
-    else:
-        form = SearchForm(placeholder=_("Search embed videos"))
-
-    # Filter by collection
-    current_collection = None
-    collection_id = request.GET.get("collection_id")
-    if collection_id:
-        try:
-            current_collection = Collection.objects.get(id=collection_id)
-            embed_videos = embed_videos.filter(collection=current_collection)
-        except (ValueError, Collection.DoesNotExist):
-            pass
-
-    # Filter by tag
-    current_tag = request.GET.get("tag")
-    if current_tag:
-        try:
-            embed_videos = embed_videos.filter(tags__name=current_tag)
-        except (AttributeError):
-            current_tag = None
-
-    paginator = Paginator(embed_videos, per_page=INDEX_PAGE_SIZE)
-    embed_videos = paginator.get_page(request.GET.get("p"))
-
-    collections = permission_policy.collections_user_has_any_permission_for(request.user, ["add", "change"])
-    if len(collections) < 2:
-        collections = None
-
-    # Create response
-    if request.is_ajax():
-        return TemplateResponse(
-            request,
-            "wagtail_embed_videos/embed_videos/results.html",
-            {
-                "embed_videos": embed_videos,
-                "query_string": query_string,
-                "is_searching": bool(query_string),
-            },
+        # Get embed videos (filtered by user permission)
+        embed_videos = (
+            permission_policy.instances_user_has_any_permission_for(self.request.user, ["change", "delete"])
+            .order_by("-created_at")
+            .select_related("collection")
         )
-    else:
-        return TemplateResponse(
-            request,
-            "wagtail_embed_videos/embed_videos/index.html",
+
+        # Search
+        query_string = None
+        if "q" in self.request.GET:
+            self.form = SearchForm(self.request.GET, placeholder=_("Search embed videos"))
+            if self.form.is_valid():
+                query_string = self.form.cleaned_data["q"]
+
+                embed_videos = embed_videos.search(query_string)
+        else:
+            self.form = SearchForm(placeholder=_("Search embed videos"))
+
+        # Filter by collection
+        self.current_collection = None
+        collection_id = self.request.GET.get("collection_id")
+        if collection_id:
+            try:
+                self.current_collection = Collection.objects.get(id=collection_id)
+                embed_videos = embed_videos.filter(collection=self.current_collection)
+            except (ValueError, Collection.DoesNotExist):
+                pass
+
+        # Filter by tag
+        self.current_tag = self.request.GET.get("tag")
+        if self.current_tag:
+            try:
+                embed_videos = embed_videos.filter(tags__name=self.current_tag)
+            except (AttributeError):
+                self.current_tag = None
+
+        paginator = Paginator(embed_videos, per_page=INDEX_PAGE_SIZE)
+        embed_videos = paginator.get_page(self.request.GET.get("p"))
+
+        context.update(
             {
                 "embed_videos": embed_videos,
                 "query_string": query_string,
                 "is_searching": bool(query_string),
-                "search_form": form,
-                "popular_tags": popular_tags_for_model(EmbedVideo),
-                "current_tag": current_tag,
+            }
+        )
+
+        return context
+
+
+class IndexView(BaseListingView):
+    template_name = "wagtail_embed_videos/embed_videos/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        collections = permission_policy.collections_user_has_any_permission_for(self.request.user, ["add", "change"])
+        if len(collections) < 2:
+            collections = None
+
+        context.update(
+            {
+                "search_form": self.form,
+                "popular_tags": popular_tags_for_model(get_embed_video_model()),
+                "current_tag": self.current_tag,
                 "collections": collections,
-                "current_collection": current_collection,
-                "user_can_add": permission_policy.user_has_permission(request.user, "add"),
-            },
+                "current_collection": self.current_collection,
+                "user_can_add": permission_policy.user_has_permission(self.request.user, "add"),
+            }
         )
+        return context
+
+
+class ListingResultsView(BaseListingView):
+    template_name = "wagtail_embed_videos/embed_videos/results.html"
 
 
 @permission_checker.require("change")

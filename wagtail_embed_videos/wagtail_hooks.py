@@ -1,6 +1,5 @@
 from django.urls import include, path, reverse
 from django.utils.html import format_html
-from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from wagtail.admin.menu import MenuItem
