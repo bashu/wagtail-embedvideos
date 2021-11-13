@@ -92,6 +92,8 @@ class IndexView(BaseListingView):
         if len(collections) < 2:
             collections = None
 
+        EmbedVideo = get_embed_video_model()
+
         context.update(
             {
                 "search_form": self.form,
@@ -100,6 +102,8 @@ class IndexView(BaseListingView):
                 "collections": collections,
                 "current_collection": self.current_collection,
                 "user_can_add": permission_policy.user_has_permission(self.request.user, "add"),
+                'app_label': EmbedVideo._meta.app_label,
+                'model_name': EmbedVideo._meta.model_name,
             }
         )
         return context

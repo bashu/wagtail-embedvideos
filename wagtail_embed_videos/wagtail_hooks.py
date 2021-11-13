@@ -58,9 +58,9 @@ def editor_js():
 
 # class EmbedVideosSummaryItem(SummaryItem):
 #     order = 201
-#     template = "wagtail_embed_videos/homepage/site_summary_videos.html"
+#     template_name = "wagtail_embed_videos/homepage/site_summary_videos.html"
 
-#     def get_context(self):
+#     def get_context_data(self, parent_context):
 #         return {
 #             "total_videos": get_embed_video_model().objects.count(),
 #         }

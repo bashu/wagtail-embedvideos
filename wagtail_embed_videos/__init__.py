@@ -24,7 +24,7 @@ def get_embed_video_model():
 
     model_string = get_embed_video_model_string()
     try:
-        return apps.get_model(model_string)
+        return apps.get_model(model_string, require_ready=False)
     except ValueError:
         raise ImproperlyConfigured("WAGTAILEMBEDVIDEOS_EMBEDVIDEO_MODEL must be of the form 'app_label.model_name'")
     except LookupError:
