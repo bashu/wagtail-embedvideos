@@ -15,6 +15,12 @@ wagtail-embedvideos
 
 Simple app that works similar to ``wagtailimages``, but for embedding YouTube and Vimeo videos and music from SoundCloud.
 
+The current version is tested for compatiblily with the following:
+
+- Wagtail versions 2.7 to 2.14
+- Django versions 2.2 to 3.2
+- Python versions 3.6 and 3.9
+
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.
 
@@ -24,21 +30,6 @@ Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
         <img src="https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png">
     </p>
 
-Compatibility
--------------
-
-The current version is tested for compatiblily with the following:
-
-- Wagtail versions 2.7 to 2.14
-- Django versions 2.2 to 3.2
-- Python versions 3.6 and 3.9
-
-Requirements
-------------
-
-You must have *django-embed-video* installed and configured, see the
-django-embed-video_ documentation for details and setup instructions.
-
 Installation
 ------------
 
@@ -47,6 +38,12 @@ First install the module, preferably in a virtual environment. It can be install
 .. code-block:: shell
 
     pip install wagtail-embedvideos
+
+Requirements
+~~~~~~~~~~~~
+
+You must have *django-embed-video* installed and configured, see the
+django-embed-video_ documentation for details and setup instructions.
 
 Setup
 -----
