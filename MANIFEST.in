@@ -1,3 +1,5 @@
+include AUTHORS
+include CHANGES.rst
 include README.rst
 include LICENSE
 recursive-exclude example *
