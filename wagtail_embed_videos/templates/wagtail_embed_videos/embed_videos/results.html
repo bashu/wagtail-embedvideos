@@ -1,5 +1,5 @@
 {% load embed_video_tags wagtailadmin_tags wagtailimages_tags %}
-{% load i18n %}
+{% load i18n l10n %}
 {% if embed_videos %}
     {% if is_searching %}
         <h2 role="alert">
@@ -12,15 +12,23 @@
 
         {% search_other %}
     {% else %}
-        <h2>{% trans "Latest videos" %}</h2>
+        <h2>{% trans "Latest embed videos" %}</h2>
     {% endif %}
+
+    {# Used below for the checkbox aria_labelledby #}
+    <p class="visuallyhidden" id="select-embed_video-label">{% trans "Select embed video" %}</p>
 
     <ul class="listing horiz images">
         {% for embed_video in embed_videos %}
             <li>
+                {% include "wagtailadmin/bulk_actions/listing_checkbox_cell.html" with obj_type="embed_video" obj=embed_video aria_labelledby_prefix="select-embed_video-label embed_video_" aria_labelledby=embed_video.pk|unlocalize aria_labelledby_suffix="_title" %}
                 <a class="image-choice" href="{% url 'wagtail_embed_videos:edit' embed_video.id %}">
-                    {% include "wagtail_embed_videos/embed_videos/results_video.html" %}
-                    <h3>{{ embed_video.title|ellipsistrim:60 }}</h3>
+                    <figure>
+                        {% include "wagtail_embed_videos/embed_videos/results_video.html" %}
+                        <figcaption id="embed_video_{{ embed_video.pk|unlocalize }}_title">
+                            {{ embed_video.title|ellipsistrim:60 }}
+                        </figcaption>
+                    </figure>
                 </a>
             </li>
         {% endfor %}
@@ -30,15 +38,15 @@
 
 {% else %}
     {% if is_searching %}
-        <h2 role="alert">{% blocktrans %}Sorry, no videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</h2>
+        <h2 role="alert">{% blocktrans %}Sorry, no embed videos match "<em>{{ query_string }}</em>"{% endblocktrans %}</h2>
 
         {% search_other %}
     {% else %}
         {% url 'wagtail_embed_videos:add' as wagtail_embedvideos_add_embed_video_url %}
         {% if current_collection %}
-            <p>{% blocktrans %}You haven't uploaded any videos in this collection. Why not <a href="{{ wagtail_embedvideos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+            <p>{% blocktrans %}You haven't uploaded any embed videos in this collection. Why not <a href="{{ wagtail_embedvideos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
         {% else %}
-            <p>{% blocktrans %}You haven't uploaded any videos. Why not <a href="{{ wagtal_embedvideos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
+            <p>{% blocktrans %}You haven't uploaded any embed videos. Why not <a href="{{ wagtal_embedvideos_add_embed_video_url }}">add one now</a>?{% endblocktrans %}</p>
         {% endif %}
     {% endif %}
 {% endif %}

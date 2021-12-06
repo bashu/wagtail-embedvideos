@@ -19,7 +19,7 @@ def add_choose_permission_to_admin_groups(apps, _schema_editor):
     )
 
     # Assign it to all groups which have "Access the Wagtail admin" permission.
-    # This emulates the previous behavior, where everyone could choose any image in any Collection
+    # This emulates the previous behavior, where everyone could choose any embed video in any Collection
     # because choosing wasn't permissioned.
     for group in Group.objects.filter(permissions__codename="access_admin"):
         group.permissions.add(choose_embedvideo_permission)
