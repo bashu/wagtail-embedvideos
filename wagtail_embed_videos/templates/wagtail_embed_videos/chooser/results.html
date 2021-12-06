@@ -32,5 +32,5 @@
         {% endfor %}
     </ul>
 
-    {% include "wagtailadmin/shared/ajax_pagination_nav.html" with items=embed_videos %}
+    {% include "wagtailadmin/shared/pagination_nav.html" with items=embed_videos linkurl='wagtail_embed_videos:chooser_results' %}
 {% endif %}

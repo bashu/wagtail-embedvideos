@@ -11,7 +11,8 @@ urlpatterns = [
     path("<int:embed_video_id>/delete/", embed_videos.delete, name="delete"),
     path("add/", embed_videos.add, name="add"),
     path("usage/<int:embed_video_id>/", embed_videos.usage, name="embed_video_usage"),
-    path("chooser/", chooser.chooser, name="chooser"),
+    path('chooser/', chooser.ChooseView.as_view(), name='chooser'),
+    path('chooser/results/', chooser.ChooseResultsView.as_view(), name='chooser_results'),
     path("chooser/<int:embed_video_id>/", chooser.embed_video_chosen, name="embed_video_chosen"),
     path("chooser/upload/", chooser.chooser_upload, name="chooser_upload"),
 ]

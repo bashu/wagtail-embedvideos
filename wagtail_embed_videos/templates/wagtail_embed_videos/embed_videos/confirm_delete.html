@@ -1,9 +1,9 @@
 {% extends "wagtailadmin/base.html" %}
 {% load embed_video_tags wagtailimages_tags i18n wagtailadmin_tags %}
-{% block titletag %}{% trans "Delete video" %}{% endblock %}
+{% block titletag %}{% trans "Delete embed video" %}{% endblock %}
 
 {% block content %}
-    {% trans "Delete video" as del_str %}
+    {% trans "Delete embed video" as del_str %}
     {% include "wagtailadmin/shared/header.html" with title=del_str icon="media" %}
 
     <div class="row row-flush nice-padding">
@@ -23,7 +23,7 @@
                     <a href="{{ embed_video.usage_url }}">{% blocktrans count usage_count=embed_video.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>
                 </div>
             {% endif %}
-            <p>{% trans "Are you sure you want to delete this video?" %}</p>
+            <p>{% trans "Are you sure you want to delete this embed video?" %}</p>
             <form action="{% url 'wagtail_embed_videos:delete' embed_video.id %}" method="POST">
                 {% csrf_token %}
                 <input type="submit" value="{% trans 'Yes, delete' %}" class="button serious" />

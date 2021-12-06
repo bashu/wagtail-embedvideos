@@ -3,9 +3,11 @@ from types import SimpleNamespace
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.views.generic.base import View
 from embed_video.backends import detect_backend
 from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm
@@ -21,16 +23,6 @@ from wagtail_embed_videos.permissions import permission_policy
 permission_checker = PermissionPolicyChecker(permission_policy)
 
 CHOOSER_PAGE_SIZE = getattr(settings, "WAGTAILEMBEDVIDEOS_CHOOSER_PAGE_SIZE", 12)
-
-
-def get_chooser_js_data():
-    """construct context variables needed by the chooser JS"""
-    return {
-        "step": "chooser",
-        "error_label": _("Server Error"),
-        "error_message": _("Report this error to your webmaster with the following information:"),
-        "tag_autocomplete_url": reverse("wagtailadmin_tag_autocomplete"),
-    }
 
 
 def get_embed_video_result_data(embed_video):
@@ -59,87 +51,94 @@ def get_embed_video_result_data(embed_video):
     }
 
 
-def get_chooser_context(request):
-    """Helper function to return common template context variables for the main chooser view"""
+class BaseChooseView(View):
+    def get(self, request):
+        self.embed_video_model = get_embed_video_model()
 
-    collections = permission_policy.collections_user_has_permission_for(request.user, "choose")
-    if len(collections) < 2:
-        collections = None
+        embed_videos = permission_policy.instances_user_has_any_permission_for(request.user, ["choose"]).order_by(
+            "-created_at"
+        )
 
-    return {
-        "searchform": SearchForm(),
-        "is_searching": False,
-        "query_string": None,
-        "popular_tags": popular_tags_for_model(get_embed_video_model()),
-        "collections": collections,
-    }
+        # allow hooks to modify the queryset
+        for hook in hooks.get_hooks("construct_embed_video_chooser_queryset"):
+            embed_videos = hook(embed_videos, request)
 
-
-def chooser(request):
-    EmbedVideo = get_embed_video_model()
-
-    if permission_policy.user_has_permission(request.user, "add"):
-        EmbedVideoForm = get_embed_video_form(EmbedVideo)
-        uploadform = EmbedVideoForm(user=request.user)
-    else:
-        uploadform = None
-
-    embed_videos = permission_policy.instances_user_has_any_permission_for(request.user, ["choose"]).order_by(
-        "-created_at"
-    )
-
-    # allow hooks to modify the queryset
-    for hook in hooks.get_hooks("construct_embed_video_chooser_queryset"):
-        embed_videos = hook(embed_videos, request)
-
-    if "q" in request.GET or "p" in request.GET or "tag" in request.GET or "collection_id" in request.GET:
-        # this request is triggered from search, pagination or 'popular tags';
-        # we will just render the results.html fragment
         collection_id = request.GET.get("collection_id")
         if collection_id:
             embed_videos = embed_videos.filter(collection=collection_id)
 
-        searchform = SearchForm(request.GET)
-        if searchform.is_valid():
-            q = searchform.cleaned_data["q"]
+        self.is_searching = False
+        self.q = None
 
-            embed_videos = embed_videos.search(q)
-            is_searching = True
+        if 'q' in request.GET:
+            self.search_form = SearchForm(request.GET)
+            if self.search_form.is_valid():
+                self.q = self.search_form.cleaned_data['q']
+                self.is_searching = True
+                embed_videos = embed_videos.search(self.q)
         else:
-            is_searching = False
-            q = None
+            self.search_form = SearchForm()
 
+        if not self.is_searching:
             tag_name = request.GET.get("tag")
             if tag_name:
                 embed_videos = embed_videos.filter(tags__name=tag_name)
 
         # Pagination
         paginator = Paginator(embed_videos, per_page=CHOOSER_PAGE_SIZE)
-        embed_videos = paginator.get_page(request.GET.get("p"))
+        self.embed_videos = paginator.get_page(request.GET.get('p'))
+        return self.render_to_response()
 
-        return TemplateResponse(
-            request,
-            "wagtail_embed_videos/chooser/results.html",
-            {
-                "embed_videos": embed_videos,
-                "is_searching": is_searching,
-                "query_string": q,
-            },
+    def get_context_data(self):
+        return {
+            'embed_videos': self.embed_videos,
+            'is_searching': self.is_searching,
+            'query_string': self.q,
+        }
+
+    def render_to_response(self):
+        raise NotImplementedError()
+
+
+class ChooseView(BaseChooseView):
+    def get_context_data(self):
+        context = super().get_context_data()
+
+        if permission_policy.user_has_permission(self.request.user, 'add'):
+            EmbedVideoForm = get_embed_video_form(self.embed_video_model)
+            uploadform = EmbedVideoForm(user=self.request.user, prefix='embed_video-chooser-upload')
+        else:
+            uploadform = None
+
+        collections = permission_policy.collections_user_has_permission_for(
+            self.request.user, 'choose'
         )
-    else:
-        paginator = Paginator(embed_videos, per_page=CHOOSER_PAGE_SIZE)
-        embed_videos = paginator.get_page(request.GET.get("p"))
+        if len(collections) < 2:
+            collections = None
 
-        context = get_chooser_context(request)
-        context.update(
-            {
-                "embed_videos": embed_videos,
-                "uploadform": uploadform,
+        context.update({
+            'searchform': self.search_form,
+            'popular_tags': popular_tags_for_model(self.embed_video_model),
+            'collections': collections,
+            'uploadform': uploadform,
+        })
+        return context
+
+    def render_to_response(self):
+        return render_modal_workflow(
+            self.request, 'wagtail_embed_videos/chooser/chooser.html', None, self.get_context_data(),
+            json_data={
+                'step': 'chooser',
+                'error_label': _("Server Error"),
+                'error_message': _("Report this error to your webmaster with the following information:"),
+                'tag_autocomplete_url': reverse('wagtailadmin_tag_autocomplete'),
             }
         )
-        return render_modal_workflow(
-            request, "wagtail_embed_videos/chooser/chooser.html", None, context, json_data=get_chooser_js_data()
-        )
+
+
+class ChooseResultsView(BaseChooseView):
+    def render_to_response(self):
+        return TemplateResponse(self.request, "wagtail_embed_videos/chooser/results.html", self.get_context_data())
 
 
 def embed_video_chosen(request, embed_video_id):
@@ -181,22 +180,14 @@ def chooser_upload(request):
     else:
         form = EmbedVideoForm(user=request.user, prefix="embed_video-chooser-upload")
 
-    embed_videos = EmbedVideo.objects.order_by("-created_at")
+    upload_form_html = render_to_string('wagtail_embed_videos/chooser/upload_form.html', {
+        'form': form,
+    }, request)
 
-    # allow hooks to modify the queryset
-    for hook in hooks.get_hooks("construct_embed_video_chooser_queryset"):
-        embed_videos = hook(embed_videos, request)
-
-    paginator = Paginator(embed_videos, per_page=CHOOSER_PAGE_SIZE)
-    embed_videos = paginator.get_page(request.GET.get("p"))
-
-    context = get_chooser_context(request)
-    context.update(
-        {
-            "embed_videos": embed_videos,
-            "uploadform": form,
-        }
-    )
     return render_modal_workflow(
-        request, "wagtail_embed_videos/chooser/chooser.html", None, context, json_data=get_chooser_js_data()
+        request, None, None, None,
+        json_data={
+            'step': 'reshow_upload_form',
+            'htmlFragment': upload_form_html
+        }
     )

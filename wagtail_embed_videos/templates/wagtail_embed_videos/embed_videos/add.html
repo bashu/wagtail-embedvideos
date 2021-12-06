@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n static %}
-{% block titletag %}{% trans "Add a video" %}{% endblock %}
+{% block titletag %}{% trans "Add an embed video" %}{% endblock %}
 
 {% block extra_js %}
     {{ block.super }}
@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block content %}
-    {% trans "Add video" as add_str %}
+    {% trans "Add embed video" as add_str %}
     {% include "wagtailadmin/shared/header.html" with title=add_str icon="media" %}
 
     <div class="nice-padding">

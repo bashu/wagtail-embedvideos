@@ -18,13 +18,17 @@
             })
         });
     </script>
+    <script>
+        window.wagtailConfig.BULK_ACTION_ITEM_TYPE = 'IMAGE';
+    </script>
+    <script defer src="{% versioned_static 'wagtailadmin/js/bulk-actions.js' %}"></script>
 {% endblock %}
 
 {% block content %}
     {% trans "Embed Videos" as ev_str %}
 
     {% if user_can_add %}
-        {% trans "Add a video" as add_ev_str %}
+        {% trans "Add an embed video" as add_ev_str %}
         {% url "wagtail_embed_videos:add" as add_link %}
         {% include "wagtailadmin/shared/header.html" with title=ev_str action_url=add_link icon="media" action_text=add_ev_str search_url="wagtail_embed_videos:index" %}
     {% else %}
@@ -63,6 +67,8 @@
         <div id="embed_video-results">
             {% include "wagtail_embed_videos/embed_videos/results.html" %}
         </div>
+        {% trans "Select all videos in listing" as select_all_text %}
+        {% include 'wagtailadmin/bulk_actions/footer.html' with select_all_obj_text=select_all_text app_label=app_label model_name=model_name objects=embed_videos parent=current_collection.id %}
     </div>
 
 {% endblock %}

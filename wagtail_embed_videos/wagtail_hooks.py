@@ -6,11 +6,14 @@ from wagtail.admin.menu import MenuItem
 from wagtail.admin.search import SearchArea
 
 # from wagtail.admin.site_summary import SummaryItem
+from wagtail.admin.admin_url_finder import ModelAdminURLFinder, register_admin_url_finder
 from wagtail.core import hooks
 
 from wagtail_embed_videos import admin_urls, get_embed_video_model
 from wagtail_embed_videos.forms import GroupEmbedVideoPermissionFormSet
 from wagtail_embed_videos.permissions import permission_policy
+from wagtail_embed_videos.views.bulk_actions import (
+    AddTagsBulkAction, AddToCollectionBulkAction, DeleteBulkAction)
 
 
 @hooks.register("register_admin_urls")
@@ -106,3 +109,14 @@ def describe_collection_docs(collection):
             % {"count": embedvideos_count},
             "url": url,
         }
+
+
+class EmbedVideoAdminURLFinder(ModelAdminURLFinder):
+    edit_url_name = 'wagtail_embed_videos:edit'
+    permission_policy = permission_policy
+
+register_admin_url_finder(get_embed_video_model(), EmbedVideoAdminURLFinder)
+
+
+for action_class in [AddTagsBulkAction, AddToCollectionBulkAction, DeleteBulkAction]:
+    hooks.register('register_bulk_action', action_class)
