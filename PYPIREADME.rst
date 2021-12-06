@@ -24,10 +24,10 @@ The current version is tested for compatiblily with the following:
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.
 
--.. image:: https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png
--   :target: https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png
--   :align: center
--   :width: 600px
+.. image:: https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png
+   :target: https://raw.githubusercontent.com/bashu/wagtail-embedvideos/develop/screenshot.png
+   :align: center
+   :width: 600px
 
 Installation
 ------------
