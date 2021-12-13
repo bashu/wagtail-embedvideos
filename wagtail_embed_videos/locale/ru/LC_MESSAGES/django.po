@@ -1,0 +1,469 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-13 11:49+0700\n"
+"PO-Revision-Date: 2021-12-13 12:09+0700\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Last-Translator: Basil S. <basil.shubin@gmail.com>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.4.2\n"
+
+#: forms.py:23
+msgid "Collection"
+msgstr "Коллекция"
+
+#: forms.py:75
+msgid "Add"
+msgstr "Добавить"
+
+#: forms.py:75
+msgid "Add/edit embed videos you own"
+msgstr ""
+
+#: forms.py:76 views/embed_videos.py:196
+msgid "Edit"
+msgstr "Правка"
+
+#: forms.py:76
+msgid "Edit any embed video"
+msgstr ""
+
+#: forms.py:77
+msgid "Choose"
+msgstr "Выберите"
+
+#: forms.py:77
+msgid "Select embed videos in choosers"
+msgstr ""
+
+#: models.py:58
+msgid "title"
+msgstr "заголовок"
+
+#: models.py:62
+msgid "thumbnail"
+msgstr ""
+
+#: models.py:68
+msgid "created at"
+msgstr "создано"
+
+#: models.py:71
+msgid "uploaded by user"
+msgstr "загружено пользователем"
+
+#: models.py:78
+msgid "tags"
+msgstr "тэги"
+
+#: models.py:137
+msgid "embed video"
+msgstr ""
+
+#: models.py:138
+msgid "embed videos"
+msgstr ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_tags.html:4
+#, python-format
+msgid "Add tags to 1 embed video"
+msgid_plural "Add tags to %(counter)s embed videos"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_tags.html:19
+msgid "Add tags to embed videos"
+msgstr ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_tags.html:26
+msgid "Are you sure you want to tag the following embed video?"
+msgid_plural "Are you sure you want to tag the following embed videos?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_tags.html:44
+msgid "You don't have permission to add tags to this embed video"
+msgid_plural "You don't have permission to add tags to these embed videos"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_tags.html:51
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_to_collection.html:39
+msgid "Yes, add"
+msgstr ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_tags.html:52
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_to_collection.html:40
+msgid "No, don't add"
+msgstr ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_to_collection.html:4
+#, python-format
+msgid "Add 1 embed video to new collection "
+msgid_plural "Add %(counter)s embed videos to new collection"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_to_collection.html:7
+msgid "Add embed videos to collection"
+msgstr ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_to_collection.html:14
+msgid ""
+"Are you sure you want to add the following embed video to the selected "
+"collection?"
+msgid_plural ""
+"Are you sure you want to add the following embed videos to the selected "
+"collection?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_add_to_collection.html:32
+msgid "You don't have permission to add this embed video to a collection"
+msgid_plural ""
+"You don't have permission to add these embed videos to a collection"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_delete.html:3
+#, python-format
+msgid "Delete 1 embed video"
+msgid_plural "Delete %(counter)s embed videos"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_delete.html:6
+msgid "Delete embed videos"
+msgstr ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_delete.html:13
+#: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:26
+msgid "Are you sure you want to delete this embed video?"
+msgid_plural "Are you sure you want to delete these embed videos?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_delete.html:25
+#: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:23
+#, python-format
+msgid "Used %(usage_count)s time"
+msgid_plural "Used %(usage_count)s times"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_delete.html:35
+msgid "You don't have permission to delete this embed video"
+msgid_plural "You don't have permission to delete these embed videos"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_delete.html:42
+#: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:29
+msgid "Yes, delete"
+msgstr "Да, удалить"
+
+#: templates/wagtail_embed_videos/bulk_actions/confirm_bulk_delete.html:43
+#: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:30
+msgid "No, don't delete"
+msgstr "Нет, не удалять"
+
+#: templates/wagtail_embed_videos/chooser/chooser.html:3 widgets.py:16
+msgid "Choose an embed video"
+msgstr ""
+
+#: templates/wagtail_embed_videos/chooser/chooser.html:11
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/wagtail_embed_videos/chooser/chooser.html:12
+#: templates/wagtail_embed_videos/chooser/upload_form.html:16
+msgid "Upload"
+msgstr "Загрузка"
+
+#: templates/wagtail_embed_videos/chooser/chooser.html:28
+msgid "Popular tags"
+msgstr "Популярные теги"
+
+#: templates/wagtail_embed_videos/chooser/results.html:6
+#: templates/wagtail_embed_videos/embed_videos/results.html:6
+#, python-format
+msgid ""
+"\n"
+"            There is %(counter)s match\n"
+"        "
+msgid_plural ""
+"\n"
+"            There are %(counter)s matches\n"
+"        "
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/chooser/results.html:13
+msgid "Latest videos"
+msgstr ""
+
+#: templates/wagtail_embed_videos/chooser/upload_form.html:16
+msgid "Uploading…"
+msgstr "Загрузка…"
+
+#: templates/wagtail_embed_videos/embed_videos/add.html:3
+#: templates/wagtail_embed_videos/embed_videos/index.html:31
+msgid "Add an embed video"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/add.html:28
+msgid "Add embed video"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/add.html:44
+#: templates/wagtail_embed_videos/embed_videos/edit.html:44
+#: templates/wagtail_embed_videos/embed_videos/edit.html:69
+msgid "Save"
+msgstr "Сохранить"
+
+#: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:3
+#: templates/wagtail_embed_videos/embed_videos/confirm_delete.html:6
+#: templates/wagtail_embed_videos/embed_videos/edit.html:46
+#: templates/wagtail_embed_videos/embed_videos/edit.html:71
+msgid "Delete embed video"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/edit.html:3
+#, python-format
+msgid "Editing embed video %(title)s"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/edit.html:26
+msgid "Editing"
+msgstr "Редактирование"
+
+#: templates/wagtail_embed_videos/embed_videos/edit.html:56
+msgid "URL"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/edit.html:58
+msgid "Backend"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/index.html:5
+#: templates/wagtail_embed_videos/embed_videos/index.html:28
+#: wagtail_hooks.py:40 wagtail_hooks.py:88
+msgid "Embed Videos"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/index.html:50
+msgid "Popular Tags:"
+msgstr "Популярные тэги:"
+
+#: templates/wagtail_embed_videos/embed_videos/index.html:59
+msgid "Clear choice"
+msgstr "Очистить выбор"
+
+#: templates/wagtail_embed_videos/embed_videos/index.html:70
+msgid "Select all videos in listing"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/results.html:15
+msgid "Latest embed videos"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/results.html:19
+msgid "Select embed video"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/results.html:41
+#, python-format
+msgid "Sorry, no embed videos match \"<em>%(query_string)s</em>\""
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/results.html:47
+#, python-format
+msgid ""
+"You haven't uploaded any embed videos in this collection. Why not <a href="
+"\"%(wagtail_embedvideos_add_embed_video_url)s\">add one now</a>?"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/results.html:49
+#, python-format
+msgid ""
+"You haven't uploaded any embed videos. Why not <a href="
+"\"%(wagtal_embedvideos_add_embed_video_url)s\">add one now</a>?"
+msgstr ""
+
+#: templates/wagtail_embed_videos/embed_videos/usage.html:3
+#, python-format
+msgid "Usage of %(title)s"
+msgstr "Использование %(title)s"
+
+#: templates/wagtail_embed_videos/embed_videos/usage.html:5
+msgid "Usage of"
+msgstr "Использование"
+
+#: templates/wagtail_embed_videos/embed_videos/usage.html:16
+msgid "Title"
+msgstr "Заголовок"
+
+#: templates/wagtail_embed_videos/embed_videos/usage.html:17
+msgid "Parent"
+msgstr "Родительский элемент"
+
+#: templates/wagtail_embed_videos/embed_videos/usage.html:18
+msgid "Type"
+msgstr "Тип"
+
+#: templates/wagtail_embed_videos/embed_videos/usage.html:19
+msgid "Status"
+msgstr "Статус"
+
+#: templates/wagtail_embed_videos/embed_videos/usage.html:26
+msgid "Edit this page"
+msgstr "Редактировать эту страницу"
+
+#: templates/wagtail_embed_videos/homepage/site_summary_videos.html:5
+#, python-format
+msgid ""
+"\n"
+"        <span>%(total)s</span> Embed Video\n"
+"    "
+msgid_plural ""
+"\n"
+"        <span>%(total)s</span> Embed Videos\n"
+"    "
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/wagtail_embed_videos/permissions/includes/embedvideo_permissions_formset.html:4
+msgid "Embed video permissions"
+msgstr ""
+
+#: templates/wagtail_embed_videos/permissions/includes/embedvideo_permissions_formset.html:5
+msgid "Add an embed video permission"
+msgstr ""
+
+#: views/bulk_actions/add_tags.py:14
+msgid "Tag"
+msgstr ""
+
+#: views/bulk_actions/add_tags.py:16
+msgid "Add tags to the selected embed videos"
+msgstr ""
+
+#: views/bulk_actions/add_tags.py:41
+#, python-format
+msgid "New tags have been added to %(num_parent_objects)d embed video"
+msgid_plural "New tags have been added to %(num_parent_objects)d embed videos"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: views/bulk_actions/add_to_collection.py:18
+msgid "Add to collection"
+msgstr "Добавить в коллекцию"
+
+#: views/bulk_actions/add_to_collection.py:20
+msgid "Add selected embed videos to collection"
+msgstr ""
+
+#: views/bulk_actions/add_to_collection.py:50
+#, python-format
+msgid "%(num_parent_objects)d embed video has been added to %(collection)s"
+msgid_plural ""
+"%(num_parent_objects)d embed videos have been added to %(collection)s"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: views/bulk_actions/delete.py:8
+msgid "Delete"
+msgstr "Удалить"
+
+#: views/bulk_actions/delete.py:10
+msgid "Delete selected embed videos"
+msgstr ""
+
+#: views/bulk_actions/delete.py:26
+#, python-format
+msgid "%(num_parent_objects)d embed video has been deleted"
+msgid_plural "%(num_parent_objects)d embed videos have been deleted"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: views/chooser.py:132
+msgid "Server Error"
+msgstr "Ошибка Сервера"
+
+#: views/chooser.py:133
+msgid "Report this error to your webmaster with the following information:"
+msgstr ""
+"Сообщите об этой ошибке администратору и укажите следующую информацию:"
+
+#: views/embed_videos.py:45 views/embed_videos.py:51
+msgid "Search embed videos"
+msgstr ""
+
+#: views/embed_videos.py:136
+#, python-brace-format
+msgid "Video '{0}' updated."
+msgstr ""
+
+#: views/embed_videos.py:138
+msgid "Edit again"
+msgstr ""
+
+#: views/embed_videos.py:143
+msgid "The video could not be saved due to errors."
+msgstr ""
+
+#: views/embed_videos.py:167
+#, python-brace-format
+msgid "Video '{0}' deleted."
+msgstr ""
+
+#: views/embed_videos.py:195
+#, python-brace-format
+msgid "Video '{0}' added."
+msgstr ""
+
+#: views/embed_videos.py:200
+msgid "The video could not be created due to errors."
+msgstr ""
+
+#: wagtail_hooks.py:108
+#, python-format
+msgid "%(count)s embed video"
+msgid_plural "%(count)s embed videos"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: widgets.py:17
+msgid "Choose another embed video"
+msgstr ""
+
+#: widgets.py:18
+msgid "Edit this embed video"
+msgstr ""
