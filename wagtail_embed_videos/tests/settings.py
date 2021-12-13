@@ -1,43 +1,47 @@
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-WAGTAIL_ROOT = os.path.dirname(__file__)
-STATIC_ROOT = os.path.join(WAGTAIL_ROOT, "test-static")
-MEDIA_ROOT = os.path.join(WAGTAIL_ROOT, "test-media")
-MEDIA_URL = "/media/"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SECRET_KEY = "DUMMY_SECRET_KEY"
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("DATABASE_NAME", "wagtail"),
-        "USER": os.environ.get("DATABASE_USER", None),
-        "PASSWORD": os.environ.get("DATABASE_PASS", None),
-        "HOST": os.environ.get("DATABASE_HOST", None),
-        "TEST": {
-            "NAME": os.environ.get("DATABASE_NAME", None),
-        },
-    }
-}
+INTERNAL_IPS = []
 
+# Application definition
 
-SECRET_KEY = "not needed"
+PROJECT_APPS = ["wagtail_embed_videos.tests", "wagtail_embed_videos"]
 
-ROOT_URLCONF = "wagtail.tests.urls"
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "taggit",
+    "modelcluster",
+    "wagtail.core",
+    "wagtail.users",
+    "wagtail.images",
+    "wagtail.admin",
+    "embed_video",
+] + PROJECT_APPS
 
-STATIC_URL = "/static/"
-STATIC_ROOT = STATIC_ROOT
-
-STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
-)
-
-USE_TZ = True
+MIDDLEWARE = [
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "wagtail.core.middleware.SiteMiddleware",
+    "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+]
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "tests", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -45,99 +49,34 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django.template.context_processors.request",
                 "wagtail.tests.context_processors.do_not_use_static_url",
                 "wagtail.contrib.settings.context_processors.settings",
-            ],
+            ]
         },
-    },
-    {
-        "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "extensions": [
-                "wagtail.core.jinja2tags.core",
-                "wagtail.admin.jinja2tags.userbar",
-                "wagtail.images.jinja2tags.images",
-            ],
-        },
-    },
+    }
 ]
 
-MIDDLEWARE_CLASSES = (
-    "django.middleware.common.CommonMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "wagtail.core.middleware.SiteMiddleware",
-    "wagtail.redirects.middleware.RedirectMiddleware",
-)
+ROOT_URLCONF = "wagtail_embed_videos.tests.urls"
 
-INSTALLED_APPS = (
-    # Install wagtailredirects with its appconfig
-    # Theres nothing special about wagtailredirects, we just need to have one
-    # app which uses AppConfigs to test that hooks load properly
-    "wagtail.forms",
-    "wagtail.redirects",
-    "wagtail.embeds",
-    "wagtail.sites",
-    "wagtail.users",
-    "wagtail.snippets",
-    "wagtail.docs",
-    "wagtail.images",
-    "wagtail.search",
-    "wagtail.admin",
-    "wagtail.core",
-    "wagtail.contrib.wagtailapi",
-    "modelcluster",
-    "compressor",
-    "taggit",
-    "rest_framework",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "embed_video",
-    "wagtail_embed_videos",
-)
+# Database
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 
-# Using DatabaseCache to make sure that the cache is cleared between tests.
-# This prevents false-positives in some wagtail core tests where we are
-# changing the 'wagtail_root_paths' key which may cause future tests to fail.
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
-        "LOCATION": "cache",
-    }
-}
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-PASSWORD_HASHERS = (
-    "django.contrib.auth.hashers.MD5PasswordHasher",  # don't use the intentionally slow default password hasher
-)
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+MEDIA_ROOT = os.path.join(BASE_DIR, "..", "media")
 
-COMPRESS_ENABLED = False  # disable compression so that we can run tests on the content of the compress tag
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash.
+MEDIA_URL = "/media/"
 
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "staticfiles")
 
-WAGTAILSEARCH_BACKENDS = {
-    "default": {
-        "BACKEND": "wagtail.search.backends.db",
-    }
-}
+STATIC_URL = "/static/"
 
-if "ELASTICSEARCH_URL" in os.environ:
-    WAGTAILSEARCH_BACKENDS["elasticsearch"] = {
-        "BACKEND": "wagtail.search.backends.elasticsearch",
-        "URLS": [os.environ["ELASTICSEARCH_URL"]],
-        "TIMEOUT": 10,
-        "max_retries": 1,
-        "AUTO_UPDATE": False,
-    }
-
+## Wagtail settings
 
 WAGTAIL_SITE_NAME = "Test Site"

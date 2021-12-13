@@ -3,16 +3,12 @@ import sys
 from django.conf import settings
 from django.test import TestCase
 from mock_django.models import ModelMock
-from wagtail.images.models import get_image_model
-
+from wagtail.images import get_image_model, get_image_model_string
 from wagtail_embed_videos.models import EmbedVideo, create_thumbnail
 
 
 class EmbedVideoTestCase(TestCase):
-    def setUp(self):
-        pass
-
-    def test_video_image_model(self):
+    def test_default_image_model(self):
         """Image model is the default Wagtail model"""
         # Remove module from cache
         # (https://docs.python.org/3/reference/import.html#the-module-cache)
@@ -21,10 +17,7 @@ class EmbedVideoTestCase(TestCase):
         except KeyError:
             pass  # Nothing to do
 
-        # Thumbnail model is set dynamically at import.
-        from wagtail_embed_videos.models import image_model_name
-
-        self.assertEqual(image_model_name, "wagtailimages.Image")
+        self.assertEqual(get_image_model_string(), "wagtailimages.Image")
 
     def test_custom_image_model(self):
         """Image model is a custom model"""
@@ -34,20 +27,11 @@ class EmbedVideoTestCase(TestCase):
             except KeyError:
                 pass  # Nothing to do
 
-            from wagtail_embed_videos.models import image_model_name
-
-            self.assertEqual(settings.WAGTAILIMAGES_IMAGE_MODEL, "testapp.CustomImage")
-            self.assertEqual(image_model_name, "testapp.CustomImage")
+            self.assertEqual(get_image_model_string(), "testapp.CustomImage")
 
     def test_create_thumbnail(self):
         """Fetch a thumbnail from a video service."""
-        video = ModelMock(EmbedVideo)
+        video = EmbedVideo.objects.create(url="https://www.youtube.com/watch?v=dQw4w9WgXcQ", title="Click Me!")
 
-        video.url = "https://www.youtube.com/watch?v=-YGDyPAwQz0"
-        video.title = "Test title"
-        create_thumbnail(video)
-        Image = get_image_model()
-
-        self.assertEqual("Test title", video.thumbnail.title)
-        self.assertIn("video-thumbnail", [tag.name for tag in video.thumbnail.tags.all()])
-        self.assertIsInstance(video.thumbnail, Image)
+        self.assertEqual("Click Me!", video.thumbnail.title)
+        self.assertIsInstance(video.thumbnail, get_image_model())
