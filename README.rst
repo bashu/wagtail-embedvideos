@@ -10,8 +10,8 @@ wagtail-embedvideos
 .. image:: https://img.shields.io/github/license/bashu/wagtail-embedvideos.svg
     :target: https://pypi.python.org/pypi/wagtail-embedvideos/
 
-.. image:: https://img.shields.io/travis/bashu/wagtail-embedvideos.svg
-    :target: https://travis-ci.com/github/bashu/wagtail-embedvideos/
+.. image:: https://app.travis-ci.com/bashu/wagtail-embedvideos.svg?branch=develop
+    :target: https://app.travis-ci.com/bashu/wagtail-embedvideos
 
 Simple app that works similar to ``wagtailimages``, but for embedding YouTube and Vimeo videos and music from SoundCloud.
 
