@@ -22,7 +22,7 @@
         {% for embed_video in embed_videos %}
             <li>
                 {% include "wagtailadmin/bulk_actions/listing_checkbox_cell.html" with obj_type="embed_video" obj=embed_video aria_labelledby_prefix="select-embed_video-label embed_video_" aria_labelledby=embed_video.pk|unlocalize aria_labelledby_suffix="_title" %}
-                <a class="image-choice" href="{% url 'wagtail_embed_videos:edit' embed_video.id %}">
+                <a class="image-choice" title="{% if collections %}{{ embed_video.collection.name }} » {% endif %}{{ embed_video.title }}" href="{% url 'wagtail_embed_videos:edit' embed_video.id %}{% if next %}?next={{ next|urlencode }}{% endif %}">
                     <figure>
                         {% include "wagtail_embed_videos/embed_videos/results_video.html" %}
                         <figcaption id="embed_video_{{ embed_video.pk|unlocalize }}_title">

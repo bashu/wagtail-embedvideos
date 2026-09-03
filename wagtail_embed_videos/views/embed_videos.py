@@ -5,12 +5,14 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.http import urlencode
 from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 from wagtail.admin import messages
 from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.models import popular_tags_for_model
+from wagtail.admin.views.pages.utils import get_valid_next_url_from_request
 from wagtail.core.models import Collection
 from wagtail.search import index as search_index
 
@@ -71,11 +73,17 @@ class BaseListingView(TemplateView):
         paginator = Paginator(embed_videos, per_page=INDEX_PAGE_SIZE)
         embed_videos = paginator.get_page(self.request.GET.get("p"))
 
+        next_url = reverse("wagtail_embed_videos:index")
+        request_query_string = self.request.META.get("QUERY_STRING")
+        if request_query_string:
+            next_url += "?" + request_query_string
+
         context.update(
             {
                 "embed_videos": embed_videos,
                 "query_string": query_string,
                 "is_searching": bool(query_string),
+                'next': next_url,
             }
         )
 
@@ -123,6 +131,8 @@ def edit(request, embed_video_id):
     if not permission_policy.user_has_permission_for_instance(request.user, "change", embed_video):
         raise PermissionDenied
 
+    next_url = get_valid_next_url_from_request(request)
+
     if request.method == "POST":
         form = EmbedVideoForm(request.POST, request.FILES, instance=embed_video, user=request.user)
         if form.is_valid():
@@ -131,14 +141,16 @@ def edit(request, embed_video_id):
             # Reindex the embed video to make sure all tags are indexed
             search_index.insert_or_update_object(embed_video)
 
-            messages.success(
-                request,
-                _("Video '{0}' updated.").format(embed_video.title),
-                buttons=[
-                    messages.button(reverse("wagtail_embed_videos:edit", args=(embed_video.id,)), _("Edit again"))
-                ],
-            )
-            return redirect("wagtail_embed_videos:index")
+            edit_url = reverse('wagtail_embed_videos:edit', args=(embed_video.id,))
+            redirect_url = 'wagtail_embed_videos:index'
+            if next_url:
+                edit_url = f"{edit_url}?{urlencode({'next': next_url})}"
+                redirect_url = next_url
+
+            messages.success(request, _("Video '{0}' updated.").format(embed_video.title), buttons=[
+                messages.button(edit_url, _('Edit again'))
+            ])
+            return redirect(redirect_url)
         else:
             messages.error(request, _("The video could not be saved due to errors."))
     else:
@@ -151,6 +163,7 @@ def edit(request, embed_video_id):
             "embed_video": embed_video,
             "form": form,
             "user_can_delete": permission_policy.user_has_permission_for_instance(request.user, "delete", embed_video),
+            'next': next_url,
         },
     )
 
@@ -162,16 +175,19 @@ def delete(request, embed_video_id):
     if not permission_policy.user_has_permission_for_instance(request.user, "delete", embed_video):
         raise PermissionDenied
 
+    next_url = get_valid_next_url_from_request(request)
+
     if request.method == "POST":
         embed_video.delete()
         messages.success(request, _("Video '{0}' deleted.").format(embed_video.title))
-        return redirect("wagtail_embed_videos:index")
+        return redirect(next_url) if next_url else redirect('wagtail_embed_videos:index')
 
     return TemplateResponse(
         request,
         "wagtail_embed_videos/embed_videos/confirm_delete.html",
         {
             "embed_video": embed_video,
+            'next': next_url,
         },
     )
 

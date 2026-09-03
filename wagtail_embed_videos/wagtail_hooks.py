@@ -3,9 +3,10 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from wagtail.admin.menu import MenuItem
+from wagtail.admin.navigation import get_site_for_user
 from wagtail.admin.search import SearchArea
 
-# from wagtail.admin.site_summary import SummaryItem
+from wagtail.admin.site_summary import SummaryItem
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder, register_admin_url_finder
 from wagtail.core import hooks
 
@@ -59,22 +60,25 @@ def editor_js():
 
 # TODO: implement register_embedvideo_feature
 
-# class EmbedVideosSummaryItem(SummaryItem):
-#     order = 201
-#     template_name = "wagtail_embed_videos/homepage/site_summary_videos.html"
+class EmbedVideosSummaryItem(SummaryItem):
+    order = 201
+    template_name = "wagtail_embed_videos/homepage/site_summary_videos.html"
 
-#     def get_context_data(self, parent_context):
-#         return {
-#             "total_videos": get_embed_video_model().objects.count(),
-#         }
+    def get_context_data(self, parent_context):
+        site_name = get_site_for_user(self.request.user)['site_name']
 
-#     def is_shown(self):
-#         return permission_policy.user_has_any_permission(self.request.user, ["add", "change", "delete"])
+        return {
+            "total_videos": get_embed_video_model().objects.count(),
+            'site_name': site_name,
+        }
+
+    def is_shown(self):
+        return permission_policy.user_has_any_permission(self.request.user, ["add", "change", "delete"])
 
 
-# @hooks.register("construct_homepage_summary_items")
-# def add_embed_videos_summary_item(request, items):
-#     items.append(EmbedVideosSummaryItem(request))
+@hooks.register("construct_homepage_summary_items")
+def add_embed_videos_summary_item(request, items):
+    items.append(EmbedVideosSummaryItem(request))
 
 
 class EmbedVideosSearchArea(SearchArea):

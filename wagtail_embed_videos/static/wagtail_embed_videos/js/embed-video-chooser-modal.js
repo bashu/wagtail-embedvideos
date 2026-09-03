@@ -2,11 +2,11 @@ function ajaxifyEmbedVideoUploadForm(modal) {
     $('form.embed_video-upload', modal.body).on('submit', function() {
         var formdata = new FormData(this);
 
-        if ($('#id_embed_video-chooser-upload-title', modal.body).val() == '') {
+        if (!$('#id_embed_video-chooser-upload-title', modal.body).val()) {
             var li = $('#id_embed_video-chooser-upload-title', modal.body).closest('li');
             if (!li.hasClass('error')) {
                 li.addClass('error');
-                $('#id_embed_video-chooser-upload-title', modal.body).closest('.field-content').append('<p class="error-message"><span>This field is required.</span></p>')
+                $('#id_embed_video-chooser-upload-title', modal.body).closest('.field-content').append('<p class="error-message"><span>This field is required.</span></p>');
             }
             setTimeout(cancelSpinner, 500);
         } else {
@@ -19,10 +19,10 @@ function ajaxifyEmbedVideoUploadForm(modal) {
                 dataType: 'text',
                 success: modal.loadResponseText,
                 error: function(response, textStatus, errorThrown) {
-                    var message = jsonData['error_message'] + '<br />' + errorThrown + ' - ' + response.status;
+                    var message = jsonData.error_message + '<br />' + errorThrown + ' - ' + response.status;
                     $('#upload').append(
                         '<div class="help-block help-critical">' +
-                            '<strong>' + jsonData['error_label'] + ': </strong>' + message + '</div>');
+                            '<strong>' + jsonData.error_label + ': </strong>' + message + '</div>');
                 }
             });
         }
@@ -64,7 +64,7 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
                 error: function() {
                     request = null;
                 }
-            }
+            };
             if (requestData) {
                 opts.data = requestData;
             }
@@ -100,7 +100,7 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         });
     },
     'embed_video_chosen': function(modal, jsonData) {
-        modal.respond('embedVideoChosen', jsonData['result']);
+        modal.respond('embedVideoChosen', jsonData.result);
         modal.close();
     },
     'reshow_upload_form': function(modal, jsonData) {
