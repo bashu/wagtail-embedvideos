@@ -7,8 +7,9 @@
 | wagtail\_embed\_videos/\_\_init\_\_.py                                   |       15 |        6 |     60% |     30-37 |
 | wagtail\_embed\_videos/admin.py                                          |        6 |        1 |     83% |        14 |
 | wagtail\_embed\_videos/admin\_urls.py                                    |        4 |        4 |      0% |       1-7 |
-| wagtail\_embed\_videos/apps.py                                           |       16 |        0 |    100% |           |
+| wagtail\_embed\_videos/apps.py                                           |       19 |        0 |    100% |           |
 | wagtail\_embed\_videos/blocks.py                                         |       18 |       18 |      0% |      1-28 |
+| wagtail\_embed\_videos/components.py                                     |        7 |        3 |     57% |      7-10 |
 | wagtail\_embed\_videos/edit\_handlers.py                                 |        0 |        0 |    100% |           |
 | wagtail\_embed\_videos/forms.py                                          |       47 |       47 |      0% |     2-103 |
 | wagtail\_embed\_videos/models.py                                         |       79 |       14 |     82% |34-35, 39-47, 111, 119, 123, 130, 133-135 |
@@ -23,7 +24,7 @@
 | wagtail\_embed\_videos/views/embed\_videos.py                            |      168 |      168 |      0% |     2-339 |
 | wagtail\_embed\_videos/wagtail\_hooks.py                                 |       71 |       71 |      0% |     1-157 |
 | wagtail\_embed\_videos/widgets.py                                        |       33 |       13 |     61% |22-23, 26-41, 44-46, 50 |
-| **TOTAL**                                                                |  **689** |  **574** | **17%** |           |
+| **TOTAL**                                                                |  **699** |  **577** | **17%** |           |
 
 
 ## Setup coverage badge
