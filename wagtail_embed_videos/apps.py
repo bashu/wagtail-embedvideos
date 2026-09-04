@@ -28,6 +28,6 @@ class WagtailEmbedVideosAppConfig(AppConfig):
 
         from wagtail.models.reference_index import ReferenceIndex
 
-        ReferenceIndex.register_model(get_embed_video_model())
+        ReferenceIndex.register_model(EmbedVideo)
 
         # TODO: implement EmbedVideoFieldComparison class

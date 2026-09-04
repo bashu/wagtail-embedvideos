@@ -1,57 +1,53 @@
 {% extends 'wagtailadmin/bulk_actions/confirmation/base.html' %}
+
 {% load i18n %}
 {% load wagtailadmin_tags %}
-{% block titletag %}{% blocktrans trimmed count counter=items|length %}Add tags to 1 embed video{% plural %}Add tags to {{ counter }} embed videos{% endblocktrans %}{% endblock %}
 
-{% block extra_js %}
-    {{ block.super }}
-    {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
-    <script>
-        $(function() {
-            $('#id_tags').tagit({
-                autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
-            });
-        });
-    </script>
+{% block titletag %}
+  {% blocktrans trimmed count counter=items|length %}
+    Add tags to 1 embed video
+  {% plural %}
+    Add tags to {{ counter }} embed videos
+  {% endblocktrans %}
 {% endblock %}
-
 {% block header %}
-    {% trans "Add tags to embed videos" as add_str %}
-    {% include "wagtailadmin/shared/header.html" with title=add_str icon="doc-full-inverse" %}
+  {% trans "Add tags to embed videos" as add_str %}
+  {% include "wagtailadmin/shared/header.html" with title=add_str icon="doc-full-inverse" %}
 {% endblock header %}
-
 {% block items_with_access %}
-    {% if items %}
+  {% if items %}
     <p>
-        {% blocktrans trimmed count counter=items|length %}
+      {% blocktrans trimmed count counter=items|length %}
         Are you sure you want to tag the following embed video?
-        {% plural %}
+      {% plural %}
         Are you sure you want to tag the following embed videos?
-        {% endblocktrans %}
+      {% endblocktrans %}
     </p>
     <ul>
-        {% for video in items %}
+      {% for video in items %}
         <li>
-            <a href="{% url 'wagtail_embed_videos:edit' video.item.id %}"  target="_blank" rel="noreferrer">{{video.item.title}}</a>
+          <a href="{% url 'wagtail_embed_videos:edit' video.item.id %}"
+             target="_blank"
+             rel="noreferrer">{{ video.item.title }}</a>
         </li>
-        {% endfor %}
+      {% endfor %}
     </ul>
-    {% endif %}
+  {% endif %}
 {% endblock items_with_access %}
-
 {% block items_with_no_access %}
-
-{% blocktrans trimmed asvar no_access_msg count counter=items_with_no_access|length %}You don't have permission to add tags to this embed video{% plural %}You don't have permission to add tags to these embed videos{% endblocktrans %}
-{% include 'wagtail_embed_videos/bulk_actions/list_items_with_no_access.html' with items=items_with_no_access no_access_msg=no_access_msg %}
-
+  {% blocktrans trimmed asvar no_access_msg count counter=items_with_no_access|length %}
+    You don't have permission to add tags to this embed video
+  {% plural %}
+    You don't have permission to add tags to these embed videos
+  {% endblocktrans %}
+  {% include 'wagtail_embed_videos/bulk_actions/list_items_with_no_access.html' with items=items_with_no_access no_access_msg=no_access_msg %}
 {% endblock items_with_no_access %}
-
 {% block form_section %}
-    {% if items %}
-        {% trans 'Yes, add' as action_button_text %}
-        {% trans "No, don't add" as no_action_button_text %}
-        {% include 'wagtailadmin/bulk_actions/confirmation/form_with_fields.html' %}
-    {% else %}
-        {% include 'wagtailadmin/bulk_actions/confirmation/go_back.html' %}
-    {% endif %}
+  {% if items %}
+    {% trans 'Yes, add' as action_button_text %}
+    {% trans "No, don't add" as no_action_button_text %}
+    {% include 'wagtailadmin/bulk_actions/confirmation/form_with_fields.html' %}
+  {% else %}
+    {% include 'wagtailadmin/bulk_actions/confirmation/go_back.html' %}
+  {% endif %}
 {% endblock form_section %}

@@ -19,7 +19,7 @@ class EmbedVideoChooserBlock(ChooserBlock):
 
     def render_basic(self, value, context=None):
         if value:
-            return VideoNode.embed(value.url, size="medium")
+            return VideoNode.embed(value.url, size="medium", context=context)
         return ""
 
     # TODO: implement get_comparison_class

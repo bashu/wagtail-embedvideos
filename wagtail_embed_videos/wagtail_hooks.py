@@ -78,7 +78,10 @@ class EmbedVideosSummaryItem(SummaryItem):
         site_name = get_site_for_user(self.request.user)["site_name"]
 
         return {
-            "total_videos": get_embed_video_model().objects.count(),
+            "total_videos": permission_policy.instances_user_has_any_permission_for(
+                self.request.user,
+                {"add", "change", "delete", "choose"},
+            ).count(),
             "site_name": site_name,
         }
 
