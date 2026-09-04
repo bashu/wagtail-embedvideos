@@ -1,5 +1,3 @@
-import json
-
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
@@ -18,6 +16,7 @@ class AdminEmbedVideoChooser(BaseChooser):
     chooser_modal_url_name = "wagtail_embed_videos_chooser:choose"
     icon = "media"
     classname = "embed-video-chooser"
+    js_constructor = "EmbedVideoChooser"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -45,9 +44,6 @@ class AdminEmbedVideoChooser(BaseChooser):
         context = super().get_context(name, value_data, attrs)
         context["preview"] = value_data.get("preview", {})
         return context
-
-    def render_js_init(self, id_, name, value_data):
-        return f"new EmbedVideoChooser({json.dumps(id_)});"
 
     @property
     def media(self):

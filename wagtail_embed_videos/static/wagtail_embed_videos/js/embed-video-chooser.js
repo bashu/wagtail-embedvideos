@@ -6,11 +6,31 @@ the load order this depends on). This mirrors Wagtail's own wagtail.images equiv
 image-chooser.js.
 */
 class EmbedVideoChooser extends window.Chooser {
-    modalOnloadHandlers = window.EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS;
-
     initHTMLElements(id) {
         super.initHTMLElements(id);
         this.previewImage = this.chooserElement.querySelector('[data-chooser-image]');
+    }
+
+    openChooserModal() {
+        /*
+        Wagtail 4.2 removed the `modalOnloadHandlers` widget property in favour
+        of a `chooserModalClass` (a `ChooserModal` subclass carrying its own
+        `onloadHandlers`). `ChooserModal` itself isn't exposed as a public
+        global though - only Wagtail's own webpack-bundled entrypoints can
+        import it directly (see wagtail.images' own image-chooser-modal.js,
+        which does `class ImageChooserModal extends ChooserModal`). So instead
+        of subclassing it, construct the inherited default `chooserModalClass`
+        as usual and swap in our own onload handlers on the instance.
+        */
+        if (!this.modal) {
+            this.modal = new this.chooserModalClass(
+                this.opts.modalUrl || this.chooserElement.dataset.chooserUrl,
+            );
+            this.modal.onloadHandlers = window.EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS;
+        }
+        this.modal.open(this.getModalOptions(), (result) => {
+            this.setStateFromModalData(result);
+        });
     }
 
     getStateFromHTML() {

@@ -11,20 +11,6 @@
             termInput: "#id_q",
             targetOutput: "#embed_video-results"
         }
-
-        const submitFormOnDropdownChange = (dropdownSelector) => {
-            const dropdown = document.querySelector(dropdownSelector);
-            if (dropdown !== null) {
-                dropdown.addEventListener('change', () => dropdown.form.submit());
-            }
-        };
-        const dropdownSelectors = [
-            "#collection_chooser_collection_id",
-        ];
-        window.addEventListener("DOMContentLoaded", () => {
-            dropdownSelectors.forEach(dropdownSelector => submitFormOnDropdownChange(dropdownSelector)
-            );
-        });
     </script>
     <script>
         window.wagtailConfig.BULK_ACTION_ITEM_TYPE = 'IMAGE';
@@ -44,7 +30,7 @@
     {% endif %}
 
     <div class="nice-padding">
-        <form class="embed_video-search search-bar" action="{% url 'wagtail_embed_videos:index' %}" method="GET" novalidate>
+        <form class="embed_video-search" action="{% url 'wagtail_embed_videos:index' %}" method="GET" novalidate>
             {% if current_tag %}
                 <input type="hidden" name="tag" value="{{ current_tag }}" />
             {% endif %}

@@ -9,6 +9,7 @@ from wagtail.admin.models import popular_tags_for_model
 from wagtail.admin.views.generic.chooser import BaseChooseView
 from wagtail.admin.views.generic.chooser import ChooseResultsViewMixin
 from wagtail.admin.views.generic.chooser import ChooseViewMixin
+from wagtail.admin.views.generic.chooser import ChosenMultipleViewMixin
 from wagtail.admin.views.generic.chooser import ChosenResponseMixin
 from wagtail.admin.views.generic.chooser import ChosenViewMixin
 from wagtail.admin.views.generic.chooser import CreateViewMixin
@@ -110,6 +111,10 @@ class BaseEmbedVideoChooseView(BaseChooseView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        for embed_video in context["results"]:
+            embed_video.chosen_url = self.append_preserved_url_parameters(
+                reverse("wagtail_embed_videos_chooser:chosen", args=(embed_video.id,)),
+            )
         context["collections"] = self.collections
         return context
 
@@ -148,6 +153,16 @@ class EmbedVideoChosenView(ChosenViewMixin, EmbedVideoChosenResponseMixin, View)
         return super().get(request, *args, pk, **kwargs)
 
 
+class EmbedVideoChosenMultipleView(
+    ChosenMultipleViewMixin,
+    EmbedVideoChosenResponseMixin,
+    View,
+):
+    def get(self, request, *args, **kwargs):
+        self.model = get_embed_video_model()
+        return super().get(request, *args, **kwargs)
+
+
 class EmbedVideoCreateView(
     CreateViewMixin,
     EmbedVideoCreationFormMixin,
@@ -167,11 +182,13 @@ class EmbedVideoChooserViewSet(ChooserViewSet):
     choose_view_class = EmbedVideoChooseView
     choose_results_view_class = EmbedVideoChooseResultsView
     chosen_view_class = EmbedVideoChosenView
+    chosen_multiple_view_class = EmbedVideoChosenMultipleView
     create_view_class = EmbedVideoCreateView
     permission_policy = permission_policy
     # We register our own explicit AdminEmbedVideoChooser widget (with thumbnail
     # preview support) via apps.py instead of the viewset's auto-generated one.
     register_widget = False
+    preserve_url_parameters = ChooserViewSet.preserve_url_parameters
 
     icon = "media"
     choose_one_text = _("Choose an embed video")
