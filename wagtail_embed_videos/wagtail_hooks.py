@@ -5,13 +5,13 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
+from wagtail import hooks
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder
 from wagtail.admin.admin_url_finder import register_admin_url_finder
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.navigation import get_site_for_user
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
-from wagtail.core import hooks
 
 from wagtail_embed_videos import admin_urls
 from wagtail_embed_videos import get_embed_video_model
@@ -20,6 +20,7 @@ from wagtail_embed_videos.permissions import permission_policy
 from wagtail_embed_videos.views.bulk_actions import AddTagsBulkAction
 from wagtail_embed_videos.views.bulk_actions import AddToCollectionBulkAction
 from wagtail_embed_videos.views.bulk_actions import DeleteBulkAction
+from wagtail_embed_videos.views.chooser import viewset as chooser_viewset
 
 
 @hooks.register("register_admin_urls")
@@ -62,7 +63,7 @@ def editor_js():
             window.chooserUrls.embedVideoChooser = '{0}';
         </script>
         """,
-        reverse("wagtail_embed_videos:chooser"),
+        reverse("wagtail_embed_videos_chooser:choose"),
     )
 
 
@@ -146,3 +147,8 @@ register_admin_url_finder(get_embed_video_model(), EmbedVideoAdminURLFinder)
 
 for action_class in [AddTagsBulkAction, AddToCollectionBulkAction, DeleteBulkAction]:
     hooks.register("register_bulk_action", action_class)
+
+
+@hooks.register("register_admin_viewset")
+def register_embed_video_chooser_viewset():
+    return chooser_viewset

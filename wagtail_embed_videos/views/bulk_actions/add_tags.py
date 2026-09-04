@@ -10,7 +10,7 @@ from wagtail_embed_videos.views.bulk_actions.embed_video_bulk_action import (
 
 
 class TagForm(forms.Form):
-    tags = forms.Field(widget=widgets.AdminTagWidget)
+    tags = forms.Field(label=_("Tags"), widget=widgets.AdminTagWidget)
 
 
 class AddTagsBulkAction(EmbedVideoBulkAction):

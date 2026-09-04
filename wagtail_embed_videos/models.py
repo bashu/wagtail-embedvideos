@@ -13,9 +13,9 @@ from embed_video.backends import detect_backend
 from embed_video.fields import EmbedVideoField
 from taggit.managers import TaggableManager
 from wagtail.admin.models import get_object_usage
-from wagtail.core.models import CollectionMember
 from wagtail.images import get_image_model
 from wagtail.images import get_image_model_string
+from wagtail.models import CollectionMember
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 

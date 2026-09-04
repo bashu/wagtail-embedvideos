@@ -17,17 +17,6 @@ class EmbedVideoChooserBlock(ChooserBlock):
 
         return AdminEmbedVideoChooser()
 
-    def get_form_state(self, value):
-        value_data = self.widget.get_value_data(value)
-        if value_data is None:
-            return None
-        return {
-            "id": value_data["id"],
-            "edit_link": value_data["edit_url"],
-            "title": value_data["title"],
-            "preview": value_data["preview"],
-        }
-
     def render_basic(self, value, context=None):
         if value:
             return VideoNode.embed(value.url, size="medium")
