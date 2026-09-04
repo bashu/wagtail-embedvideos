@@ -1,0 +1,57 @@
+# Repository Coverage
+
+[Full report](https://htmlpreview.github.io/?https://github.com/bashu/wagtail-embedvideos/blob/python-coverage-comment-action-data/htmlcov/index.html)
+
+| Name                                                                     |    Stmts |     Miss |   Cover |   Missing |
+|------------------------------------------------------------------------- | -------: | -------: | ------: | --------: |
+| wagtail\_embed\_videos/\_\_init\_\_.py                                   |       15 |        6 |     60% |     30-37 |
+| wagtail\_embed\_videos/admin.py                                          |        6 |        1 |     83% |        14 |
+| wagtail\_embed\_videos/admin\_urls.py                                    |        5 |        5 |      0% |       1-8 |
+| wagtail\_embed\_videos/apps.py                                           |       13 |        0 |    100% |           |
+| wagtail\_embed\_videos/blocks.py                                         |       23 |       23 |      0% |      1-39 |
+| wagtail\_embed\_videos/edit\_handlers.py                                 |        7 |        7 |      0% |      1-14 |
+| wagtail\_embed\_videos/forms.py                                          |       35 |       35 |      0% |      1-80 |
+| wagtail\_embed\_videos/models.py                                         |       78 |       14 |     82% |34-35, 39-47, 110, 118, 122, 129, 132-134 |
+| wagtail\_embed\_videos/permissions.py                                    |       16 |       16 |      0% |      1-51 |
+| wagtail\_embed\_videos/views/\_\_init\_\_.py                             |        0 |        0 |    100% |           |
+| wagtail\_embed\_videos/views/bulk\_actions/\_\_init\_\_.py               |        4 |        4 |      0% |       1-5 |
+| wagtail\_embed\_videos/views/bulk\_actions/add\_tags.py                  |       29 |       29 |      0% |      1-47 |
+| wagtail\_embed\_videos/views/bulk\_actions/add\_to\_collection.py        |       32 |       32 |      0% |      1-64 |
+| wagtail\_embed\_videos/views/bulk\_actions/delete.py                     |       19 |       19 |      0% |      1-33 |
+| wagtail\_embed\_videos/views/bulk\_actions/embed\_video\_bulk\_action.py |       19 |       19 |      0% |      1-39 |
+| wagtail\_embed\_videos/views/chooser.py                                  |       89 |       89 |      0% |     2-221 |
+| wagtail\_embed\_videos/views/embed\_videos.py                            |      126 |      126 |      0% |     2-281 |
+| wagtail\_embed\_videos/wagtail\_hooks.py                                 |       67 |       67 |      0% |     1-148 |
+| wagtail\_embed\_videos/widgets.py                                        |       36 |       16 |     56% |22-23, 26-42, 54-57, 73, 77 |
+| **TOTAL**                                                                |  **619** |  **508** | **18%** |           |
+
+
+## Setup coverage badge
+
+Below are examples of the badges you can use in your main branch `README` file.
+
+### Direct image
+
+[![Coverage badge](https://raw.githubusercontent.com/bashu/wagtail-embedvideos/python-coverage-comment-action-data/badge.svg)](https://htmlpreview.github.io/?https://github.com/bashu/wagtail-embedvideos/blob/python-coverage-comment-action-data/htmlcov/index.html)
+
+This is the one to use if your repository is private or if you don't want to customize anything.
+
+### [Shields.io](https://shields.io) Json Endpoint
+
+[![Coverage badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/bashu/wagtail-embedvideos/python-coverage-comment-action-data/endpoint.json)](https://htmlpreview.github.io/?https://github.com/bashu/wagtail-embedvideos/blob/python-coverage-comment-action-data/htmlcov/index.html)
+
+Using this one will allow you to [customize](https://shields.io/endpoint) the look of your badge.
+It won't work with private repositories. It won't be refreshed more than once per five minutes.
+
+### [Shields.io](https://shields.io) Dynamic Badge
+
+[![Coverage badge](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=coverage&query=%24.message&url=https%3A%2F%2Fraw.githubusercontent.com%2Fbashu%2Fwagtail-embedvideos%2Fpython-coverage-comment-action-data%2Fendpoint.json)](https://htmlpreview.github.io/?https://github.com/bashu/wagtail-embedvideos/blob/python-coverage-comment-action-data/htmlcov/index.html)
+
+This one will always be the same color. It won't work for private repos. I'm not even sure why we included it.
+
+## What is that?
+
+This branch is part of the
+[python-coverage-comment-action](https://github.com/marketplace/actions/python-coverage-comment)
+GitHub Action. All the files in this branch are automatically generated and may be
+overwritten at any moment.
