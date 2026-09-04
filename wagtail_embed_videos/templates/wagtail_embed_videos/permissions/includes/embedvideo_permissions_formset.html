@@ -1,6 +1,11 @@
 {% extends "wagtailadmin/permissions/includes/collection_member_permissions_formset.html" %}
+
 {% load i18n %}
 
 {% block icon %}media{% endblock %}
-{% block title %}{% trans "Embed video permissions" %}{% endblock %}
-{% block add_button_label %}{% trans "Add an embed video permission" %}{% endblock %}
+{% block title %}
+  {% trans "Embed video permissions" %}
+{% endblock %}
+{% block add_button_label %}
+  {% trans "Add an embed video permission" %}
+{% endblock %}

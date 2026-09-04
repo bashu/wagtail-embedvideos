@@ -1,6 +1,28 @@
 Changes
 -------
 
+5.0.1 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
+
+* Fixed the embed video edit and add pages, which were completely broken
+  under Wagtail 5.0: both included
+  ``wagtailadmin/pages/_editor_css.html``, a template Wagtail 5.0 removed
+  (``insert_editor_css`` is now emitted unconditionally by
+  ``admin_base.html`` itself, making the include redundant even before
+  it broke).
+  Also fixed a missing closing ``</div>`` on the edit page left over from
+  an earlier restructure.
+* Made the video preview on the edit page responsive (scales with the
+  viewport instead of a fixed 480x360 box), via a CSS
+  ``aspect-ratio``-based wrapper.
+* ``EmbedVideoChooserBlock.render_basic()`` now passes its ``context``
+  through to ``VideoNode.embed()``, so StreamField-embedded videos get
+  a correctly secure/insecure embed URL based on the current request
+  instead of always defaulting to one or the other.
+* The homepage summary count now reflects only videos the user has
+  permission for, rather than the total count across all videos.
+* Added ``djlint`` for template linting/formatting.
+
 5.0.0 (2026-09-04)
 ~~~~~~~~~~~~~~~~~~
 

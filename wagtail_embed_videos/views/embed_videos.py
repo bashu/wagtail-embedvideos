@@ -1,7 +1,9 @@
 # ruff: noqa: N806
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import InvalidPage
 from django.core.paginator import Paginator
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
@@ -120,7 +122,10 @@ class BaseListingView(TemplateView):
 
         entries_per_page = self.get_num_entries_per_page()
         paginator = Paginator(embed_videos, per_page=entries_per_page)
-        embed_videos = paginator.get_page(self.request.GET.get("p"))
+        try:
+            embed_videos = paginator.page(self.request.GET.get("p", 1))
+        except InvalidPage as err:
+            raise Http404 from err
 
         next_url = reverse("wagtail_embed_videos:index")
         request_query_string = self.request.META.get("QUERY_STRING")

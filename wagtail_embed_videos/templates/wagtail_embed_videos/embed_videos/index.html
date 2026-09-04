@@ -1,68 +1,65 @@
 {% extends "wagtailadmin/base.html" %}
+
 {% load wagtailadmin_tags %}
 {% load i18n %}
 
-{% block titletag %}{% trans "Embed Videos" %}{% endblock %}
+{% block titletag %}
+  {% trans "Embed Videos" %}
+{% endblock %}
 {% block extra_js %}
-    {{ block.super }}
-    <script>
-        window.headerSearch = {
-            url: "{% url 'wagtail_embed_videos:listing_results' %}",
-            termInput: "#id_q",
-            targetOutput: "#embed_video-results"
-        }
-    </script>
-    <script>
-        window.wagtailConfig.BULK_ACTION_ITEM_TYPE = 'IMAGE';
-    </script>
-    <script defer src="{% versioned_static 'wagtailadmin/js/bulk-actions.js' %}"></script>
-    {% endblock %}
-
-    {% block content %}
-    {% trans "Embed Videos" as ev_str %}
-
-    {% if user_can_add %}
+  {{ block.super }}
+  <script>
+    window.wagtailConfig.BULK_ACTION_ITEM_TYPE = 'IMAGE';
+  </script>
+  <script defer src="{% versioned_static 'wagtailadmin/js/bulk-actions.js' %}"></script>
+{% endblock %}
+{% block content %}
+  {% trans "Embed Videos" as ev_str %}
+  {% url 'wagtailimages:listing_results' as search_results_url %}
+  {% if user_can_add %}
     {% trans "Add an embed video" as add_ev_str %}
     {% url "wagtail_embed_videos:add" as add_link %}
     {% querystring as querystring %}
-    {% include "wagtailadmin/shared/header.html" with title=ev_str action_url=add_link|add:querystring icon="media" action_text=add_ev_str search_url="wagtail_embed_videos:index" %}
-    {% else %}
-        {% include "wagtailadmin/shared/header.html" with title=ev_str icon="media" search_url="wagtal_embed_videos:index" %}
-    {% endif %}
-
-    <div class="nice-padding">
-        <form class="embed_video-search" action="{% url 'wagtail_embed_videos:index' %}" method="GET" novalidate>
-            {% if current_tag %}
-                <input type="hidden" name="tag" value="{{ current_tag }}" />
+    {% include "wagtailadmin/shared/header.html" with title=ev_str action_url=add_link|add:querystring icon="media" action_text=add_ev_str search_url="wagtail_embed_videos:index" search_results_url=search_results_url search_target="#embed_video-results" %}
+  {% else %}
+    {% include "wagtailadmin/shared/header.html" with title=ev_str icon="media" search_url="wagtal_embed_videos:index" search_results_url=search_results_url search_target="#embed_video-results" %}
+  {% endif %}
+  <div class="nice-padding">
+    <form class="embed_video-search"
+          action="{% url 'wagtail_embed_videos:index' %}"
+          method="get"
+          novalidate>
+      {% if current_tag %}
+        <input type="hidden" name="tag" value="{{ current_tag }}" />
+      {% endif %}
+      {% field_row max_content=True %}
+        {% if collections %}
+          {% include "wagtailadmin/shared/collection_chooser.html" %}
+        {% endif %}
+      {% endfield_row %}
+      {% if popular_tags %}
+        <fieldset class="tagfilter">
+          <legend>{% trans 'Popular Tags:' %}</legend>
+          {% for tag in popular_tags %}
+            {% if tag.name != current_tag %}
+              <a class="button button-small button-secondary bicolor button--icon"
+                 href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
+            {% else %}
+              <a class="button button-small bicolor button--icon"
+                 href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
             {% endif %}
-
-            {% field_row max_content=True %}
-                {% if collections %}
-                    {% include "wagtailadmin/shared/collection_chooser.html" %}
-                {% endif %}
-            {% endfield_row %}
-                {% if popular_tags %}
-                        <fieldset class="tagfilter">
-                            <legend>{% trans 'Popular Tags:' %}</legend>
-                            {% for tag in popular_tags %}
-                                {% if tag.name != current_tag %}
-                                    <a class="button button-small button-secondary bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
-                                {% else %}
-                                    <a class="button button-small bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
-                                {% endif %}
-                            {% endfor %}
-                            {% if current_tag %}
-                                <a class="button button-small bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear' %}</a>
-                            {% endif %}
-                        </fieldset>
-                {% endif %}
-        </form>
-
-        <div id="embed_video-results">
-            {% include "wagtail_embed_videos/embed_videos/results.html" with querystring=querystring %}
-        </div>
-        {% trans "Select all videos in listing" as select_all_text %}
-        {% include 'wagtailadmin/bulk_actions/footer.html' with select_all_obj_text=select_all_text app_label=app_label model_name=model_name objects=embed_videos parent=current_collection.id %}
+          {% endfor %}
+          {% if current_tag %}
+            <a class="button button-small bicolor button--icon"
+               href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear' %}</a>
+          {% endif %}
+        </fieldset>
+      {% endif %}
+    </form>
+    <div id="embed_video-results">
+      {% include "wagtail_embed_videos/embed_videos/results.html" with querystring=querystring %}
     </div>
-
+    {% trans "Select all videos in listing" as select_all_text %}
+    {% include 'wagtailadmin/bulk_actions/footer.html' with select_all_obj_text=select_all_text app_label=app_label model_name=model_name objects=embed_videos parent=current_collection.id %}
+  </div>
 {% endblock %}
