@@ -1,4 +1,8 @@
+# ruff: noqa: N806, PLC0415
 from django.apps import AppConfig
+from django.db.models import ForeignKey
+
+from . import get_embed_video_model
 
 
 class WagtailEmbedVideosAppConfig(AppConfig):
@@ -6,3 +10,19 @@ class WagtailEmbedVideosAppConfig(AppConfig):
     label = "wagtail_embed_videos"
     verbose_name = "Wagtail embed videos"
     default_auto_field = "django.db.models.AutoField"
+
+    def ready(self):
+        # Set up model forms to use AdminImageChooser for any ForeignKey to the
+        # embed video model
+        from wagtail.admin.forms.models import register_form_field_override
+
+        from .widgets import AdminEmbedVideoChooser
+
+        EmbedVideo = get_embed_video_model()
+        register_form_field_override(
+            ForeignKey,
+            to=EmbedVideo,
+            override={"widget": AdminEmbedVideoChooser},
+        )
+
+        # TODO: implement EmbedVideoFieldComparison class

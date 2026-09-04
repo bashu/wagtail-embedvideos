@@ -1,18 +1,19 @@
 from django.utils.functional import cached_property
+
 from embed_video.templatetags.embed_video_tags import VideoNode
-from wagtail.core.blocks import ChooserBlock
+from wagtail.blocks import ChooserBlock
 
 
 class EmbedVideoChooserBlock(ChooserBlock):
     @cached_property
     def target_model(self):
-        from wagtail_embed_videos import get_embed_video_model
+        from wagtail_embed_videos import get_embed_video_model  # noqa: PLC0415
 
         return get_embed_video_model()
 
     @cached_property
     def widget(self):
-        from wagtail_embed_videos.widgets import AdminEmbedVideoChooser
+        from wagtail_embed_videos.widgets import AdminEmbedVideoChooser  # noqa: PLC0415
 
         return AdminEmbedVideoChooser()
 
@@ -20,19 +21,17 @@ class EmbedVideoChooserBlock(ChooserBlock):
         value_data = self.widget.get_value_data(value)
         if value_data is None:
             return None
-        else:
-            return {
-                "id": value_data["id"],
-                "edit_link": value_data["edit_url"],
-                "title": value_data["title"],
-                "preview": value_data["preview"],
-            }
+        return {
+            "id": value_data["id"],
+            "edit_link": value_data["edit_url"],
+            "title": value_data["title"],
+            "preview": value_data["preview"],
+        }
 
     def render_basic(self, value, context=None):
         if value:
             return VideoNode.embed(value.url, size="medium")
-        else:
-            return ""
+        return ""
 
     # TODO: implement get_comparison_class
 

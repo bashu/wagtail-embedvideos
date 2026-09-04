@@ -1,8 +1,0 @@
-include AUTHORS
-include CHANGES.rst
-include README.rst
-include LICENSE
-recursive-exclude example *
-recursive-include wagtail_embed_videos/static *.css *.js
-recursive-include wagtail_embed_videos/templates *.html
-recursive-include wagtail_embed_videos/locale *.po *.mo

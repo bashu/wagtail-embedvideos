@@ -1,13 +1,17 @@
-from wagtail.admin.edit_handlers import BaseChooserPanel
+from warnings import warn
 
-from .widgets import AdminEmbedVideoChooser
+from wagtail.admin.panels import FieldPanel
+from wagtail.utils.deprecation import RemovedInWagtail50Warning
 
 
-class EmbedVideoChooserPanel(BaseChooserPanel):
-    object_type_name = "embed_video"
-
-    def widget_overrides(self):
-        return {self.field_name: AdminEmbedVideoChooser}
+class EmbedVideoChooserPanel(FieldPanel):
+    def __init__(self, *args, **kwargs):
+        warn(
+            "wagtail_embed_videos.edit_handlers.EmbedVideosChooserPanel is obsolete and should be replaced by wagtail.admin.panels.FieldPanel",  # noqa: E501
+            category=RemovedInWagtail50Warning,
+            stacklevel=2,
+        )
+        super().__init__(*args, **kwargs)
 
 
 # TODO: EmbedVideoFieldComparison

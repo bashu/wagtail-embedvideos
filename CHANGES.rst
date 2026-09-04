@@ -1,6 +1,19 @@
 Changes
 -------
 
+3.0.0 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
+
+* Wagtail version 3.x supported. Dropped support for Wagtail < 3.0.
+* Django versions 3.2 and 4.0 supported. Dropped support for Django < 3.2.
+* Python versions 3.7 to 3.10 supported.
+* Vendored Wagtail's own ``tabs.js`` into the embed video chooser modal, since
+  Wagtail 3.x no longer exposes it as a public global, restoring full keyboard
+  accessibility for the chooser's tabbed UI.
+* Migrated packaging from ``setup.py``/``setup.cfg`` to ``pyproject.toml``.
+* Switched CI from Travis to GitHub Actions.
+* Fixed broken imports.
+
 0.5.12 (2022-04-20)
 ~~~~~~~~~~~~~~~~~~~
 

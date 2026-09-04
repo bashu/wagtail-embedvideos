@@ -1,12 +1,30 @@
+/*
+Wagtail's own tab-switching behaviour (wagtailadmin/js/vendor.js) is bundled as a
+webpack module that isn't exposed on `window`, so it can't be called from plain,
+non-webpack static files like this one. wagtail_embed_videos/js/vendor/tabs.js is a
+vendored, behavior-identical copy of Wagtail's own client/src/includes/tabs.js for
+that reason. This just scopes (re)initialization to the modal's own tab markup,
+instead of the whole document, so it can be re-run whenever the modal's tab markup
+is (re)loaded via AJAX without re-binding tabs elsewhere on the underlying page.
+*/
+function initEmbedVideoChooserTabs(modal) {
+    var tabs = modal.body.get(0).querySelectorAll('[data-tabs]');
+    window.WagtailEmbedVideosTabs.initTabs(tabs);
+}
+
 function ajaxifyEmbedVideoUploadForm(modal) {
     $('form.embed_video-upload', modal.body).on('submit', function() {
         var formdata = new FormData(this);
 
-        if ($('#id_embed_video-chooser-upload-title', modal.body).val() == '') {
+        if (!$('#id_embed_video-chooser-upload-title', modal.body).val()) {
             var li = $('#id_embed_video-chooser-upload-title', modal.body).closest('li');
             if (!li.hasClass('error')) {
                 li.addClass('error');
-                $('#id_embed_video-chooser-upload-title', modal.body).closest('.field-content').append('<p class="error-message"><span>This field is required.</span></p>')
+                $('#id_embed_video-chooser-upload-title', modal.body)
+                    .closest('.field-content')
+                    .append(
+                        '<p class="error-message"><span>This field is required.</span></p>',
+                    );
             }
             setTimeout(cancelSpinner, 500);
         } else {
@@ -19,10 +37,10 @@ function ajaxifyEmbedVideoUploadForm(modal) {
                 dataType: 'text',
                 success: modal.loadResponseText,
                 error: function(response, textStatus, errorThrown) {
-                    var message = jsonData['error_message'] + '<br />' + errorThrown + ' - ' + response.status;
-                    $('#upload').append(
+                    var message = jsonData.error_message + '<br />' + errorThrown + ' - ' + response.status;
+                    $('#tab-upload', modal.body).append(
                         '<div class="help-block help-critical">' +
-                            '<strong>' + jsonData['error_label'] + ': </strong>' + message + '</div>');
+                            '<strong>' + jsonData.error_label + ': </strong>' + message + '</div>');
                 }
             });
         }
@@ -35,10 +53,6 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
     'chooser': function(modal, jsonData) {
         var searchForm = $('form.embed_video-search', modal.body);
         var searchUrl = searchForm.attr('action');
-
-        /* currentTag stores the tag currently being filtered on, so that we can
-        preserve this when paginating */
-        var currentTag;
 
         function ajaxifyLinks (context) {
             $('.listing a', context).on('click', function() {
@@ -64,7 +78,7 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
                 error: function() {
                     request = null;
                 }
-            }
+            };
             if (requestData) {
                 opts.data = requestData;
             }
@@ -93,18 +107,22 @@ EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         $('a.suggested-tag').on('click', function() {
             $('#id_q').val('');
             fetchResults(searchUrl, {
-                'tag': $(this).text(),
+                tag: $(this).text(),
                 collection_id: $('#collection_chooser_collection_id').val()
             });
             return false;
         });
+
+        // Reinitialize tabs to hook up tab event listeners in the modal
+        initEmbedVideoChooserTabs(modal);
     },
     'embed_video_chosen': function(modal, jsonData) {
-        modal.respond('embedVideoChosen', jsonData['result']);
+        modal.respond('embedVideoChosen', jsonData.result);
         modal.close();
     },
     'reshow_upload_form': function(modal, jsonData) {
-        $('#upload', modal.body).replaceWith(jsonData.htmlFragment);
+        $('#tab-upload', modal.body).replaceWith(jsonData.htmlFragment);
+        initEmbedVideoChooserTabs(modal);
         ajaxifyEmbedVideoUploadForm(modal);
     },
 };

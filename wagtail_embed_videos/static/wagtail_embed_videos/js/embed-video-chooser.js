@@ -3,10 +3,11 @@ function createEmbedVideoChooser(id) {
     var previewEmbedVideo = chooserElement.find('.preview-embedvideo img');
     var input = $('#' + id);
     var editLink = chooserElement.find('.edit-link');
+    const chooserBaseUrl = chooserElement.data('chooserUrl');
 
     $('.action-choose', chooserElement).on('click', function() {
         ModalWorkflow({
-            url: chooserElement.data('chooserUrl'),
+            url: chooserBaseUrl,
             onload: EMBEDVIDEO_CHOOSER_MODAL_ONLOAD_HANDLERS,
             responses: {
                 embedVideoChosen: function(embedVideoData) {
@@ -16,7 +17,7 @@ function createEmbedVideoChooser(id) {
                         width: embedVideoData.preview.width,
                         height: embedVideoData.preview.height,
                         alt: embedVideoData.title,
-                        title: embedVideoData.title
+                        title: embedVideoData.title,
                     });
                     chooserElement.removeClass('blank');
                     editLink.attr('href', embedVideoData.edit_link);

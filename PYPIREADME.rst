@@ -1,25 +1,25 @@
 wagtail-embedvideos
 ===================
 
-.. image:: https://img.shields.io/pypi/v/wagtail-embedvideos.svg
+.. image:: https://badge.fury.io/py/wagtail-embedvideos.svg
+    :target: https://badge.fury.io/py/wagtail-embedvideos
+
+.. image:: https://img.shields.io/pypi/pyversions/wagtail-embedvideos.svg
     :target: https://pypi.python.org/pypi/wagtail-embedvideos/
 
-.. image:: https://img.shields.io/pypi/dm/wagtail-embedvideos.svg
+.. image:: https://img.shields.io/pypi/djversions/wagtail-embedvideos.svg
     :target: https://pypi.python.org/pypi/wagtail-embedvideos/
 
-.. image:: https://img.shields.io/github/license/bashu/wagtail-embedvideos.svg
-    :target: https://pypi.python.org/pypi/wagtail-embedvideos/
-
-.. image:: https://img.shields.io/travis/bashu/wagtail-embedvideos.svg
-    :target: https://travis-ci.com/github/bashu/wagtail-embedvideos/
+.. image:: https://github.com/bashu/wagtail-embedvideos/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/bashu/wagtail-embedvideos/actions/workflows/test.yml
 
 Simple app that works similar to ``wagtailimages``, but for embedding YouTube and Vimeo videos and music from SoundCloud.
 
 The current version is tested for compatiblily with the following:
 
-- Wagtail versions 2.7 to 2.15
-- Django versions 2.2 to 3.2
-- Python versions 3.6 and 3.9
+- Wagtail version 3.x
+- Django versions 3.2 to 4.0
+- Python versions 3.7 to 3.10
 
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.
@@ -68,7 +68,7 @@ In models, implement as a ``ForeignKey`` relation, same as ``wagtailimages``.
 
     # models.py
 
-    from wagtail.core.models import Page, PageBase
+    from wagtail.models import Page, PageBase
 
     from wagtail_embed_videos import get_embed_video_model_string
     from wagtail_embed_videos.edit_handlers import EmbedVideoChooserPanel
