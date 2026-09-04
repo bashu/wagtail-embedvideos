@@ -6,24 +6,24 @@
 |------------------------------------------------------------------------- | -------: | -------: | ------: | --------: |
 | wagtail\_embed\_videos/\_\_init\_\_.py                                   |       15 |        6 |     60% |     30-37 |
 | wagtail\_embed\_videos/admin.py                                          |        6 |        1 |     83% |        14 |
-| wagtail\_embed\_videos/admin\_urls.py                                    |        5 |        5 |      0% |       1-8 |
+| wagtail\_embed\_videos/admin\_urls.py                                    |        4 |        4 |      0% |       1-7 |
 | wagtail\_embed\_videos/apps.py                                           |       13 |        0 |    100% |           |
-| wagtail\_embed\_videos/blocks.py                                         |       23 |       23 |      0% |      1-39 |
+| wagtail\_embed\_videos/blocks.py                                         |       18 |       18 |      0% |      1-28 |
 | wagtail\_embed\_videos/edit\_handlers.py                                 |        7 |        7 |      0% |      1-14 |
-| wagtail\_embed\_videos/forms.py                                          |       35 |       35 |      0% |      1-80 |
+| wagtail\_embed\_videos/forms.py                                          |       47 |       47 |      0% |     2-103 |
 | wagtail\_embed\_videos/models.py                                         |       78 |       14 |     82% |34-35, 39-47, 110, 118, 122, 129, 132-134 |
-| wagtail\_embed\_videos/permissions.py                                    |       16 |       16 |      0% |      1-51 |
+| wagtail\_embed\_videos/permissions.py                                    |       16 |       16 |      0% |      1-49 |
 | wagtail\_embed\_videos/views/\_\_init\_\_.py                             |        0 |        0 |    100% |           |
 | wagtail\_embed\_videos/views/bulk\_actions/\_\_init\_\_.py               |        4 |        4 |      0% |       1-5 |
 | wagtail\_embed\_videos/views/bulk\_actions/add\_tags.py                  |       29 |       29 |      0% |      1-47 |
-| wagtail\_embed\_videos/views/bulk\_actions/add\_to\_collection.py        |       32 |       32 |      0% |      1-64 |
+| wagtail\_embed\_videos/views/bulk\_actions/add\_to\_collection.py        |       32 |       32 |      0% |      1-65 |
 | wagtail\_embed\_videos/views/bulk\_actions/delete.py                     |       19 |       19 |      0% |      1-33 |
 | wagtail\_embed\_videos/views/bulk\_actions/embed\_video\_bulk\_action.py |       19 |       19 |      0% |      1-39 |
-| wagtail\_embed\_videos/views/chooser.py                                  |       89 |       89 |      0% |     2-221 |
-| wagtail\_embed\_videos/views/embed\_videos.py                            |      126 |      126 |      0% |     2-281 |
-| wagtail\_embed\_videos/wagtail\_hooks.py                                 |       67 |       67 |      0% |     1-148 |
-| wagtail\_embed\_videos/widgets.py                                        |       36 |       16 |     56% |22-23, 26-42, 54-57, 73, 77 |
-| **TOTAL**                                                                |  **619** |  **508** | **18%** |           |
+| wagtail\_embed\_videos/views/chooser.py                                  |      108 |      108 |      0% |     1-184 |
+| wagtail\_embed\_videos/views/embed\_videos.py                            |      144 |      144 |      0% |     2-311 |
+| wagtail\_embed\_videos/wagtail\_hooks.py                                 |       71 |       71 |      0% |     1-154 |
+| wagtail\_embed\_videos/widgets.py                                        |       35 |       14 |     60% |23-24, 27-42, 45-47, 50, 54 |
+| **TOTAL**                                                                |  **665** |  **553** | **17%** |           |
 
 
 ## Setup coverage badge
