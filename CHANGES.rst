@@ -1,6 +1,12 @@
 Changes
 -------
 
+5.2.0 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
+
+* Wagtail version 5.2 supported. Dropped support for Wagtail < 5.2.
+* Django version 5.0 supported, alongside 4.2.
+
 5.1.0 (2026-09-04)
 ~~~~~~~~~~~~~~~~~~
 
