@@ -1,6 +1,28 @@
 Changes
 -------
 
+4.1.0 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
+
+* Wagtail version 4.1 supported. Dropped support for Wagtail < 4.1.
+* Switched ``get_usage()`` to Wagtail 4.1's ``ReferenceIndex`` API
+  (``wagtail.models.ReferenceIndex.get_references_to(self).group_by_source_object()``),
+  replacing the old reflection-based ``get_object_usage()``. Existing
+  installations must run ``./manage.py rebuild_references_index`` once
+  after upgrading, to backfill usage data for content saved before the
+  upgrade.
+* The embed video "usage" view now checks "change" permission on the
+  specific instance, and resolves proper edit URLs/labels for
+  referencing objects via ``AdminURLFinder``; the usage template shows
+  which field/content path each reference comes from.
+* Added a usage count link to the embed video edit page, and removed
+  the ``usage_count_enabled`` feature-flag guard around usage counts
+  on the delete/bulk-delete confirmation templates (usage counting is
+  now always available via ``ReferenceIndex``).
+* Fixed ``get_valid_next_url_from_request`` import
+  (``wagtail.admin.views.pages.utils`` moved to ``wagtail.admin.utils``
+  in Wagtail 4.1).
+
 4.0.0 (2026-09-04)
 ~~~~~~~~~~~~~~~~~~
 

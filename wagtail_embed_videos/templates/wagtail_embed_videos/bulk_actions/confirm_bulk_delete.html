@@ -17,13 +17,10 @@
         {% endblocktrans %}
     </p>
     <ul>
-    {% usage_count_enabled as uc_enabled %}
     {% for video in items %}
         <li>
             <a href="{% url 'wagtail_embed_video:edit' video.item.id %}"  target="_blank" rel="noreferrer">{{video.item.title}}</a>
-            {% if uc_enabled %}
             (<a href="{{ video.item.usage_url }}">{% blocktrans trimmed count usage_count=video.item.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>)
-            {% endif %}
         </li>
     {% endfor %}
     </ul>

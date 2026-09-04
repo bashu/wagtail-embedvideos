@@ -12,10 +12,10 @@ from embed_video.backends import VideoDoesntExistException
 from embed_video.backends import detect_backend
 from embed_video.fields import EmbedVideoField
 from taggit.managers import TaggableManager
-from wagtail.admin.models import get_object_usage
 from wagtail.images import get_image_model
 from wagtail.images import get_image_model_string
 from wagtail.models import CollectionMember
+from wagtail.models import ReferenceIndex
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
@@ -83,6 +83,7 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
         editable=False,
         on_delete=models.SET_NULL,
     )
+    uploaded_by_user.wagtail_reference_index_ignore = True
 
     tags = TaggableManager(help_text=None, blank=True, verbose_name=_("tags"))
 
@@ -115,7 +116,7 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
             create_thumbnail(self)
 
     def get_usage(self):
-        return get_object_usage(self)
+        return ReferenceIndex.get_references_to(self).group_by_source_object()
 
     @property
     def usage_url(self):

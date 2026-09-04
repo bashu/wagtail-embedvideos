@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/widgets/chooser.html" %}
 
 {% block chosen_icon %}
-    {# Empty alt because the chosen item's title is already displayed next to the preview. #}
-    <img class="chooser__image" data-chooser-image alt="" height="{{ preview.height }}" src="{{ preview.url }}" width="{{ preview.width }}">
+{# Empty alt because the chosen item's title is already displayed next to the preview. #}
+<img class="chooser__image" data-chooser-image alt="" class="show-transparency" decoding="async" height="{{ preview.height }}" src="{{ preview.url }}" width="{{ preview.width }}">
 {% endblock chosen_icon %}
