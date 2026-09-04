@@ -7,24 +7,25 @@ name = "wagtail-embedvideos"
 version = "4.2.0"
 description = "Embed Videos for Wagtail CMS"
 license = "BSD-3-Clause"
-authors = [ { name = "InfoPortugal, S.A.", email = "suporte24@infoportugal.com" } ]
 maintainers = [ { name = "Basil Shubin", email = "basil.shubin@gmail.com" } ]
-requires-python = ">=3.8"
+authors = [ { name = "InfoPortugal, S.A.", email = "suporte24@infoportugal.com" } ]
+requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 3.2",
-  "Framework :: Django :: 4.0",
+  "Framework :: Django :: 4.2",
   "Framework :: Wagtail",
-  "Framework :: Wagtail :: 4",
+  "Framework :: Wagtail :: 5",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Internet :: WWW/HTTP",
   "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
   "Topic :: Software Development :: Libraries :: Python Modules",
@@ -32,18 +33,17 @@ classifiers = [
 dynamic = [ "readme" ]
 dependencies = [
   "django-embed-video>1.3",
-  "wagtail>=4.2,<4.3",
+  "wagtail>=5.0,<5.1",
 ]
 urls.download = "https://github.com/bashu/wagtail-embedvideos/zipball/master"
 urls.homepage = "https://github.com/bashu/wagtail-embedvideos/"
 
 [dependency-groups]
 dev = [
-  # "coverage==7.16.0",
-  "coverage==6.5.0",
-  # "django-stubs[compatible-mypy]==6.0.9",
-  # "django-upgrade==1.32.0",
-  # "mypy==2.3.1",
+  "coverage==7.16.0",
+  "django-stubs[compatible-mypy]==6.0.9",
+  "django-upgrade==1.32.0",
+  "mypy==2.3.1",
   "pre-commit==4.6.2",
   "pytest==9.1.1",
   "pytest-django==4.14.0",
@@ -51,17 +51,11 @@ dev = [
   "ruff==0.16.5",
 ]
 
-[tool.uv.dependency-groups]
-# pre-commit==4.6.2 requires Python>=3.10; without this, `uv lock`'s universal
-# resolution would require every group to satisfy the project's own
-# `requires-python` (>=3.8) and fail.
-dev = { requires-python = ">=3.10" }
-
 [tool.setuptools]
 packages.find.include = [ "wagtail_embed_videos*" ]
 packages.find.exclude = [ "example*", "wagtail_embed_videos.tests*" ]
 include-package-data = true
-package-data.wagtail_embed_videos = [ "static/**/*", "templates/**/*", "locale/**/*" ]
+package-data.wagtail_embed_videos = [ "locale/**/*", "static/**/*", "templates/**/*" ]
 dynamic.readme = { file = [ "PYPIREADME.rst", "CHANGES.rst" ], content-type = "text/x-rst" }
 zip-safe = false
 

@@ -58,10 +58,3 @@ class EmbedVideoChooser extends window.Chooser {
     }
 }
 window.EmbedVideoChooser = EmbedVideoChooser;
-
-function createEmbedVideoChooser(id) {
-    /* legacy factory kept for third-party code still calling it directly;
-    widgets.py's own render_js_init now emits `new EmbedVideoChooser(id)`. */
-    return new EmbedVideoChooser(id);
-}
-window.createEmbedVideoChooser = createEmbedVideoChooser;

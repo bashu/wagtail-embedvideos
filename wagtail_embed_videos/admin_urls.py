@@ -8,7 +8,15 @@ urlpatterns = [
     path("", embed_videos.IndexView.as_view(), name="index"),
     path("results/", embed_videos.ListingResultsView.as_view(), name="listing_results"),
     path("<int:embed_video_id>/", embed_videos.edit, name="edit"),
-    path("<int:embed_video_id>/delete/", embed_videos.delete, name="delete"),
+    path(
+        "<int:embed_video_id>/delete/",
+        embed_videos.DeleteView.as_view(),
+        name="delete",
+    ),
     path("add/", embed_videos.add, name="add"),
-    path("usage/<int:embed_video_id>/", embed_videos.usage, name="embed_video_usage"),
+    path(
+        "usage/<int:embed_video_id>/",
+        embed_videos.UsageView.as_view(),
+        name="embed_video_usage",
+    ),
 ]
