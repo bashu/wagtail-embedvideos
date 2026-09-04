@@ -1,14 +1,16 @@
+# ruff: noqa: N806
 from django import forms
 from django.conf import settings
 from django.forms.models import modelform_factory
 from django.utils.translation import gettext as _
 
-from wagtail.admin import widgets
 from wagtail.admin.forms.collections import BaseCollectionMemberForm
 from wagtail.admin.forms.collections import CollectionChoiceField
 from wagtail.admin.forms.collections import collection_member_permission_formset_factory
-from wagtail.core.models import Collection
+from wagtail.admin.widgets import AdminTagWidget
 from wagtail.images.widgets import AdminImageChooser
+from wagtail.models import Collection
+from wagtail.search import index as search_index
 
 from wagtail_embed_videos.models import EmbedVideo
 from wagtail_embed_videos.permissions import (
@@ -34,9 +36,18 @@ def formfield_for_dbfield(db_field, **kwargs):
 class BaseEmbedVideoForm(BaseCollectionMemberForm):
     permission_policy = embed_videos_permission_policy
 
+    def save(self, commit=True):  # noqa: FBT002
+        super().save(commit=commit)
+
+        if commit:
+            # Reindex the image to make sure all tags are indexed
+            search_index.insert_or_update_object(self.instance)
+
+        return self.instance
+
     class Meta:
         widgets = {
-            "tags": widgets.AdminTagWidget,
+            "tags": AdminTagWidget,
             "thumbnail": AdminImageChooser,
         }
 
@@ -65,10 +76,22 @@ def get_embed_video_form(model):
         # and when only one collection exists, it will get hidden anyway.
         fields = [*list(fields), "collection"]
 
+    BaseForm = get_embed_video_base_form()
+
+    # If the base form specifies the 'tags' widget as a plain unconfigured
+    # AdminTagWidget, substitute one that correctly passes the tag model used
+    # on the image model.
+    widgets = None
+    if BaseForm._meta.widgets.get("tags") == AdminTagWidget:  # noqa: SLF001
+        tag_model = model._meta.get_field("tags").related_model  # noqa: SLF001
+        widgets = BaseForm._meta.widgets.copy()  # noqa: SLF001
+        widgets["tags"] = AdminTagWidget(tag_model=tag_model)
+
     return modelform_factory(
         model,
-        form=get_embed_video_base_form(),
+        form=BaseForm,
         fields=fields,
+        widgets=widgets,
         formfield_callback=formfield_for_dbfield,
     )
 

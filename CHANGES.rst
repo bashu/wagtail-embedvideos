@@ -1,9 +1,18 @@
 Changes
 -------
 
-3.0.1 (2026-09-04)
+4.0.0 (2026-09-04)
 ~~~~~~~~~~~~~~~~~~
 
+* Wagtail version 4.x supported. Dropped support for Wagtail < 4.0.
+* Rewrote the embed video chooser (widget, views and JS) on Wagtail 4.x's
+  generic chooser framework (``wagtail.admin.views.generic.chooser``,
+  ``wagtail.admin.viewsets.chooser.ChooserViewSet``,
+  ``wagtail.admin.widgets.BaseChooser``), replacing the old
+  ``AdminChooser``/``ModalWorkflow``-based implementation.
+* Dropped the vendored ``tabs.js``: Wagtail 4.x exposes its own chooser-modal
+  JS (``window.Chooser``, ``window.ChooserModalOnloadHandlerFactory``) as
+  public globals for exactly this purpose, so it's no longer needed.
 * Dropped support for Python 3.7 (no longer obtainable via ``uv``/
   ``python-build-standalone``; EOL since June 2023). Python versions
   3.8 to 3.10 supported.

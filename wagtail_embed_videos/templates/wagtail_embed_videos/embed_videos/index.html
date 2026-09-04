@@ -12,10 +12,18 @@
             targetOutput: "#embed_video-results"
         }
 
-        $(function() {
-            $('#collection_chooser_collection_id').on('change', function() {
-                this.form.submit();
-            })
+        const submitFormOnDropdownChange = (dropdownSelector) => {
+            const dropdown = document.querySelector(dropdownSelector);
+            if (dropdown !== null) {
+                dropdown.addEventListener('change', () => dropdown.form.submit());
+            }
+        };
+        const dropdownSelectors = [
+            "#collection_chooser_collection_id",
+        ];
+        window.addEventListener("DOMContentLoaded", () => {
+            dropdownSelectors.forEach(dropdownSelector => submitFormOnDropdownChange(dropdownSelector)
+            );
         });
     </script>
     <script>
@@ -37,15 +45,16 @@
 
     <div class="nice-padding">
         <form class="embed_video-search search-bar" action="{% url 'wagtail_embed_videos:index' %}" method="GET" novalidate>
-            <ul class="fields">
+            {% if current_tag %}
+                <input type="hidden" name="tag" value="{{ current_tag }}" />
+            {% endif %}
+
+            {% field_row max_content=True %}
                 {% if collections %}
                     {% include "wagtailadmin/shared/collection_chooser.html" %}
-                    {% if current_tag %}
-                        <input type="hidden" name="tag" value="{{ current_tag }}" />
-                    {% endif %}
                 {% endif %}
+            {% endfield_row %}
                 {% if popular_tags %}
-                    <li>
                         <fieldset class="tagfilter">
                             <legend>{% trans 'Popular Tags:' %}</legend>
                             {% for tag in popular_tags %}
@@ -56,12 +65,10 @@
                                 {% endif %}
                             {% endfor %}
                             {% if current_tag %}
-                                <a class="button button-small bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear choice' %}</a>
+                                <a class="button button-small bicolor button--icon" href="{% url 'wagtail_embed_videos:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear' %}</a>
                             {% endif %}
                         </fieldset>
-                    </li>
                 {% endif %}
-            </ul>
         </form>
 
         <div id="embed_video-results">

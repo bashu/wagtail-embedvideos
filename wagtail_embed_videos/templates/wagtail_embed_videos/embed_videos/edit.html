@@ -32,15 +32,13 @@
         <input type="hidden" value="{{ next }}" name="next">
         <div class="row row-flush nice-padding">
             <div class="col6">
-                <ul class="fields">
                     {% for field in form %}
                         {% if field.is_hidden %}
                             {{ field }}
                         {% else %}
-                            {% include "wagtailadmin/shared/field_as_li.html" with li_classes="label-above" %}
+                            {% include "wagtailadmin/shared/field.html" %}
                         {% endif %}
                     {% endfor %}
-                </ul>
                 <div class="w-hidden sm:w-block">
                     <input type="submit" value="{% trans 'Save' %}" class="button" />
                     {% if user_can_delete %}

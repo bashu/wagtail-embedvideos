@@ -12,6 +12,7 @@ class CollectionForm(forms.Form):
         user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.fields["collection"] = forms.ModelChoiceField(
+            label=_("Collection"),
             queryset=EmbedVideoBulkAction.permission_policy.collections_user_has_permission_for(
                 user,
                 "add",
