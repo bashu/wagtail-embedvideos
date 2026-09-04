@@ -17,8 +17,8 @@ Simple app that works similar to ``wagtailimages``, but for embedding YouTube an
 
 The current version is tested for compatiblily with the following:
 
-- Wagtail version 5.0
-- Django version 4.2
+- Wagtail version 5.2
+- Django version 4.2 or 5.0
 - Python versions 3.10 to 3.11
 
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
