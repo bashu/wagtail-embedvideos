@@ -1,6 +1,11 @@
 {% load i18n wagtailadmin_tags %}
-
-<section id="upload" class="{% if form.errors %}active{% endif %} nice-padding">
+<section
+    id="tab-upload"
+    class="w-tabs__panel"
+    role="tabpanel"
+    hidden
+    aria-labelledby="tab-label-upload"
+>
     {% include "wagtailadmin/shared/non_field_errors.html" with form=form %}
     <form class="embed_video-upload" action="{% url 'wagtail_embed_videos:chooser_upload' %}" method="POST" enctype="multipart/form-data" novalidate>
         {% csrf_token %}

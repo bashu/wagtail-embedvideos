@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n %}
-{% block titletag %}{% blocktrans with title=embed_video.title %}Usage of {{ title }}{% endblocktrans %}{% endblock %}
+{% block titletag %}{% blocktrans trimmed with title=embed_video.title %}Usage of {{ title }}{% endblocktrans %}{% endblock %}
 {% block content %}
     {% trans "Usage of" as usage_str %}
     {% include "wagtailadmin/shared/header.html" with title=usage_str subtitle=embed_video.title %}

@@ -5,6 +5,7 @@ from django import forms
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
 from embed_video.backends import detect_backend
 from wagtail.admin.staticfiles import versioned_static
 from wagtail.admin.widgets import AdminChooser
@@ -24,7 +25,7 @@ class AdminEmbedVideoChooser(AdminChooser):
     def get_value_data(self, value):
         if value is None:
             return None
-        elif isinstance(value, self.embed_video_model):
+        if isinstance(value, self.embed_video_model):
             embed_video = value
         else:  # assume embed video ID
             embed_video = self.embed_video_model.objects.get(pk=value)
@@ -59,7 +60,9 @@ class AdminEmbedVideoChooser(AdminChooser):
                 "widget": self,
                 "original_field_html": original_field_html,
                 "attrs": attrs,
-                "value": bool(value_data),  # only used by chooser.html to identify blank values
+                "value": bool(
+                    value_data,
+                ),  # only used by chooser.html to identify blank values
                 "title": value_data.get("title", ""),
                 "preview": value_data.get("preview", {}),
                 "edit_url": value_data.get("edit_url", ""),
@@ -67,16 +70,23 @@ class AdminEmbedVideoChooser(AdminChooser):
         )
 
     def render_js_init(self, id_, name, value_data):
-        return "createEmbedVideoChooser({0});".format(json.dumps(id_))
+        return f"createEmbedVideoChooser({json.dumps(id_)});"
 
     @property
     def media(self):
         return forms.Media(
             js=[
-                versioned_static("wagtail_embed_videos/js/embed-video-chooser-modal.js"),
+                versioned_static("wagtail_embed_videos/js/vendor/tabs.js"),
+                versioned_static(
+                    "wagtail_embed_videos/js/embed-video-chooser-modal.js",
+                ),
                 versioned_static("wagtail_embed_videos/js/embed-video-chooser.js"),
             ],
             css={
-                "all": (versioned_static("wagtail_embed_videos/css/embed-video-chooser.css"),),
+                "all": (
+                    versioned_static(
+                        "wagtail_embed_videos/css/embed-video-chooser.css",
+                    ),
+                ),
             },
         )

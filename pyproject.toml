@@ -1,0 +1,175 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=61" ]
+
+[project]
+name = "wagtail-embedvideos"
+version = "0.5.12"
+description = "Embed Videos for Wagtail CMS"
+license = "BSD-3-Clause"
+authors = [ { name = "InfoPortugal, S.A.", email = "suporte24@infoportugal.com" } ]
+maintainers = [ { name = "Basil Shubin", email = "basil.shubin@gmail.com" } ]
+requires-python = ">=3.7"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4.0",
+  "Framework :: Wagtail",
+  "Framework :: Wagtail :: 3",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = [ "readme" ]
+dependencies = [
+  "django-embed-video>1.3",
+  "wagtail>=3.0,<3.1",
+]
+urls.download = "https://github.com/bashu/wagtail-embedvideos/zipball/master"
+urls.homepage = "https://github.com/bashu/wagtail-embedvideos/"
+
+[dependency-groups]
+dev = [
+  # "coverage==7.16.0",
+  "coverage==6.5.0",
+  # "django-stubs[compatible-mypy]==6.0.9",
+  # "django-upgrade==1.32.0",
+  # "mypy==2.3.1",
+  "pre-commit==4.6.2",
+  "pytest==9.1.1",
+  "pytest-django==4.14.0",
+  "pytest-sugar==1.1.1",
+  "ruff==0.16.5",
+]
+
+[tool.uv.dependency-groups]
+# pre-commit==4.6.2 requires Python>=3.10; without this, `uv lock`'s universal
+# resolution would require every group to satisfy the project's own
+# `requires-python` (>=3.7) and fail.
+dev = { requires-python = ">=3.10" }
+
+[tool.setuptools]
+packages.find.include = [ "wagtail_embed_videos*" ]
+packages.find.exclude = [ "example*" ]
+include-package-data = true
+package-data.wagtail_embed_videos = [ "static/**/*", "templates/**/*", "locale/**/*" ]
+dynamic.readme = { file = [ "PYPIREADME.rst", "CHANGES.rst" ], content-type = "text/x-rst" }
+zip-safe = false
+
+# ==== ruff ====
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+extend-exclude = [
+  "*/migrations/*.py",
+]
+lint.select = [
+  "A",
+  "ASYNC",
+  "B",
+  "BLE",
+  "C4",
+  "C90",
+  "COM",
+  "DJ",
+  "DTZ",
+  "E",
+  "EM",
+  "ERA",
+  "EXE",
+  "F",
+  "FA",
+  "FBT",
+  "FLY",
+  "G",
+  "I",
+  "ICN",
+  "INP",
+  "INT",
+  "ISC",
+  "N",
+  "PD",
+  "PERF",
+  "PGH",
+  "PIE",
+  "PL",
+  "PT",
+  "PTH",
+  "PYI",
+  "Q",
+  "RET",
+  "RSE",
+  "RUF",
+  "S",
+  "SIM",
+  "SLF",
+  "SLOT",
+  "T10",
+  "T20",
+  "TC",
+  "TID",
+  "TRY",
+  "UP",
+  "W",
+  "YTT",
+]
+lint.ignore = [
+  "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+  "S101",   # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
+  "SIM102", # sometimes it's better to nest
+  # of types for comparison.
+  # Deactivated because it can make the code slow:
+  # https://github.com/astral-sh/ruff/issues/7871
+]
+lint.isort.default-section = "third-party"
+lint.isort.force-single-line = true
+lint.isort.known-first-party = [ "wagtail_embed_videos" ]
+lint.isort.section-order = [ "future", "standard-library", "django", "third-party", "first-party", "local-folder" ]
+lint.isort.sections.django = [ "django" ]
+
+# ==== pyproject-fmt ====
+[tool.pyproject-fmt]
+keep_full_version = true
+
+# ==== mypy ====
+[tool.mypy]
+ignore_missing_imports = true
+python_version = "3.9"
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+plugins = [
+  "mypy_django_plugin.main",
+]
+warn_unused_configs = true
+overrides = [
+  # Django migrations should not produce any errors:
+  { module = "*.migrations.*", ignore_errors = true },
+]
+
+[tool.django-stubs]
+django_settings_module = "wagtail_embed_videos.tests.settings"
+
+[tool.pytest]
+ini_options.minversion = "6.0"
+ini_options.python_files = [
+  "test_*.py",
+  "tests.py",
+]
+# ==== pytest ====
+ini_options.addopts = [ "--ds=wagtail_embed_videos.tests.settings", "--reuse-db", "--import-mode=importlib" ]
+
+# ==== Coverage ====
+[tool.coverage]
+run.omit = [ "*/migrations/*", "*/tests/*" ]
+run.relative_files = true
+run.source = [ "wagtail_embed_videos" ]

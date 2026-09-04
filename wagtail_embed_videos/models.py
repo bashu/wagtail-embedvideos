@@ -1,20 +1,21 @@
-# coding: utf-8
-
-import certifi
-import requests
-import urllib3 as ul
 from django.conf import settings
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from embed_video.backends import VideoDoesntExistException, detect_backend
+
+import certifi
+import requests
+import urllib3 as ul
+from embed_video.backends import VideoDoesntExistException
+from embed_video.backends import detect_backend
 from embed_video.fields import EmbedVideoField
 from taggit.managers import TaggableManager
 from wagtail.admin.models import get_object_usage
 from wagtail.core.models import CollectionMember
-from wagtail.images import get_image_model, get_image_model_string
+from wagtail.images import get_image_model
+from wagtail.images import get_image_model_string
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
@@ -37,7 +38,11 @@ def create_thumbnail(model_instance):
         if thumbnail_url.endswith("hqdefault.jpg"):
             for resolution in YOUTUBE_RESOLUTIONS:
                 temp_thumbnail_url = thumbnail_url.replace("hqdefault.jpg", resolution)
-                if int(requests.head(temp_thumbnail_url).status_code) < 400:
+                response = requests.head(
+                    temp_thumbnail_url,
+                    timeout=5,
+                )
+                if int(response.status_code) < 400:  # noqa: PLR2004
                     thumbnail_url = temp_thumbnail_url
                     break
 
@@ -65,7 +70,11 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-    created_at = models.DateTimeField(verbose_name=_("created at"), auto_now_add=True, db_index=True)
+    created_at = models.DateTimeField(
+        verbose_name=_("created at"),
+        auto_now_add=True,
+        db_index=True,
+    )
     uploaded_by_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_("uploaded by user"),
@@ -79,14 +88,8 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
 
     objects = EmbedVideoQuerySet.as_manager()
 
-    def get_usage(self):
-        return get_object_usage(self)
-
-    @property
-    def usage_url(self):
-        return reverse("wagtail_embed_videos:embed_video_usage", args=(self.id,))
-
-    search_fields = CollectionMember.search_fields + [
+    search_fields = [
+        *CollectionMember.search_fields,
         index.SearchField("title", partial_match=True, boost=10),
         index.AutocompleteField("title"),
         index.FilterField("title"),
@@ -100,8 +103,23 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
         index.FilterField("uploaded_by_user"),
     ]
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.thumbnail:
+            create_thumbnail(self)
+
+    def get_usage(self):
+        return get_object_usage(self)
+
+    @property
+    def usage_url(self):
+        return reverse("wagtail_embed_videos:embed_video_usage", args=(self.id,))
 
     @property
     def default_alt_text(self):
@@ -111,17 +129,9 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
         return self.title
 
     def is_editable_by_user(self, user):
-        from wagtail_embed_videos.permissions import permission_policy
+        from wagtail_embed_videos.permissions import permission_policy  # noqa: PLC0415
 
         return permission_policy.user_has_permission_for_instance(user, "change", self)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.thumbnail:
-            create_thumbnail(self)
-
-    class Meta:
-        abstract = True
 
 
 class EmbedVideo(AbstractEmbedVideo):
