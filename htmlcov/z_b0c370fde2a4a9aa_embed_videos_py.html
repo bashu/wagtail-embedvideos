@@ -54,9 +54,9 @@
             </div>
         </aside>
         <h2>
-            <span class="text">158 statements &nbsp;</span>
+            <span class="text">159 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">0<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">158<span class="text"> missing</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">159<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_3895ab9f2b9328f5_wagtail_hooks_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-09-04 09:05 +0000
+            created at 2026-09-04 09:52 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -180,8 +180,8 @@
     <p class="mis mis2 show_mis"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">form</span><span class="op">.</span><span class="nam">is_valid</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">                <span class="nam">query_string</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">form</span><span class="op">.</span><span class="nam">cleaned_data</span><span class="op">[</span><span class="str">&quot;q&quot;</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">                <span class="nam">embed_videos</span> <span class="op">=</span> <span class="nam">embed_videos</span><span class="op">.</span><span class="nam">search</span><span class="op">(</span><span class="nam">query_string</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">                <span class="key">if</span> <span class="nam">query_string</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">                    <span class="nam">embed_videos</span> <span class="op">=</span> <span class="nam">embed_videos</span><span class="op">.</span><span class="nam">search</span><span class="op">(</span><span class="nam">query_string</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">form</span> <span class="op">=</span> <span class="nam">SearchForm</span><span class="op">(</span><span class="nam">placeholder</span><span class="op">=</span><span class="nam">_</span><span class="op">(</span><span class="str">&quot;Search embed videos&quot;</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -426,7 +426,7 @@
             <a class="nav" href="z_3895ab9f2b9328f5_wagtail_hooks_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-09-04 09:05 +0000
+            created at 2026-09-04 09:52 +0000
         </p>
     </div>
 </footer>
