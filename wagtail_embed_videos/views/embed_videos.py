@@ -12,10 +12,11 @@ from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 
 from wagtail.admin import messages
+from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.models import popular_tags_for_model
-from wagtail.admin.views.pages.utils import get_valid_next_url_from_request
+from wagtail.admin.utils import get_valid_next_url_from_request
 from wagtail.models import Collection
 
 from wagtail_embed_videos import get_embed_video_model
@@ -302,14 +303,35 @@ def add(request):
     )
 
 
+@permission_checker.require("change")
 def usage(request, embed_video_id):
     embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
 
+    if not permission_policy.user_has_permission_for_instance(
+        request.user,
+        "change",
+        embed_video,
+    ):
+        raise PermissionDenied
+
     paginator = Paginator(embed_video.get_usage(), per_page=USAGE_PAGE_SIZE)
-    used_by = paginator.get_page(request.GET.get("p"))
+    object_page = paginator.get_page(request.GET.get("p"))
+
+    # Add edit URLs to each source object
+    url_finder = AdminURLFinder(request.user)
+    results = []
+    for object, references in object_page:  # noqa: A001
+        edit_url = url_finder.get_edit_url(object)
+        if edit_url is None:
+            label = _("(Private %s)") % object._meta.verbose_name  # noqa: SLF001
+            edit_link_title = None
+        else:
+            label = str(object)
+            edit_link_title = _("Edit this %s") % object._meta.verbose_name  # noqa: SLF001
+        results.append((label, edit_url, edit_link_title, references))
 
     return TemplateResponse(
         request,
         "wagtail_embed_videos/embed_videos/usage.html",
-        {"embed_video": embed_video, "used_by": used_by},
+        {"embed_video": embed_video, "results": results, "object_page": object_page},
     )

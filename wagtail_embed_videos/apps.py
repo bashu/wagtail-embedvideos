@@ -10,6 +10,7 @@ class WagtailEmbedVideosAppConfig(AppConfig):
     label = "wagtail_embed_videos"
     verbose_name = "Wagtail embed videos"
     default_auto_field = "django.db.models.AutoField"
+    default_attrs = {}
 
     def ready(self):
         # Set up model forms to use AdminImageChooser for any ForeignKey to the
