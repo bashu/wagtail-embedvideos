@@ -9,15 +9,18 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.http import urlencode
 from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
+from django.utils.translation import ngettext
 from django.views.generic import TemplateView
 
 from wagtail.admin import messages
-from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.models import popular_tags_for_model
 from wagtail.admin.utils import get_valid_next_url_from_request
+from wagtail.admin.views import generic
 from wagtail.models import Collection
+from wagtail.search.backends import get_search_backend
 
 from wagtail_embed_videos import get_embed_video_model
 from wagtail_embed_videos.forms import get_embed_video_form
@@ -99,7 +102,11 @@ class BaseListingView(TemplateView):
             if self.form.is_valid():
                 query_string = self.form.cleaned_data["q"]
                 if query_string:
-                    embed_videos = embed_videos.search(query_string)
+                    search_backend = get_search_backend()
+                    embed_videos = search_backend.autocomplete(
+                        query_string,
+                        embed_videos,
+                    )
         else:
             self.form = SearchForm(placeholder=_("Search embed videos"))
 
@@ -233,34 +240,39 @@ def edit(request, embed_video_id):
     )
 
 
-@permission_checker.require("delete")
-def delete(request, embed_video_id):
-    embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
+class DeleteView(generic.DeleteView):
+    model = get_embed_video_model()
+    pk_url_kwarg = "embed_video_id"
+    permission_policy = permission_policy
+    permission_required = "delete"
+    header_icon = "media"
+    template_name = "wagtail_embed_videos/embed_videos/confirm_delete.html"
+    usage_url_name = "wagtail_embed_videos:embed_video_usage"
+    delete_url_name = "wagtail_embed_videos:delete"
+    index_url_name = "wagtail_embed_videos:index"
+    page_title = gettext_lazy("Delete embed video")
 
-    if not permission_policy.user_has_permission_for_instance(
-        request.user,
-        "delete",
-        embed_video,
-    ):
-        raise PermissionDenied
-
-    next_url = get_valid_next_url_from_request(request)
-
-    if request.method == "POST":
-        embed_video.delete()
-        messages.success(request, _("Video '{0}' deleted.").format(embed_video.title))
-        return (
-            redirect(next_url) if next_url else redirect("wagtail_embed_videos:index")
+    def user_has_permission(self, permission):
+        return self.permission_policy.user_has_permission_for_instance(
+            self.request.user,
+            permission,
+            self.object,
         )
 
-    return TemplateResponse(
-        request,
-        "wagtail_embed_videos/embed_videos/confirm_delete.html",
-        {
-            "embed_video": embed_video,
-            "next": next_url,
-        },
-    )
+    @property
+    def confirmation_message(self):
+        # This message will only appear in the singular, but we specify a plural
+        # so it can share the translation string with confirm_bulk_delete.html
+        return ngettext(
+            "Are you sure you want to delete this embed video?",
+            "Are you sure you want to delete these embed videos?",
+            1,
+        )
+
+    def get_success_message(self):
+        return _("Video '%(embed_video_title)s' deleted.") % {
+            "embed_video_title": self.object.title,
+        }
 
 
 @permission_checker.require("add")
@@ -303,35 +315,20 @@ def add(request):
     )
 
 
-@permission_checker.require("change")
-def usage(request, embed_video_id):
-    embed_video = get_object_or_404(get_embed_video_model(), id=embed_video_id)
+class UsageView(generic.UsageView):
+    model = get_embed_video_model()
+    paginate_by = USAGE_PAGE_SIZE
+    pk_url_kwarg = "embed_video_id"
+    permission_policy = permission_policy
+    permission_required = "change"
+    header_icon = "media"
 
-    if not permission_policy.user_has_permission_for_instance(
-        request.user,
-        "change",
-        embed_video,
-    ):
-        raise PermissionDenied
+    def user_has_permission(self, permission):
+        return self.permission_policy.user_has_permission_for_instance(
+            self.request.user,
+            permission,
+            self.object,
+        )
 
-    paginator = Paginator(embed_video.get_usage(), per_page=USAGE_PAGE_SIZE)
-    object_page = paginator.get_page(request.GET.get("p"))
-
-    # Add edit URLs to each source object
-    url_finder = AdminURLFinder(request.user)
-    results = []
-    for object, references in object_page:  # noqa: A001
-        edit_url = url_finder.get_edit_url(object)
-        if edit_url is None:
-            label = _("(Private %s)") % object._meta.verbose_name  # noqa: SLF001
-            edit_link_title = None
-        else:
-            label = str(object)
-            edit_link_title = _("Edit this %s") % object._meta.verbose_name  # noqa: SLF001
-        results.append((label, edit_url, edit_link_title, references))
-
-    return TemplateResponse(
-        request,
-        "wagtail_embed_videos/embed_videos/usage.html",
-        {"embed_video": embed_video, "results": results, "object_page": object_page},
-    )
+    def get_page_subtitle(self):
+        return self.object.title

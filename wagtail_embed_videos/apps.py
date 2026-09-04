@@ -26,4 +26,8 @@ class WagtailEmbedVideosAppConfig(AppConfig):
             override={"widget": AdminEmbedVideoChooser},
         )
 
+        from wagtail.models.reference_index import ReferenceIndex
+
+        ReferenceIndex.register_model(get_embed_video_model())
+
         # TODO: implement EmbedVideoFieldComparison class

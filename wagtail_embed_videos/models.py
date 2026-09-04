@@ -91,13 +91,13 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
 
     search_fields = [
         *CollectionMember.search_fields,
-        index.SearchField("title", partial_match=True, boost=10),
+        index.SearchField("title", boost=10),
         index.AutocompleteField("title"),
         index.FilterField("title"),
         index.RelatedFields(
             "tags",
             [
-                index.SearchField("name", partial_match=True, boost=10),
+                index.SearchField("name", boost=10),
                 index.AutocompleteField("name"),
             ],
         ),
@@ -116,7 +116,7 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
             create_thumbnail(self)
 
     def get_usage(self):
-        return ReferenceIndex.get_references_to(self).group_by_source_object()
+        return ReferenceIndex.get_grouped_references_to(self)
 
     @property
     def usage_url(self):

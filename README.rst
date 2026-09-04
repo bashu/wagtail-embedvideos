@@ -17,9 +17,9 @@ Simple app that works similar to ``wagtailimages``, but for embedding YouTube an
 
 The current version is tested for compatiblily with the following:
 
-- Wagtail version 4.x
-- Django versions 3.2 to 4.0
-- Python versions 3.8 to 3.10
+- Wagtail version 5.0
+- Django version 4.2
+- Python versions 3.10 to 3.11
 
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.
@@ -69,10 +69,10 @@ In models, implement as a ``ForeignKey`` relation, same as ``wagtailimages``.
 
     # models.py
 
+    from wagtail.admin.panels import FieldPanel
     from wagtail.models import Page, PageBase
 
     from wagtail_embed_videos import get_embed_video_model_string
-    from wagtail_embed_videos.edit_handlers import EmbedVideoChooserPanel
 
     class CustomPage(Page):
         video = models.ForeignKey(
@@ -85,7 +85,7 @@ In models, implement as a ``ForeignKey`` relation, same as ``wagtailimages``.
         # ...
 
         content_panels = [
-                EmbedVideoChooserPanel('video'),
+                FieldPanel('video'),
         ]
 
 In templates, load the ``embed_video_tags`` library in every template where you want to use it:
