@@ -1,6 +1,16 @@
 Changes
 -------
 
+5.1.0 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
+
+* Wagtail version 5.1 supported. Dropped support for Wagtail < 5.1.
+* Registered ``EmbedVideoDisplay`` (``wagtail_embed_videos/components.py``)
+  for any ``ForeignKey`` to the embed video model, via Wagtail 5.1's new
+  ``register_display_class`` API. Embed video fields shown on a model's
+  generic inspect view now render as an actual embedded iframe instead
+  of the video's plain title text.
+
 5.0.1 (2026-09-04)
 ~~~~~~~~~~~~~~~~~~
 

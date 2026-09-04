@@ -30,4 +30,16 @@ class WagtailEmbedVideosAppConfig(AppConfig):
 
         ReferenceIndex.register_model(EmbedVideo)
 
+        # Set up embed video ForeignKeys to render as an embedded iframe
+        # (rather than plain str(value)) in the generic inspect view
+        from wagtail.admin.ui.fields import register_display_class
+
+        from .components import EmbedVideoDisplay
+
+        register_display_class(
+            ForeignKey,
+            to=EmbedVideo,
+            display_class=EmbedVideoDisplay,
+        )
+
         # TODO: implement EmbedVideoFieldComparison class
