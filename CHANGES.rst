@@ -1,6 +1,14 @@
 Changes
 -------
 
+3.0.1 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
+
+* Dropped support for Python 3.7 (no longer obtainable via ``uv``/
+  ``python-build-standalone``; EOL since June 2023). Python versions
+  3.8 to 3.10 supported.
+* Excluded the ``tests`` package from the built wheel/sdist.
+
 3.0.0 (2026-09-04)
 ~~~~~~~~~~~~~~~~~~
 
