@@ -1,8 +1,8 @@
 Changes
 -------
 
-3.0.0 (WIP)
-~~~~~~~~~~~
+3.0.0 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
 
 * Wagtail version 3.x supported. Dropped support for Wagtail < 3.0.
 * Django versions 3.2 and 4.0 supported. Dropped support for Django < 3.2.

@@ -4,7 +4,7 @@ requires = [ "setuptools>=61" ]
 
 [project]
 name = "wagtail-embedvideos"
-version = "0.5.12"
+version = "3.0.0"
 description = "Embed Videos for Wagtail CMS"
 license = "BSD-3-Clause"
 authors = [ { name = "InfoPortugal, S.A.", email = "suporte24@infoportugal.com" } ]
