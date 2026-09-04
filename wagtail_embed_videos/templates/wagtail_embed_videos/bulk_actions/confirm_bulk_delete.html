@@ -19,7 +19,7 @@
     <ul>
     {% for video in items %}
         <li>
-            <a href="{% url 'wagtail_embed_video:edit' video.item.id %}"  target="_blank" rel="noreferrer">{{video.item.title}}</a>
+            <a href="{% url 'wagtail_embed_videos:edit' video.item.id %}"  target="_blank" rel="noreferrer">{{video.item.title}}</a>
             (<a href="{{ video.item.usage_url }}">{% blocktrans trimmed count usage_count=video.item.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>)
         </li>
     {% endfor %}

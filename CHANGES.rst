@@ -1,6 +1,29 @@
 Changes
 -------
 
+4.2.0 (2026-09-04)
+~~~~~~~~~~~~~~~~~~
+
+* Wagtail version 4.2 supported. Dropped support for Wagtail < 4.2.
+* Widget's JS hookup switched from an overridden ``render_js_init()`` to
+  Wagtail 4.2's declarative ``js_constructor`` attribute on
+  ``BaseChooser``.
+* Added multiple-choice support to the chooser (``ChosenMultipleViewMixin``,
+  ``chosen_multiple_view_class``), and preserved URL parameters on the
+  chosen link, matching Wagtail 4.2's ``ChooserViewSet`` conventions.
+* Fixed a URL namespace typo in the bulk-delete confirmation template
+  (``wagtail_embed_video:edit`` -> ``wagtail_embed_videos:edit``).
+* Guarded the embed video listing search against an empty query string.
+* Fixed the chooser widget's JS for Wagtail 4.2's ``Chooser.openChooserModal()``
+  rewrite, which dropped the ``modalOnloadHandlers`` widget property in favour
+  of a ``chooserModalClass`` (a ``ChooserModal`` subclass carrying its own
+  ``onloadHandlers``); left as-is, the widget would have silently fallen back
+  to the default (non-customised) chooser-modal behaviour, with no error.
+  Since ``ChooserModal`` isn't exposed as a public global (only Wagtail's own
+  webpack-bundled entrypoints can subclass it directly), ``EmbedVideoChooser``
+  now overrides ``openChooserModal()`` to construct the inherited default
+  modal class and swap in our own onload handlers on the instance instead.
+
 4.1.0 (2026-09-04)
 ~~~~~~~~~~~~~~~~~~
 
