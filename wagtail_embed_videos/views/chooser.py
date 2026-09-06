@@ -74,10 +74,15 @@ class EmbedVideoCreationFormMixin(CreationFormMixin):
 class BaseEmbedVideoChooseView(BaseChooseView):
     template_name = "wagtail_embed_videos/chooser/chooser.html"
     results_template_name = "wagtail_embed_videos/chooser/results.html"
-    per_page = getattr(settings, "WAGTAILEMBEDVIDEOS_CHOOSER_PAGE_SIZE", 12)
     ordering = "-created_at"
     construct_queryset_hook_name = "construct_embed_video_chooser_queryset"
     icon = "media"
+
+    @property
+    def per_page(self):
+        # Make per_page into a property so that we can read back
+        # WAGTAILEMBEDVIDEOS_CHOOSER_PAGE_SIZE at runtime.
+        return getattr(settings, "WAGTAILEMBEDVIDEOS_CHOOSER_PAGE_SIZE", 20)
 
     def get_object_list(self):
         return permission_policy.instances_user_has_any_permission_for(
