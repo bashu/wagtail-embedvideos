@@ -98,7 +98,7 @@ def register_embedvideos_search_area():
         _("Embed Videos"),
         reverse("wagtail_embed_videos:index"),
         name="embedvideos",
-        classnames="icon icon-media",
+        icon_name="media",
         order=201,
     )
 

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -148,6 +149,18 @@ class EmbedVideoChooseResultsView(
 
 
 class EmbedVideoChosenView(ChosenViewMixin, EmbedVideoChosenResponseMixin, View):
+    def get_object(self, pk):
+        item = super().get_object(pk)
+
+        if not permission_policy.user_has_permission_for_instance(
+            self.request.user,
+            "choose",
+            item,
+        ):
+            raise PermissionDenied
+
+        return item
+
     def get(self, request, *args, pk, **kwargs):
         self.model = get_embed_video_model()
         return super().get(request, *args, pk, **kwargs)
@@ -158,6 +171,12 @@ class EmbedVideoChosenMultipleView(
     EmbedVideoChosenResponseMixin,
     View,
 ):
+    def get_objects(self, pks):
+        return permission_policy.instances_user_has_any_permission_for(
+            self.request.user,
+            ["choose"],
+        ).filter(pk__in=pks)
+
     def get(self, request, *args, **kwargs):
         self.model = get_embed_video_model()
         return super().get(request, *args, **kwargs)
