@@ -1,6 +1,11 @@
 Changes
 -------
 
+6.1.0 (2026-09-06)
+~~~~~~~~~~~~~~~~~~
+
+* Wagtail version 6.1 supported. Dropped support for Wagtail < 6.1.
+
 6.0.0 (2026-09-06)
 ~~~~~~~~~~~~~~~~~~
 
