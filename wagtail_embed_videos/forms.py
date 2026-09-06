@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from wagtail.admin.forms.collections import BaseCollectionMemberForm
 from wagtail.admin.forms.collections import CollectionChoiceField
 from wagtail.admin.forms.collections import collection_member_permission_formset_factory
+from wagtail.admin.forms.tags import validate_tag_length
 from wagtail.admin.widgets import AdminTagWidget
 from wagtail.images.widgets import AdminImageChooser
 from wagtail.models import Collection
@@ -50,6 +51,11 @@ class BaseEmbedVideoForm(BaseCollectionMemberForm):
             "tags": AdminTagWidget,
             "thumbnail": AdminImageChooser,
         }
+
+    def clean_tags(self):
+        tags = self.cleaned_data["tags"]
+        validate_tag_length(tags)
+        return tags
 
 
 def get_embed_video_base_form():

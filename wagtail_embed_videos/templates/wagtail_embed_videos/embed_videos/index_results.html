@@ -1,0 +1,49 @@
+{% extends "wagtailadmin/generic/index_results.html" %}
+
+{% load embed_video_tags wagtailadmin_tags wagtailimages_tags %}
+{% load i18n l10n %}
+
+{% block results %}
+  <div class="nice-padding">
+    <ul class="listing horiz images">
+      {% for embed_video in object_list %}
+        <li>
+          {% include "wagtailadmin/bulk_actions/listing_checkbox_cell.html" with obj_type="emebd_video" instance=embed_video aria_describedby=title_id only %}
+          <a class="image-choice"
+             title="{% if collections %}{{ embed_video.collection.name }} » {% endif %}{{ embed_video.title }}"
+             href="{% url view.edit_url_name embed_video.id %}{% if next %}?next={{ next|urlencode }}{% endif %}">
+            <figure>
+              {% include "wagtail_embed_videos/embed_videos/results_video.html" %}
+              <figcaption id="{{ title_id }}">{{ embed_video.title|ellipsistrim:60 }}</figcaption>
+            </figure>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+{% block no_results_message %}
+  {% if is_searching %}
+    <h2 role="alert">
+      {% blocktrans trimmed %}
+        Sorry, no embed videos match "<em>{{ query_string }}</em>"
+      {% endblocktrans %}
+    </h2>
+  {% else %}
+    {% with wagtail_embedvideos_add_embed_video_url=add_url %}
+      {% if current_collection %}
+        <p>
+          {% blocktrans trimmed %}
+            You haven't uploaded any embed videos in this collection. Why not <a href="{{ wagtail_embedvideos_add_embed_video_url }}">add one now</a>?
+          {% endblocktrans %}
+        </p>
+      {% else %}
+        <p>
+          {% blocktrans trimmed %}
+            You haven't uploaded any embed videos. Why not <a href="{{ wagtal_embedvideos_add_embed_video_url }}">add one now</a>?
+          {% endblocktrans %}
+        </p>
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+{% endblock %}

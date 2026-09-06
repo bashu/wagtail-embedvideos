@@ -4,9 +4,9 @@
   {% icon name="media" %}
   <a href="{% url 'wagtail_embed_videos:index' %}">
     {% blocktrans trimmed count counter=total_videos with total_videos|intcomma as total %}
-      <span>{{ total }}</span> Embed Video
+      <span>{{ total }}</span> Embed Video <span class="w-sr-only">created in {{ site_name }}</span>
     {% plural %}
-      <span>{{ total }}</span> Embed Videos
+      <span>{{ total }}</span> Embed Videos <span class="w-sr-only">created in {{ site_name }}</span>
     {% endblocktrans %}
   </a>
 </li>
