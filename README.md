@@ -12,7 +12,7 @@
 | wagtail\_embed\_videos/components.py                                     |        7 |        3 |     57% |      7-10 |
 | wagtail\_embed\_videos/edit\_handlers.py                                 |        0 |        0 |    100% |           |
 | wagtail\_embed\_videos/forms.py                                          |       52 |       52 |      0% |     2-109 |
-| wagtail\_embed\_videos/models.py                                         |       79 |       14 |     82% |34-35, 39-47, 111, 119, 123, 130, 133-135 |
+| wagtail\_embed\_videos/models.py                                         |       79 |       14 |     82% |34-35, 39-47, 113, 121, 125, 132, 135-137 |
 | wagtail\_embed\_videos/permissions.py                                    |       16 |       16 |      0% |      1-49 |
 | wagtail\_embed\_videos/views/\_\_init\_\_.py                             |        0 |        0 |    100% |           |
 | wagtail\_embed\_videos/views/bulk\_actions/\_\_init\_\_.py               |        4 |        4 |      0% |       1-5 |
@@ -21,10 +21,10 @@
 | wagtail\_embed\_videos/views/bulk\_actions/delete.py                     |       19 |       19 |      0% |      1-33 |
 | wagtail\_embed\_videos/views/bulk\_actions/embed\_video\_bulk\_action.py |       19 |       19 |      0% |      1-39 |
 | wagtail\_embed\_videos/views/chooser.py                                  |      113 |      113 |      0% |     1-196 |
-| wagtail\_embed\_videos/views/embed\_videos.py                            |      154 |      154 |      0% |     2-298 |
-| wagtail\_embed\_videos/wagtail\_hooks.py                                 |       71 |       71 |      0% |     1-157 |
+| wagtail\_embed\_videos/views/embed\_videos.py                            |      138 |      138 |      0% |     2-267 |
+| wagtail\_embed\_videos/wagtail\_hooks.py                                 |       67 |       67 |      0% |     1-144 |
 | wagtail\_embed\_videos/widgets.py                                        |       33 |       13 |     61% |22-23, 26-41, 44-46, 50 |
-| **TOTAL**                                                                |  **690** |  **568** | **18%** |           |
+| **TOTAL**                                                                |  **670** |  **548** | **18%** |           |
 
 
 ## Setup coverage badge
