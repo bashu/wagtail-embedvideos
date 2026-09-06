@@ -4,11 +4,13 @@
 {% load wagtailadmin_tags %}
 
 {% block titletag %}
-  {% blocktrans trimmed count counter=items|length %}
-    Add tags to 1 embed video
-  {% plural %}
-    Add tags to {{ counter }} embed videos
-  {% endblocktrans %}
+  {% with counter_val=items|length %}
+    {% blocktrans trimmed with counter=counter_val|intcomma count counter_val=counter_val %}
+      Add tags to 1 embed video
+    {% plural %}
+      Add tags to {{ counter }} embed videos
+    {% endblocktrans %}
+  {% endwith %}
 {% endblock %}
 {% block header %}
   {% trans "Add tags to embed videos" as add_str %}

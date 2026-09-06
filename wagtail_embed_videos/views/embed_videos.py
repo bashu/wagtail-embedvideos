@@ -1,17 +1,10 @@
-# ruff: noqa: N806
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.template.response import TemplateResponse
-from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.http import urlencode
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 from django.utils.translation import ngettext
 
-from wagtail.admin import messages
 from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.filters import BaseMediaFilterSet
 from wagtail.admin.utils import get_valid_next_url_from_request
@@ -56,7 +49,6 @@ class IndexView(generic.IndexView):
     index_results_url_name = "wagtail_embed_videos:index_results"
     add_url_name = "wagtail_embed_videos:add"
     edit_url_name = "wagtail_embed_videos:edit"
-    _show_breadcrumbs = True
     template_name = "wagtail_embed_videos/embed_videos/index.html"
     results_template_name = "wagtail_embed_videos/embed_videos/index_results.html"
     columns = []
@@ -113,64 +105,56 @@ class IndexView(generic.IndexView):
         return context
 
 
-@permission_checker.require("change")
-def edit(request, embed_video_id):
-    EmbedVideo = get_embed_video_model()
-    EmbedVideoForm = get_embed_video_form(EmbedVideo)
+class EditView(generic.EditView):
+    permission_policy = permission_policy
+    pk_url_kwarg = "embed_video_id"
+    error_message = gettext_lazy("The video could not be saved due to errors.")
+    template_name = "wagtail_embed_videos/embed_videos/edit.html"
+    index_url_name = "wagtail_embed_videos:index"
+    edit_url_name = "wagtail_embed_videos:edit"
+    delete_url_name = "wagtail_embed_videos:delete"
+    header_icon = "media"
+    context_object_name = "embed_video"
+    _show_breadcrumbs = True
 
-    embed_video = get_object_or_404(EmbedVideo, id=embed_video_id)
+    @cached_property
+    def model(self):
+        return get_embed_video_model()
 
-    if not permission_policy.user_has_permission_for_instance(
-        request.user,
-        "change",
-        embed_video,
-    ):
-        raise PermissionDenied
+    def get_form_class(self):
+        return get_embed_video_form(self.model)
 
-    next_url = get_valid_next_url_from_request(request)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
-    if request.method == "POST":
-        form = EmbedVideoForm(
-            request.POST,
-            request.FILES,
-            instance=embed_video,
-            user=request.user,
-        )
-        if form.is_valid():
-            form.save()
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if not permission_policy.user_has_permission_for_instance(
+            self.request.user,
+            "change",
+            obj,
+        ):
+            raise PermissionDenied
+        return obj
 
-            edit_url = reverse("wagtail_embed_videos:edit", args=(embed_video.id,))
-            redirect_url = "wagtail_embed_videos:index"
-            if next_url:
-                edit_url = f"{edit_url}?{urlencode({'next': next_url})}"
-                redirect_url = next_url
+    def get_success_message(self):
+        return _("Video '%(video_title)s' updated.") % {
+            "video_title": self.object.title,
+        }
 
-            messages.success(
-                request,
-                _("Video '{0}' updated.").format(embed_video.title),
-                buttons=[
-                    messages.button(edit_url, _("Edit again")),
-                ],
-            )
-            return redirect(redirect_url)
-        messages.error(request, _("The video could not be saved due to errors."))
-    else:
-        form = EmbedVideoForm(instance=embed_video, user=request.user)
+    @cached_property
+    def next_url(self):
+        return get_valid_next_url_from_request(self.request)
 
-    return TemplateResponse(
-        request,
-        "wagtail_embed_videos/embed_videos/edit.html",
-        {
-            "embed_video": embed_video,
-            "form": form,
-            "user_can_delete": permission_policy.user_has_permission_for_instance(
-                request.user,
-                "delete",
-                embed_video,
-            ),
-            "next": next_url,
-        },
-    )
+    def get_success_url(self):
+        return self.next_url or super().get_success_url()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["next"] = self.next_url
+        return context
 
 
 class DeleteView(generic.DeleteView):
@@ -208,44 +192,33 @@ class DeleteView(generic.DeleteView):
         }
 
 
-@permission_checker.require("add")
-def add(request):
-    EmbedVideo = get_embed_video_model()
-    EmbedVideoForm = get_embed_video_form(EmbedVideo)
+class CreateView(generic.CreateView):
+    permission_policy = permission_policy
+    index_url_name = "wagtail_embed_videos:index"
+    add_url_name = "wagtail_embed_videos:add"
+    edit_url_name = "wagtail_embed_videos:edit"
+    error_message = gettext_lazy("The video could not be created due to errors.")
+    template_name = "wagtail_embed_videos/embed_videos/add.html"
+    header_icon = "media"
+    _show_breadcrumbs = True
 
-    if request.method == "POST":
-        embed_video = EmbedVideo(uploaded_by_user=request.user)
-        form = EmbedVideoForm(
-            request.POST,
-            request.FILES,
-            instance=embed_video,
-            user=request.user,
-        )
-        if form.is_valid():
-            form.save()
+    @cached_property
+    def model(self):
+        return get_embed_video_model()
 
-            messages.success(
-                request,
-                _("Video '{0}' added.").format(embed_video.title),
-                buttons=[
-                    messages.button(
-                        reverse("wagtail_embed_videos:edit", args=(embed_video.id,)),
-                        _("Edit"),
-                    ),
-                ],
-            )
-            return redirect("wagtail_embed_videos:index")
-        messages.error(request, _("The video could not be created due to errors."))
-    else:
-        form = EmbedVideoForm(user=request.user)
+    def get_form_class(self):
+        return get_embed_video_form(self.model)
 
-    return TemplateResponse(
-        request,
-        "wagtail_embed_videos/embed_videos/add.html",
-        {
-            "form": form,
-        },
-    )
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def get_initial_form_instance(self):
+        return self.model(uploaded_by_user=self.request.user)
+
+    def get_success_message(self, instance):
+        return _("Video '%(video_title)s' added.") % {"video_title": instance.title}
 
 
 class UsageView(generic.UsageView):
@@ -255,6 +228,11 @@ class UsageView(generic.UsageView):
     permission_policy = permission_policy
     permission_required = "change"
     header_icon = "media"
+    index_url_name = "wagtail_embed_videos:index"
+    edit_url_name = "wagtail_embed_videos:edit"
+
+    def get_base_object_queryset(self):
+        return super().get_base_object_queryset().select_related("uploaded_by_user")
 
     def user_has_permission(self, permission):
         return self.permission_policy.user_has_permission_for_instance(
