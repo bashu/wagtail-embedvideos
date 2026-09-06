@@ -14,10 +14,9 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 4.2",
   "Framework :: Django :: 5.0",
   "Framework :: Wagtail",
-  "Framework :: Wagtail :: 5",
+  "Framework :: Wagtail :: 6",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
@@ -34,7 +33,7 @@ classifiers = [
 dynamic = [ "readme" ]
 dependencies = [
   "django-embed-video>1.3",
-  "wagtail>=5.2,<5.3",
+  "wagtail>=6.0,<6.1",
 ]
 urls.download = "https://github.com/bashu/wagtail-embedvideos/zipball/master"
 urls.homepage = "https://github.com/bashu/wagtail-embedvideos/"
