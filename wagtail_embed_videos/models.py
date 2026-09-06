@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.conf import settings
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile

@@ -19,7 +19,7 @@ def get_embed_video_model():
     """
     Get the embed video model from the ``WAGTAILEMBEDVIDEOS_EMBEDVIDEO_MODEL`` setting.
     Useful for developers making Wagtail plugins that need the embed video model.
-    Defaults to the standard :class:`~wagtail_embed_videos.models.EmbedVideo` model
+    Defaults to the standard ``wagtail_embed_videos.models.EmbedVideo`` model
     if no custom model is defined.
     """
     from django.apps import apps  # noqa: PLC0415

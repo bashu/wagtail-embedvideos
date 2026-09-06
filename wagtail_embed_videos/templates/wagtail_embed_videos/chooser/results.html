@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/generic/chooser/results.html" %}
 
-{% load i18n embed_video_tags wagtailimages_tags wagtailadmin_tags %}
+{% load i18n embed_video_tags wagtailimages_tags wagtailadmin_tags l10n %}
 
 {% block listing_title %}
   <h2>{% trans "Latest videos" %}</h2>
@@ -30,7 +30,7 @@
               <input type="checkbox"
                      data-multiple-choice-select
                      name="id"
-                     value="{{ embed_video.id }}"
+                     value="{{ embed_video.id|unlocalize }}"
                      title="{% blocktrans trimmed with title=embed_video.title %}Select {{ title }}{% endblocktrans %}" />
               {{ embed_video.title|ellipsistrim:60 }}
             </h3>
