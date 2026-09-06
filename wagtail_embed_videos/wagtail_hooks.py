@@ -1,7 +1,6 @@
 from django.urls import include
 from django.urls import path
 from django.urls import reverse
-from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
@@ -52,18 +51,6 @@ def register_embedvideos_menu_item():
         name="embedvideos",
         icon_name="media",
         order=301,
-    )
-
-
-@hooks.register("insert_editor_js")
-def editor_js():
-    return format_html(
-        """
-        <script>
-            window.chooserUrls.embedVideoChooser = '{0}';
-        </script>
-        """,
-        reverse("wagtail_embed_videos_chooser:choose"),
     )
 
 

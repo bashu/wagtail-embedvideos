@@ -102,6 +102,8 @@ class AbstractEmbedVideo(CollectionMember, index.Indexed, models.Model):
             ],
         ),
         index.FilterField("uploaded_by_user"),
+        index.FilterField("created_at"),
+        index.FilterField("id"),
     ]
 
     class Meta:

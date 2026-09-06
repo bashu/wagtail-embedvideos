@@ -9,41 +9,8 @@
   </script>
   <script defer src="{% versioned_static 'wagtailadmin/js/bulk-actions.js' %}"></script>
 {% endblock %}
-{% block listing %}
-  <div>
-    <form class="embed_video-search nice-padding"
-          action="{{ index_url }}"
-          method="get"
-          novalidate>
-      {% if current_tag %}
-        <input type="hidden" name="tag" value="{{ current_tag }}" />
-      {% endif %}
-      {% field_row max_content=True %}
-        {% if collections %}
-          {% include "wagtailadmin/shared/collection_chooser.html" %}
-        {% endif %}
-      {% endfield_row %}
-      {% if popular_tags %}
-        <fieldset class="tagfilter">
-          <legend>{% trans 'Popular Tags:' %}</legend>
-          {% for tag in popular_tags %}
-            {% if tag.name != current_tag %}
-              <a class="button button-small button-secondary bicolor button--icon"
-                 href="{{ index_url }}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
-            {% else %}
-              <a class="button button-small bicolor button--icon"
-                 href="{{ index_url }}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
-            {% endif %}
-          {% endfor %}
-          {% if current_tag %}
-            <a class="button button-small bicolor button--icon"
-               href="{{ index_url }}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear' %}</a>
-          {% endif %}
-        </fieldset>
-      {% endif %}
-    </form>
-    <div id="listing-results">{% include "wagtail_embed_videos/embed_videos/index_results.html" %}</div>
-  </div>
+{% block slim_header %}
+  {% include "wagtail_embed_videos/embed_videos/embed_video_listing_header.html" with breadcrumbs_items=breadcrumbs_items side_panels=side_panels history_url=history_url title=header_title search_url=index_results_url search_form=search_form filters=filters buttons=header_buttons icon_name=header_icon extra_form_fields=extra_form_fields only %}
 {% endblock %}
 {% block bulk_actions %}
   {% trans "Select all videos in listing" as select_all_text %}
