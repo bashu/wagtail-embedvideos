@@ -54,15 +54,13 @@
                   </dd>
                   <dt>{% trans "Usage" %}</dt>
                   <dd>
-                    {% with embed_video.get_usage.count as usage_count_val %}
-                      <a href="{{ embed_video.usage_url }}">
-                        {% blocktrans trimmed with usage_count=usage_count_val|intcomma count usage_count_val=usage_count_val %}
-                          Used {{ usage_count }} time
-                        {% plural %}
-                          Used {{ usage_count }} times
-                        {% endblocktrans %}
-                      </a>
-                    {% endwith %}
+                    <a href="{{ embed_video.usage_url }}">
+                      {% blocktrans trimmed with usage_count=usage_count_val|intcomma count usage_count_val=usage_count_val %}
+                        Used {{ usage_count }} time
+                      {% plural %}
+                        Used {{ usage_count }} times
+                      {% endblocktrans %}
+                    </a>
                   </dd>
                 </dl>
               {% endvideo %}

@@ -115,7 +115,6 @@ class EditView(generic.EditView):
     delete_url_name = "wagtail_embed_videos:delete"
     header_icon = "media"
     context_object_name = "embed_video"
-    _show_breadcrumbs = True
 
     @cached_property
     def model(self):
@@ -154,6 +153,7 @@ class EditView(generic.EditView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["next"] = self.next_url
+        context["usage_count_val"] = self.object.get_usage().count()
         return context
 
 
@@ -200,7 +200,6 @@ class CreateView(generic.CreateView):
     error_message = gettext_lazy("The video could not be created due to errors.")
     template_name = "wagtail_embed_videos/embed_videos/add.html"
     header_icon = "media"
-    _show_breadcrumbs = True
 
     @cached_property
     def model(self):
