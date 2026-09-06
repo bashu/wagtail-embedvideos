@@ -1,9 +1,12 @@
 from django import forms
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from embed_video.backends import detect_backend
 from wagtail.admin.staticfiles import versioned_static
 from wagtail.admin.widgets import BaseChooser
+from wagtail.admin.widgets import BaseChooserAdapter
+from wagtail.telepath import register
 
 from wagtail_embed_videos import get_embed_video_model
 
@@ -55,6 +58,9 @@ class AdminEmbedVideoChooser(BaseChooser):
                     "wagtail_embed_videos/js/embed-video-chooser-modal.js",
                 ),
                 versioned_static("wagtail_embed_videos/js/embed-video-chooser.js"),
+                versioned_static(
+                    "wagtail_embed_videos/js/embed-video-chooser-telepath.js",
+                ),
             ],
             css={
                 "all": (
@@ -64,3 +70,24 @@ class AdminEmbedVideoChooser(BaseChooser):
                 ),
             },
         )
+
+
+class EmbedVideoChooserAdapter(BaseChooserAdapter):
+    js_constructor = "wagtail_embed_videos.widgets.AdminEmbedVideoChooser"
+
+    @cached_property
+    def media(self):
+        return forms.Media(
+            js=[
+                versioned_static(
+                    "wagtail_embed_videos/js/embed-video-chooser-modal.js",
+                ),
+                versioned_static("wagtail_embed_videos/js/embed-video-chooser.js"),
+                versioned_static(
+                    "wagtail_embed_videos/js/embed-video-chooser-telepath.js",
+                ),
+            ],
+        )
+
+
+register(EmbedVideoChooserAdapter(), AdminEmbedVideoChooser)

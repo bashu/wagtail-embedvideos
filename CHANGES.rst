@@ -1,6 +1,21 @@
 Changes
 -------
 
+6.4.0 (2026-09-06)
+~~~~~~~~~~~~~~~~~~
+
+* Added ``EmbedVideoChooserAdapter``, a Telepath adapter for ``AdminEmbedVideoChooser``
+  (``embed-video-chooser-telepath.js``), so ``EmbedVideoChooserBlock`` renders and updates
+  its thumbnail preview correctly inside a StreamField, mirroring
+  ``wagtail.images.widgets.ImageChooserAdapter``. Previously, StreamField silently fell back
+  to Wagtail's generic chooser Telepath widget, which has no notion of the preview thumbnail,
+  so it was never created or updated for a chosen video inside a StreamField block.
+  ``embed-video-chooser-telepath.js`` is also now included in ``AdminEmbedVideoChooser.media``
+  itself (not just the adapter's), so the registration is loaded even on pages where the
+  widget is only used as a plain field and not through a StreamField that already includes
+  ``EmbedVideoChooserBlock`` - matching how Wagtail's own ``AdminImageChooser.media`` does
+  the same for ``image-chooser-telepath.js``.
+
 6.3.0 (2026-09-06)
 ~~~~~~~~~~~~~~~~~~
 
