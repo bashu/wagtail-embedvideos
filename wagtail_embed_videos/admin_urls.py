@@ -11,13 +11,13 @@ urlpatterns = [
         embed_videos.IndexView.as_view(results_only=True),
         name="index_results",
     ),
-    path("<int:embed_video_id>/", embed_videos.edit, name="edit"),
+    path("<int:embed_video_id>/", embed_videos.EditView.as_view(), name="edit"),
     path(
         "<int:embed_video_id>/delete/",
         embed_videos.DeleteView.as_view(),
         name="delete",
     ),
-    path("add/", embed_videos.add, name="add"),
+    path("add/", embed_videos.CreateView.as_view(), name="add"),
     path(
         "usage/<int:embed_video_id>/",
         embed_videos.UsageView.as_view(),

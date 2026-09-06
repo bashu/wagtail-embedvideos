@@ -3,11 +3,13 @@
 {% load wagtailadmin_tags i18n %}
 
 {% block titletag %}
-  {% blocktrans trimmed count counter=items|length %}
-    Delete 1 embed video
-  {% plural %}
-    Delete {{ counter }} embed videos
-  {% endblocktrans %}
+  {% with counter_val=items|length %}
+    {% blocktrans trimmed with counter=counter_val|intcomma count counter_val=counter_val %}
+      Delete 1 embed video
+    {% plural %}
+      Delete {{ counter }} embed videos
+    {% endblocktrans %}
+  {% endwith %}
 {% endblock %}
 {% block header %}
   {% trans "Delete embed videos" as del_str %}
@@ -23,13 +25,15 @@
       {% endblocktrans %}
     </p>
     <ul>
-      {% for video in items %}
-        <li>
-          <a href="{% url 'wagtail_embed_videos:edit' video.item.id %}"
-             target="_blank"
-             rel="noreferrer">{{ video.item.title }}</a>
-          (<a href="{{ video.item.usage_url }}">{% blocktrans trimmed count usage_count=video.item.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>)
-        </li>
+      {% for embed_video in items %}
+        {% with usage_count_val=embed_video.item.get_usage.count %}
+          <li>
+            <a href="{% url 'wagtail_embed_videos:edit' embed_video.item.id %}"
+               target="_blank"
+               rel="noreferrer">{{ embed_video.item.title }}</a>
+            (<a href="{{ embed_video.item.usage_url }}">{% blocktrans trimmed with usage_count=usage_count_val|intcomma count usage_count_val=usage_count_val %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>)
+          </li>
+        {% endwith %}
       {% endfor %}
     </ul>
   {% endif %}

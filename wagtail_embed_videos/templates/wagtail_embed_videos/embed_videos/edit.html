@@ -1,15 +1,9 @@
-{% extends "wagtailadmin/base.html" %}
+{% extends "wagtailadmin/generic/edit.html" %}
 
-{% load embed_video_tags wagtailimages_tags wagtailadmin_tags static i18n l10n %}
+{% load embed_video_tags wagtailimages_tags wagtailadmin_tags i18n l10n %}
 
-{% block titletag %}
-  {% blocktrans trimmed with title=embed_video.title %}
-    Editing embed video {{ title }}
-  {% endblocktrans %}
-{% endblock %}
 {% block extra_css %}
   {{ block.super }}
-  {{ form.media.css }}
   <style>
     .responsive-embed {
       position: relative;
@@ -28,75 +22,52 @@
     }
   </style>
 {% endblock %}
-{% block content %}
-  {% trans "Editing" as editing_str %}
-  {% include "wagtailadmin/shared/header.html" with title=editing_str subtitle=embed_video.title icon="media" usage_object=embed_video %}
-  {% include "wagtailadmin/shared/non_field_errors.html" %}
-  <form action="{% url 'wagtail_embed_videos:edit' embed_video.id %}"
-        method="post"
-        enctype="multipart/form-data"
-        novalidate>
-    {% csrf_token %}
-    <input type="hidden" value="{{ next }}" name="next" />
-    <div class="row row-flush nice-padding">
-      <div class="col6">
-        {% for field in form %}
-          {% if field.is_hidden %}
-            {{ field }}
-          {% else %}
-            {% formattedfield field %}
-          {% endif %}
-        {% endfor %}
-        <div class="w-hidden sm:w-block">
-          <input type="submit" value="{% trans 'Save' %}" class="button" />
-          {% if user_can_delete %}
-            <a href="{% url 'wagtail_embed_videos:delete' embed_video.id %}{% if next %}?next={{ next|urlencode }}{% endif %}"
-               class="button no">{% trans "Delete embed video" %}</a>
-          {% endif %}
-        </div>
-      </div>
-      <div class="col6">
-        <div class="responsive-embed">
-          {# djlint:off T038 #}
-          {% video embed_video.url "small" %}
-            {# djlint:on #}
+{% block form_content %}
+  <div class="w-grid w-grid-cols-1 sm:w-grid-cols-2 w-gap-8">
+    <div>
+      <input type="hidden" value="{{ next }}" name="next" />
+      {% for field in form %}
+        {% if field.is_hidden %}
+          {{ field }}
+        {% else %}
+          {% formattedfield field %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div>
+      <div class="responsive-embed">
+        {# djlint:off T038 #}
+        {% video embed_video.url "small" %}
+          {# djlint:on #}
+          </div>
+          <div class="w-grid md:w-grid-cols-3 w-gap-2">
+            <div class="w-col-span-2">
+              <h3>{{ embed_video.title }}</h3>
+              <p>{{ embed_video.url }}</p>
             </div>
-            <div class="row">
-              <div class="col8">
-                <h3>{{ embed_video.title }}</h3>
-                <p>{{ embed_video.url }}</p>
-              </div>
-              <div class="col4">
-                {% video embed_video.url as my_video %}
-                  <dl>
-                    <dt>{% trans "Backend" %}</dt>
-                    <dd>
-                      {{ my_video.backend }}
-                    </dd>
-                    <dt>{% trans "Usage" %}</dt>
-                    <dd>
+            <div class="w-col-span-1">
+              {% video embed_video.url as my_video %}
+                <dl>
+                  <dt>{% trans "Backend" %}</dt>
+                  <dd>
+                    {{ my_video.backend }}
+                  </dd>
+                  <dt>{% trans "Usage" %}</dt>
+                  <dd>
+                    {% with embed_video.get_usage.count as usage_count_val %}
                       <a href="{{ embed_video.usage_url }}">
-                        {% blocktrans trimmed count usage_count=embed_video.get_usage.count %}
+                        {% blocktrans trimmed with usage_count=usage_count_val|intcomma count usage_count_val=usage_count_val %}
                           Used {{ usage_count }} time
                         {% plural %}
                           Used {{ usage_count }} times
                         {% endblocktrans %}
                       </a>
-                    </dd>
-                  </dl>
-                {% endvideo %}
-              </div>
+                    {% endwith %}
+                  </dd>
+                </dl>
+              {% endvideo %}
             </div>
-            </div>
-            </div>
-            <div class="row row-flush nice-padding sm:!w-hidden">
-              <div class="col5">
-                <input type="submit" value="{% trans 'Save' %}" class="button" />
-                {% if user_can_delete %}
-                  <a href="{% url 'wagtail_embed_videos:delete' embed_video.id %}{% if next %}?next={{ next }}{% endif %}"
-                     class="button no">{% trans "Delete embed video" %}</a>
-                {% endif %}
-              </div>
-            </div>
-            </form>
-          {% endblock %}
+          </div>
+          </div>
+          </div>
+        {% endblock %}

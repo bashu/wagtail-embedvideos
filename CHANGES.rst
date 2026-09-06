@@ -1,6 +1,13 @@
 Changes
 -------
 
+6.3.0 (2026-09-06)
+~~~~~~~~~~~~~~~~~~
+
+* Wagtail version 6.3 supported. Dropped support for Wagtail < 6.3.
+* Python 3.13 supported, alongside 3.10 to 3.12.
+* Django version 5.1 supported; dropped 5.0.
+
 6.2.0 (2026-09-06)
 ~~~~~~~~~~~~~~~~~~
 

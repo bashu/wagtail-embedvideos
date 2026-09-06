@@ -4,11 +4,13 @@
 {% load wagtailadmin_tags %}
 
 {% block titletag %}
-  {% blocktrans trimmed count counter=items|length %}
-    Add 1 embed video to new collection
-  {% plural %}
-    Add {{ counter }} embed videos to new collection
-  {% endblocktrans %}
+  {% with counter_val=items|length %}
+    {% blocktrans trimmed with counter=counter_val|intcomma count counter_val=counter_val %}
+      Add 1 embed video to new collection
+    {% plural %}
+      Add {{ counter }} embed videos to new collection
+    {% endblocktrans %}
+  {% endwith %}
 {% endblock %}
 {% block header %}
   {% trans "Add embed videos to collection" as add_str %}
