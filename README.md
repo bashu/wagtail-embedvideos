@@ -21,10 +21,10 @@
 | wagtail\_embed\_videos/views/bulk\_actions/delete.py                     |       19 |       19 |      0% |      1-33 |
 | wagtail\_embed\_videos/views/bulk\_actions/embed\_video\_bulk\_action.py |       19 |       19 |      0% |      1-39 |
 | wagtail\_embed\_videos/views/chooser.py                                  |      115 |      115 |      0% |     1-201 |
-| wagtail\_embed\_videos/views/embed\_videos.py                            |      138 |      138 |      0% |     2-267 |
+| wagtail\_embed\_videos/views/embed\_videos.py                            |      157 |      157 |      0% |     1-245 |
 | wagtail\_embed\_videos/wagtail\_hooks.py                                 |       67 |       67 |      0% |     1-144 |
 | wagtail\_embed\_videos/widgets.py                                        |       33 |       13 |     61% |22-23, 26-41, 44-46, 50 |
-| **TOTAL**                                                                |  **673** |  **550** | **18%** |           |
+| **TOTAL**                                                                |  **692** |  **569** | **18%** |           |
 
 
 ## Setup coverage badge
