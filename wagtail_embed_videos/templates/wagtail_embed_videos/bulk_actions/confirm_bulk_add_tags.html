@@ -1,4 +1,4 @@
-{% extends 'wagtailadmin/bulk_actions/confirmation/base.html' %}
+{% extends "wagtailadmin/bulk_actions/confirmation/base.html" %}
 
 {% load i18n %}
 {% load wagtailadmin_tags %}
@@ -42,14 +42,14 @@
   {% plural %}
     You don't have permission to add tags to these embed videos
   {% endblocktrans %}
-  {% include 'wagtail_embed_videos/bulk_actions/list_items_with_no_access.html' with items=items_with_no_access no_access_msg=no_access_msg %}
+  {% include "wagtail_embed_videos/bulk_actions/list_items_with_no_access.html" with items=items_with_no_access no_access_msg=no_access_msg %}
 {% endblock items_with_no_access %}
 {% block form_section %}
   {% if items %}
-    {% trans 'Yes, add' as action_button_text %}
+    {% trans "Yes, add" as action_button_text %}
     {% trans "No, don't add" as no_action_button_text %}
-    {% include 'wagtailadmin/bulk_actions/confirmation/form_with_fields.html' %}
+    {% include "wagtailadmin/bulk_actions/confirmation/form_with_fields.html" %}
   {% else %}
-    {% include 'wagtailadmin/bulk_actions/confirmation/go_back.html' %}
+    {% include "wagtailadmin/bulk_actions/confirmation/go_back.html" %}
   {% endif %}
 {% endblock form_section %}

@@ -14,7 +14,7 @@
       {% endfor %}
       {% if popular_tags %}
         <li class="taglist w-label-3">
-          <h3>{% trans 'Popular tags' %}</h3>
+          <h3>{% trans "Popular tags" %}</h3>
           {% for tag in popular_tags %}
             <a class="suggested-tag tag"
                href="{% url 'wagtail_embed_videos:index' %}?tag={{ tag.name|urlencode }}">{{ tag.name }}</a>
