@@ -19,7 +19,7 @@ The current version is tested for compatiblily with the following:
 
 - Wagtail version 6.3 to 7.0
 - Django version 5.1 or 5.2
-- Python versions 3.10 to 3.13
+- Python versions 3.11 to 3.13
 
 Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.

@@ -1,6 +1,11 @@
 Changes
 -------
 
+7.1.0 (WIP)
+~~~~~~~~~~~
+
+* Dropped support for Python 3.10; Python 3.11 is now the minimum supported version.
+
 7.0.0 (2026-09-06)
 ~~~~~~~~~~~~~~~~~~
 
