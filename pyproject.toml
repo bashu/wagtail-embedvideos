@@ -45,13 +45,13 @@ dev = [
   "coverage==7.16.2",
   "django-stubs[compatible-mypy]==6.1.2",
   "django-upgrade==1.33.0",
-  "djlint==1.46.4",
+  "djlint==1.46.6",
   "mypy==2.4.0",
   "pre-commit==4.7.0",
   "pytest==9.1.1",
   "pytest-django==4.14.0",
   "pytest-sugar==1.1.1",
-  "ruff==0.17.0",
+  "ruff==0.17.1",
 ]
 
 [tool.setuptools]
