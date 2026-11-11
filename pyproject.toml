@@ -45,7 +45,7 @@ dev = [
   "coverage==7.17.2",
   "django-stubs[compatible-mypy]==6.1.2",
   "django-upgrade==1.33.0",
-  "djlint==1.49.9",
+  "djlint==1.49.10",
   "mypy==2.4.1",
   "pre-commit==4.7.0",
   "pytest==9.2.0",
