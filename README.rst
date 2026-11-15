@@ -21,7 +21,7 @@ The current version is tested for compatiblily with the following:
 - Django version 5.1 or 5.2
 - Python versions 3.11 to 3.13
 
-Maintained by `Basil Shubin <https://github.com/bashu>`_,  and some great
+Maintained by `Basil Shubin <https://github.com/bashu>`_ (who is available for freelance/contract work),  and some great
 `contributors <https://github.com/bashu/wagtail-embedvideos/contributors>`_.
 
 .. raw:: html
