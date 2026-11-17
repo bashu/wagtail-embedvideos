@@ -42,16 +42,16 @@ urls.homepage = "https://github.com/bashu/wagtail-embedvideos/"
 
 [dependency-groups]
 dev = [
-  "coverage==7.17.2",
+  "coverage==7.17.3",
   "django-stubs[compatible-mypy]==6.1.2",
   "django-upgrade==1.33.0",
-  "djlint==1.49.10",
+  "djlint==1.50.0",
   "mypy==2.4.1",
   "pre-commit==4.7.0",
   "pytest==9.2.0",
   "pytest-django==4.14.0",
   "pytest-sugar==1.1.1",
-  "ruff==0.17.4",
+  "ruff==0.17.5",
 ]
 
 [tool.setuptools]
